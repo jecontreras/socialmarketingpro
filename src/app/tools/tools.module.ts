@@ -9,17 +9,25 @@ import { MyOwnCustomMaterialModule } from '../app.material.module';
 import { FormsModule } from '@angular/forms';
 import { NgbAlertModule, NgbDatepickerModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { TableStatisticsComponent } from './table-statistics/table-statistics.component';
+import { ListChatComponent } from './list-chat/list-chat.component';
+import { ListChatDetailedComponent } from './list-chat-detailed/list-chat-detailed.component';
+import { FullConnectionService } from '../servicesComponent/full-connection.service';
+import { PickerModule } from '@ctrl/ngx-emoji-mart';
 
 @NgModule({
   declarations: [
     TablaComponent,
     ArchivosComponent,
     TableStatisticsComponent,
+    ListChatComponent,
+    ListChatDetailedComponent,
   ],
   exports:[
     TablaComponent,
     TableStatisticsComponent,
     ArchivosComponent,
+    ListChatComponent,
+    ListChatDetailedComponent
   ],
   imports: [
     CommonModule,
@@ -28,7 +36,9 @@ import { TableStatisticsComponent } from './table-statistics/table-statistics.co
     NgxDropzoneModule,
     NgxSpinnerModule,
     MyOwnCustomMaterialModule,
-    FormsModule
-  ]
+    FormsModule,
+    PickerModule
+  ],
+  providers: [FullConnectionService]
 })
 export class ToolsModule { }

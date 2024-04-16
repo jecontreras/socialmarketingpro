@@ -1,0 +1,146 @@
+<section mat-dialog-title>
+  <div class="d-flex justify-content-between">
+    <div>
+      <h3>
+        {{ data.name }}
+        <i class="ni ni-check-bold"></i>
+      </h3>
+    </div>
+    <div></div>
+    <div>
+      <i class="ni ni-button-pause"></i>
+      <i class="ni ni-bullet-list-67"></i>
+      <button mat-mini-fab color="warn" mat-dialog-close>
+        <i class="ni ni-fat-remove"></i>
+      </button>
+    </div>
+  </div>
+</section>
+<mat-dialog-content class="mat-typography" id="print">
+  <div class="row">
+    <div class="col-12 col-sm-4">
+      <div class="row">
+        <div class="col-12">
+          <span>{{ dataConfig.tag }} </span>
+          <span class="example-spacer"></span>
+          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+            <i class="ni ni-fat-add"></i>
+          </button>
+        </div>
+        <div class="col-12">
+          <span>{{ dataConfig.sequences }} </span>
+          <span class="example-spacer"></span>
+          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+            <i class="ni ni-fat-add"></i>
+          </button>
+        </div>
+        <div class="col-12">
+          <span>{{ dataConfig.campaigns }} </span>
+          <span class="example-spacer"></span>
+          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+            <i class="ni ni-fat-add"></i>
+          </button>
+        </div>
+        <div class="col-12">
+          <span>{{ dataConfig.variables }} </span>
+          <span class="example-spacer"></span>
+          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+            <i class="ni ni-fat-add"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-8">
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex justify-content-center">
+            <a href="#!" class="avatar avatar-xl rounded-circle">
+              <img alt="Image placeholder" [src]="data.foto">
+            </a>
+          </div>
+        </div>
+        <div class="col-12">
+          <br><br>
+          <div class="d-flex justify-content-center">
+            <div>
+              <p>
+                {{ dataConfig.txtChat }} <a class="pointer" *ngIf="data.estado === 'cerrado'"> {{ dataConfig.closed }} </a>
+                <a class="pointer" *ngIf="data.estado === 'abierto'"> {{ dataConfig.opened }} </a>
+                &nbsp; &nbsp;
+              </p>
+            </div>
+            <div>
+              <button class="btn btn-icon btn-3 btn-primary" type="button" *ngIf="data.estado === 'abierto'" (click)="handleChatClose()">
+                <span class="btn-inner--icon"><i class="ni ni-check-bold"></i></span>
+                <span class="btn-inner--text">{{ dataConfig.btnMarkClosed }} </span>
+              </button>
+              <button class="btn btn-icon btn-3 btn-primary" type="button" *ngIf="data.estado === 'cerrado'" (click)="handleChatOpen()">
+                <span class="btn-inner--icon"><i class="ni ni-check-bold"></i></span>
+                <span class="btn-inner--text">{{ dataConfig.btnReopen }} </span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <mat-list role="list">
+            <mat-list-item role="listitem">
+              <div class="d-flex justify-content-between displayWidth">
+                <div><i class="ni ni-mobile-button"></i> {{ dataConfig.phone }} </div>
+                <div></div>
+                <div><h4> {{ data.whatsapp }} </h4></div>
+              </div>
+            </mat-list-item>
+            <mat-list-item role="listitem">
+              <div class="d-flex justify-content-between displayWidth">
+                <div><i class="ni ni-email-83"></i> {{ dataConfig.email }} </div>
+                <div></div>
+                <div><h4> {{ data.email }} </h4></div>
+              </div>
+            </mat-list-item>
+            <mat-list-item role="listitem">
+              <div class="d-flex justify-content-between displayWidth">
+                <div><i class="ni ni-button-pause"></i> {{ dataConfig.subscribed }} </div>
+                <div></div>
+                <div><h4> {{ data.createdAt | date:'medium' }} </h4></div>
+              </div>
+            </mat-list-item>
+            <mat-list-item role="listitem">
+              <div class="d-flex justify-content-between displayWidth">
+                <div><i class="ni ni-badge"></i> {{ dataConfig.cpf }} </div>
+                <div></div>
+                <div><h4> </h4></div>
+              </div>
+            </mat-list-item>
+          </mat-list>
+        </div>
+        <div class="col-12">
+          <div class="d-flex justify-content-center">
+            <div style="width: 55%;">
+              <div class="row">
+                <div class="col-12" style="text-align: center;">
+                  <button class="btn btn-primary" type="button">{{ dataConfig.txtGotoChat }} <i class="ni ni-chat-round"></i> </button>
+                </div>
+                <div class="col-12" style="text-align: center;">
+                  <p>{{ dataConfig.txtAutomationUser }} </p>
+                  <span style="text-align: center;">
+                    <a href="" class="mouse"> {{ dataConfig.txtPauseAutomation }}
+                      <i class="ni ni-bold-down"></i>
+                    </a>
+                  </span>
+                </div>
+                <div class="col-12" style="text-align: center;">
+                  <button type="button" class="btn btn-outline-primary"> {{ dataConfig.unassignMe }} </button>
+                  <button type="button" class="btn btn-outline-primary">
+                    {{ dataConfig.assignedTo }}
+                    <i class="ni ni-bold-down"></i>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</mat-dialog-content>

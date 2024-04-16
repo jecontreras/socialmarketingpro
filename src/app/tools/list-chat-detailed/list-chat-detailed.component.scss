@@ -1,0 +1,164 @@
+.new-live-chat__current-chat-content {
+  display: flex;
+  flex-direction: row;
+  flex: 1 0 0px;
+  gap: 20px;
+}
+
+.current-chat {
+  background: rgb(255, 255, 255);
+  border-radius: 12px;
+  border: 1px solid rgb(217, 223, 227);
+  font-family: "Nunito Sans";
+  height: calc(100% - 30px);
+  width: 818.344px;
+}
+
+.opened-chat-room__avatar-container {
+  margin-right: 10px;
+}
+
+.opened-chat-room__users-avatar {
+  border-radius: 50%;
+  object-fit: cover;
+  width: 38px;
+  height: 38px;
+}
+
+.opened-chat-room__info-row {
+  display: flex;
+  align-items: center;
+}
+
+.opened-chat-room__user-name {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.chat-message {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.chat-message__box {
+  background-color: #dcf8c6;
+  border-radius: 12px;
+  padding: 10px 15px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.my .chat-message__box {
+  background-color: #e4e6eb;
+}
+
+.content {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+.right-bottom {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.date {
+  font-size: 12px;
+  color: #6b7c93;
+}
+
+.status {
+  display: flex;
+  align-items: center;
+}
+
+.status svg {
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
+  fill: #5f6368;
+}
+
+.opened-chat-bottom__container {
+  background-color: #f8f9fa;
+}
+
+.opened-chat-bottom__left-buttons {
+  display: flex;
+  align-items: center;
+}
+
+.opened-chat-bottom__smiles,
+.opened-chat-bottom__file {
+  margin-right: 20px;
+}
+
+.opened-chat-bottom__file-icon svg,
+.opened-chat-bottom__emoji-icon svg {
+  width: 24px;
+  height: 24px;
+  fill: #6b7c93;
+}
+
+.opened-chat-bottom__input-container {
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+  background-color: #fff;
+  padding: 6px 12px;
+}
+
+.opened-chat-bottom__emoji-container {
+  margin-right: 10px;
+}
+
+.opened-chat-bottom__input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+.opened-chat-bottom__textarea {
+  border: none;
+  resize: none;
+  flex-grow: 1;
+  font-family: "Nunito Sans";
+  font-size: 16px;
+}
+
+.opened-chat-bottom__send-container {
+  margin-left: 10px;
+}
+
+.opened-chat-bottom__send-button {
+  background-color: #0084ff;
+  border: none;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-family: "Nunito Sans";
+  font-size: 14px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.opened-chat-bottom__send-button:hover {
+  background-color: #0069d9;
+}
+
+
+.toStyle{
+  display: block;
+}
+
+.fromStyle{
+  display: flex;
+}
+
+.list-container {
+  height: 62vh;
+  overflow-y: scroll; /* Habilita el desplazamiento vertical */
+}

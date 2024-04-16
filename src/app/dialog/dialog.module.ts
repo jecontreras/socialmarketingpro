@@ -1,28 +1,36 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ArticuloDialogComponent } from './articulo-dialog/articulo-dialog.component';
 import { FormsModule } from '@angular/forms';
-import { CheckCodePrintComponent } from './check-code-print/check-code-print.component';
 import { MyOwnCustomMaterialModule } from '../app.material.module';
 import { MovementItemComponent } from './movement-item/movement-item.component';
+import { DetailContactComponent } from './detail-contact/detail-contact.component';
+import { OpenQrComponent } from './open-qr/open-qr.component';
+import { FormBellDialogComponent } from './for-bell-dialog/form-bell-dialog.component';
+import { FileDetailComponent } from './file-detail/file-detail.component';
 
 
 
 @NgModule({
   entryComponents:[
-    ArticuloDialogComponent,
-    CheckCodePrintComponent,
-    MovementItemComponent
+    MovementItemComponent,
+    DetailContactComponent,
+    OpenQrComponent,
+    FormBellDialogComponent,
+    FileDetailComponent
   ],
   declarations: [
-    ArticuloDialogComponent,
-    CheckCodePrintComponent,
     MovementItemComponent,
+    DetailContactComponent,
+    OpenQrComponent,
+    FormBellDialogComponent,
+    FileDetailComponent,
   ],
   exports:[
-    ArticuloDialogComponent,
-    CheckCodePrintComponent,
-    MovementItemComponent
+    MovementItemComponent,
+    DetailContactComponent,
+    OpenQrComponent,
+    FormBellDialogComponent,
+    FileDetailComponent
   ],
   imports: [
     CommonModule,

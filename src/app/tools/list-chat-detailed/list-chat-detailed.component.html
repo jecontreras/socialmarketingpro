@@ -1,0 +1,112 @@
+<div class="new-live-chat__current-chat-content" *ngIf="data.id">
+  <div class="current-chat">
+    <div class="opened-chat-room__container p-3">
+      <div class="d-flex flex-row bd-highlight mb-3 mat-elevation-z2">
+        <div class="p-2 bd-highlight"><img alt="Default Avatar" class="opened-chat-room__users-avatar" src="{{ data.foto }}?stp=dst-jpg_s96x96&amp;ccb=11-4&amp;oh=01_ASBO06DXF88XYlaIfx-YqvV1eJejfPAe8FjEoSPkUYzd8w&amp;oe=66268F45&amp;_nc_sid=e6ed6c&amp;_nc_cat=111"></div>
+        <div class="p-2 bd-highlight" style="margin-top: 10px;">
+          <div class="opened-chat-room__user-name"> {{ data.to }} </div>
+        </div>
+      </div>
+      <div class="opened-chat-room__content list-container" #chatContainer>
+        <div class="chat-container" [scrollTop]="chatContainer.scrollHeight">
+          <div *ngFor="let item of listDetails">
+            <div class="chat-message another toStyle" *ngIf="item.quien === 0">
+              <div class="chat-message__box another undefined-box">
+                <div class="replied-container">
+                  <div class="replied-message-container replied-message-container_rounded">
+                    <div class="replied-message-container__line"></div>
+                    <div class="replied-message-container__content">
+                      <div class="sender-title">Tú</div>
+                      <div class="message-content"></div>
+                    </div>
+                    <div class="right-content"></div>
+                  </div>
+                </div>
+                <span class="content" [innerHTML]="item.txt">
+                </span>
+                <p *ngIf="item.urlMedios"> <img [src]="item.urlMedios" alt="" srcset="" style="width: 30%;"></p>
+                <span class="right-bottom">
+                  <span class="date date-from-another"> {{ item.date }} </span>
+                </span>
+              </div>
+            </div>
+            <div class="chat-message my fromStyle" *ngIf="item.quien === 1">
+              <div class="chat-message__box my undefined-box">
+                <span class="content" [innerHTML]="item.txt">
+                </span>
+                <p *ngIf="item.urlMedios"> <img [src]="item.urlMedios" alt="" srcset="" style="width: 30%;"></p>
+                <span class="right-bottom">
+                  <span class="date">{{ item.date }}</span>
+                  <div class="status">
+                    !!
+                  </div>
+                </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="opened-chat-bottom__container">
+        <div class="row" style="width: 100%;">
+          <div class="col-12">
+            <div class="d-flex bd-highlight">
+              <div class="p-2 bd-highlight">
+                <div class="d-flex bd-highlight mb-3">
+                  <div class="bd-highlight">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" color="warn">
+                      <mat-icon>add_circle_outline</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+                      <button mat-menu-item (click)="handleFile('document')">
+                        <mat-icon>file_copy</mat-icon>
+                      </button>
+                      <button mat-menu-item  (click)="handleFile('video')">
+                        <mat-icon>movie</mat-icon>
+                      </button>
+                      <button mat-menu-item (click)="handleFile('photo')">
+                        <mat-icon> insert_photo</mat-icon>
+                      </button>
+                    </mat-menu>
+                  </div>
+                  <div class="bd-highlight">
+                    <emoji-mart *ngIf="disabledEmoji" (emojiClick)="addEmoji($event)" [style]="{ position: 'absolute', bottom: '73px', right: '20px' }"></emoji-mart>
+                    <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="disabledEmoji = !disabledEmoji;">
+                      <i class="ni ni-satisfied"></i>
+                    </button>
+                  </div>
+                  <div class="bd-highlight">
+                    <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon">
+                      <i class="ni ni-fat-add"></i>
+                    </button>
+                  </div>
+                  <div class="bd-highlight">
+                    <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon">
+                      <i class="ni ni-user-run"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+              <div class="p-2 flex-grow-1 bd-highlight">
+                <form>
+                  <textarea style="width: 100%;" class="opened-chat-bottom__textarea" [(ngModel)]="msg.txt"></textarea>
+                </form>
+              </div>
+              <div class="p-2 bd-highlight">
+                <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="handleAddMessage()">
+                  <mat-icon>send</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon">
+                  <mat-icon>settings_voice</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="new-live-chat__current-chat-content">
+  <h4>Chat no seleccionado</h4>
+</div>

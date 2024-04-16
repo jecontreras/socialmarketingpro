@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { USER } from 'src/app/interfaces/sotarage';
 import { Store } from '@ngrx/store';
+import { ConfigKeysService } from 'src/app/services/config-keys.service';
 
 declare interface RouteInfo {
     path: string;
@@ -23,16 +24,20 @@ export class SidebarComponent implements OnInit {
   public isCollapsed = true;
   dataUser:any = {};
   viewProfile:string = 'visitante';
+  dataConfig:any = {};
+
   constructor(
     private router: Router,
     private _store: Store<USER>,
+    private _config: ConfigKeysService
   ) {
+    this.dataConfig = _config._config.keys;
     this._store.subscribe((store: any) => {
       store = store.name;
       if(!store) return false;
       this.dataUser = store.user || {};
       try {
-        this.viewProfile = this.dataUser.usu_perfil.prf_descripcion;
+        this.viewProfile = this.dataUser.rol.nombre;
       } catch (error) {
 
       }
@@ -44,21 +49,14 @@ export class SidebarComponent implements OnInit {
       { path: '/dashboard', title: 'Inicio',  icon: 'ni-tv-2 text-primary', class: '' ,disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
       //{ path: '/icons', title: 'Icons',  icon:'ni-planet text-blue', class: '' },
       //{ path: '/maps', title: 'Maps',  icon:'ni-pin-3 text-orange', class: '' },
+      { path: '/audience', title: this.dataConfig.audience,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
+      { path: '/bell', title: this.dataConfig.bell,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
+      { path: '/broadcast', title: this.dataConfig.broadcast,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
+      { path: '/liveChat', title: this.dataConfig.liveChat,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
+      { path: '/flows', title: this.dataConfig.flows,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
+      { path: '/config', title: this.dataConfig.config,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
       { path: '/user-profile', title: 'Perfil',  icon:'ni-single-02 text-yellow', class: '' , disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' )},
-      //{ path: '/tables', title: 'Tables',  icon:'ni-bullet-list-67 text-red', class: '' },
-      //{ path: '/login', title: 'Login',  icon:'ni-key-25 text-info', class: '' },
-      //{ path: '/register', title: 'Register',  icon:'ni-circle-08 text-pink', class: '' },
-      { path: '/articulo', title: 'Articulo',  icon:'ni-briefcase-24 text-pink', class: '', disabled: ( this.viewProfile === 'admin' ) },
-      { path: '/empresa', title: 'Empresa',  icon:'ni-istanbul text-pink', class: '', disabled: ( this.viewProfile === 'admin' ) },
-      { path: '/factura', title: 'Factura',  icon:'ni-credit-card text-pink', class: '', disabled: ( this.viewProfile === 'admin' ) },
-      { path: '/estadisticas', title: 'Estadisticas',  icon:'ni-credit-card text-pink', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
-      { path: '/actionsreturns', title: 'Devoluciones / Cambios',  icon:'ni-world text-pink', class: '' , disabled: ( this.viewProfile === 'admin' )},
-      { path: '/moneypayment', title: 'Abonos dinero',  icon:'ni-credit-card text-pink', class: '' , disabled:  ( this.viewProfile === 'admin' )},
-      { path: '/inventario', title: 'Inventario',  icon:'ni-books text-pink', class: '' , disabled:  ( this.viewProfile === 'admin' )},
-      { path: '/categoria', title: 'Categoria',  icon:'ni-building text-pink', class: '' , disabled: ( this.viewProfile === 'admin' )},
-      { path: '/provedor', title: 'Provedor',  icon:'ni-world text-pink', class: '' , disabled:( this.viewProfile === 'admin' )},
       { path: '/perfil', title: 'Roles',  icon:'ni-vector text-pink', class: '' , disabled:  ( this.viewProfile === 'admin' )},
-      { path: '/logs', title: 'Logs',  icon:'ni-ui-04 text-pink', class: '' , disabled: ( this.viewProfile === 'admin' )},
   ];
     this.menuItems = ROUTES.filter(menuItem => menuItem.disabled === true );
     this.router.events.subscribe((event) => {

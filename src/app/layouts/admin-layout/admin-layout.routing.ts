@@ -5,19 +5,13 @@ import { IconsComponent } from '../../pages/icons/icons.component';
 import { MapsComponent } from '../../pages/maps/maps.component';
 import { UserProfileComponent } from '../../pages/user-profile/user-profile.component';
 import { TablesComponent } from '../../pages/tables/tables.component';
-import { ArticuloComponent } from 'src/app/pages/articulo/articulo.component';
-import { CategoriaComponent } from 'src/app/pages/categoria/categoria.component';
-import { EmpresaComponent } from 'src/app/pages/empresa/empresa.component';
-import { FacturaComponent } from 'src/app/pages/factura/factura.component';
-import { InventarioComponent } from 'src/app/pages/inventario/inventario.component';
-import { LogsComponent } from 'src/app/pages/logs/logs.component';
 import { PerfilComponent } from 'src/app/pages/perfil/perfil.component';
-import { ProvedorComponent } from 'src/app/pages/provedor/provedor.component';
-import { CodigoPrintComponent } from 'src/app/pages/codigo-print/codigo-print.component';
-import { PrintarticulosComponent } from 'src/app/pages/printarticulos/printarticulos.component';
-import { MoneyPaymentComponent } from 'src/app/pages/money-payment/money-payment.component';
-import { ReturnArticleComponent } from 'src/app/pages/return-article/return-article.component';
-import { EstadisticaComponent } from 'src/app/pages/estadistica/estadistica.component';
+import { AudienceComponent } from 'src/app/pages/audience/audience.component';
+import { BellComponent } from 'src/app/pages/bell/bell.component';
+import { BroadcastComponent } from 'src/app/pages/broadcast/broadcast.component';
+import { FlowsComponent } from 'src/app/pages/flows/flows.component';
+import { ConfigComponent } from 'src/app/pages/config/config.component';
+import { LiveChatComponent } from 'src/app/pages/live-chat/live-chat.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -25,17 +19,11 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'tables',         component: TablesComponent },
     { path: 'icons',          component: IconsComponent },
     { path: 'maps',           component: MapsComponent },
-    { path: 'articulo',           component: ArticuloComponent },
-    { path: 'codigoprint',           component: CodigoPrintComponent },
-    { path: 'categoria',           component: CategoriaComponent },
-    { path: 'empresa',           component: EmpresaComponent },
-    { path: 'factura',           component: FacturaComponent },
-    { path: 'inventario',           component: InventarioComponent },
-    { path: 'logs',           component: LogsComponent },
     { path: 'perfil',           component: PerfilComponent },
-    { path: 'provedor',           component: ProvedorComponent },
-    { path: 'printarticulos',           component: PrintarticulosComponent },
-    { path: 'moneypayment',           component: MoneyPaymentComponent },
-    { path: 'actionsreturns',           component: ReturnArticleComponent },
-    { path: 'estadisticas',           component: EstadisticaComponent },
+    { path: 'audience',           component: AudienceComponent },
+    { path: 'bell',           component: BellComponent },
+    { path: 'broadcast',           component: BroadcastComponent },
+    { path: 'liveChat',           component: LiveChatComponent },
+    { path: 'flows',           component: FlowsComponent },
+    { path: 'config',           component: ConfigComponent },
 ];

@@ -15,7 +15,7 @@ export class PerfilComponent implements OnInit {
     model: "",
     querys:{
       where:{
-        estado: 0
+        estado: 'activo'
       }
     },
     btn:{
@@ -27,7 +27,7 @@ export class PerfilComponent implements OnInit {
     tablet:{
       headers:["Perfil","Creado","Actualizado"],
       row:[],
-      keys: ["prf_descripcion","createdAt","updatedAt"]
+      keys: ["nombre","createdAt","updatedAt"]
     }
   };
   constructor(

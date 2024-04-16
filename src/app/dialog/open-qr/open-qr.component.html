@@ -1,0 +1,21 @@
+<section mat-dialog-title>
+  <div class="d-flex justify-content-between">
+    <div><h4>Qr View</h4></div>
+    <div></div>
+    <div>
+      <button mat-mini-fab color="warn" mat-dialog-close>
+        <i class="ni ni-fat-remove"></i>
+      </button>
+    </div>
+  </div>
+</section>
+<mat-dialog-content class="mat-typography" id="print">
+  <div class="row">
+    <div class="col-12" *ngIf="data.qr">
+      <qrcode [qrdata]="data.qr" [width]="256" [errorCorrectionLevel]="'M'"></qrcode>
+    </div>
+    <div class="col-12" *ngIf="!data.qr">
+      <h1>No Existe Codigo</h1>
+    </div>
+  </div>
+</mat-dialog-content>

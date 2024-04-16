@@ -7,10 +7,13 @@ import {MatPaginator} from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import * as moment from 'moment';
 import { XlsService } from 'src/app/servicesComponent/xls.service';
-import { ProvedorService } from 'src/app/servicesComponent/provedor.service';
 import { USER } from 'src/app/interfaces/user';
 import { Store } from '@ngrx/store';
 import { NgbCalendar, NgbDate } from '@ng-bootstrap/ng-bootstrap';
+import { MatDialog } from '@angular/material/dialog';
+import { DetailContactComponent } from 'src/app/dialog/detail-contact/detail-contact.component';
+import { OpenQrComponent } from 'src/app/dialog/open-qr/open-qr.component';
+import { FormBellDialogComponent } from 'src/app/dialog/for-bell-dialog/form-bell-dialog.component';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -52,10 +55,6 @@ export class TablaComponent implements OnInit {
   notscrolly: boolean = true;
   notEmptyPost: boolean = true;
   opcionCurrencys:any;
-  header2 = ["codigo","Talla","Cantidad"];
-  keys2=["codigo","talla","cantidad"];
-  txtFilter:string;
-  txtTipeFill:string = '1';
 
   expandedElement: PeriodicElement | null;
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -64,7 +63,6 @@ export class TablaComponent implements OnInit {
   isLoadingResults = true;
   isRateLimitReached = false;
   listXls:any = [];
-  listSupplier:any = [];
   txtSupplier:string;
   dataDummary = {
     sumPending: 0,
@@ -77,14 +75,16 @@ export class TablaComponent implements OnInit {
 	toDate: NgbDate | null = null;
   viewDisabled:boolean = false;
   urlFront:string = window.location.origin;
+  txtFilter:string;
+  txtTipeFill:string = '1';
 
   constructor(
     private _router: Router,
     private _xls: XlsService,
     public _tools: ToolsService,
-    private _supplier: ProvedorService,
     private _store: Store<USER>,
-    calendar: NgbCalendar
+    calendar: NgbCalendar,
+    public dialog: MatDialog
   ) {
     this._store.subscribe((store: any) => {
       store = store.name;
@@ -106,9 +106,6 @@ export class TablaComponent implements OnInit {
   }
 
   getSupplier(){
-    this._supplier.get( { where: { } } ).subscribe(data=>{
-      this.listSupplier = data.data || [];
-    });
   }
 
   pageEvent(ev: any) {
@@ -156,42 +153,6 @@ export class TablaComponent implements OnInit {
 			this.isHovered(date)
 		);
 	}
-
-  filterTxt(){
-    this.querys.page = 0;
-    this._dataConfig.tablet.row = [];
-    this.resultsLength = 0;
-    this.isLoadingResults = true;
-    this.isRateLimitReached = true;
-    delete this.querys.where.codigo;
-    delete this.querys.where.entrada;
-    delete this.querys.where.name;
-    if( this.txtFilter ){
-      this.querys.where.codigo = this.txtFilter;
-    }
-    if( this.txtTipeFill && ( this._dataConfig.returnHTML === 'formfactura/' ) ){
-      if( this.txtTipeFill != '2' ) this.querys.where.entrada = Number( this.txtTipeFill );
-      else delete this.querys.where.entrada;
-    }
-    if( this.txtSupplier ){
-      delete this.querys.where.fecha;
-      if( ( this._dataConfig.returnHTML === 'formmoneypayment/' ) ) this.querys.where.name = this.txtSupplier;
-      else this.querys.where.provedor = this.txtSupplier;
-    }
-    try {
-      if( this.fromDate.day && this.toDate.day ){
-        let fecha1 = String(this.fromDate.year) + "-" + String(this.fromDate.month) + "-" +String(this.fromDate.day);
-        let fecha2 = String(this.toDate.year) +"-"+ String(this.toDate.month) + "-"+ String(this.toDate.day);
-        this.querys.where.createdAt = {
-          ">=": moment( fecha1 ).format(),
-          "<=":moment( fecha2).format()
-        };
-        delete this.querys.where.fecha;
-      }
-    } catch (error) { }
-    this.getList();
-    if( this._dataConfig.returnHTML === 'formfactura/' ) this.getDetail();
-  }
 
   getDetail(){
     this._model.getDetail({ user: this.dataUser.id, provedor: this.txtSupplier } ).subscribe(( res:any )=>{
@@ -250,6 +211,20 @@ export class TablaComponent implements OnInit {
     });
   }
 
+
+  filterTxt(){
+    this.querys.page = 0;
+    this._dataConfig.tablet.row = [];
+    this.resultsLength = 0;
+    this.isLoadingResults = true;
+    this.isRateLimitReached = true;
+    if( this.txtFilter ){
+      if( ( this._dataConfig.returnHTML === 'formbell/' ) ) this.querys.where.numero = this.txtFilter;
+    }
+    this.getList();
+    if( this._dataConfig.returnHTML === 'formfactura/' ) this.getDetail();
+  }
+
   resetPaging(): void {
     this.paginator.pageIndex = 0;
     this.querys.page = 0;
@@ -281,6 +256,42 @@ export class TablaComponent implements OnInit {
 
   handleActivateMenu(){
     this.viewDisabled = !this.viewDisabled;
+  }
+
+  handleOpenDialogContact( item:any ){
+    const dialogRef = this.dialog.open(DetailContactComponent, {
+      width: '50%',
+      height: "600px",
+      data: item,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  handleOpenDialogQr( item ){
+    const dialogRef = this.dialog.open(OpenQrComponent, {
+      width: '50%',
+      height: "600px",
+      data: { qr: item.qr },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  handleUpdateBell(item){
+    const dialogRef = this.dialog.open(FormBellDialogComponent, {
+      width: '50%',
+      height: "600px",
+      data: item || {},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
 }

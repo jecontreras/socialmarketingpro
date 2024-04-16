@@ -13,7 +13,7 @@ import { UsuariosService } from 'src/app/servicesComponent/usuarios.service';
   styleUrls: ['./login.component.scss']
 })
 export class LoginComponent implements OnInit, OnDestroy {
-  
+
   data:any = {};
   disableSubmit:boolean = true;
   constructor(
@@ -31,8 +31,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   Funtlogin(){
     let data:any = {
-      usu_email: this.data.email,
-      usu_clave: this.data.password
+      email: this.data.email,
+      password: this.data.password
     };
     if(!this.disableSubmit) return false;
     this.disableSubmit = false;
@@ -53,8 +53,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   accion = new TokenAction( { token: res.data.tokens }, 'post');
   this._store.dispatch( accion );
   this._router.navigate(['/dashboard']);
-  this._tools.basicIcons({header: "Hola Bienvenido!", subheader: `Hola ${ res.data.usu_nombre } Que tengas un buen dia`});
-  setTimeout(()=>{ 
+  this._tools.basicIcons({header: "Hola Bienvenido!", subheader: `Hola ${ res.data.username } Que tengas un buen dia`});
+  setTimeout(()=>{
     location.reload();
   }, 3000);
   }

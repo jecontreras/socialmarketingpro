@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ToolsService } from 'src/app/services/tools.service';
-import { ArticuloLogService } from 'src/app/servicesComponent/articulo-log.service';
 
 @Component({
   selector: 'app-movement-item',
@@ -21,7 +20,6 @@ export class MovementItemComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<MovementItemComponent>,
     @Inject(MAT_DIALOG_DATA) public datas: any,
-    private _articuloLog: ArticuloLogService,
     private _tools: ToolsService,
   ) {
     console.log("***20", this.datas)
@@ -40,9 +38,7 @@ export class MovementItemComponent implements OnInit {
 
   async getLogs( ids:any, tipo:any ){
     return new Promise( resolve =>{
-      this._articuloLog.get( { where: { articuloTalla: ids, estado: 0 }, limit: 1000000 } ).subscribe(( res:any )=>{
-        resolve( res.data );
-      });
+
     });
   }
 

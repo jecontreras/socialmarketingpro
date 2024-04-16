@@ -1,8 +1,10 @@
 import { Injectable } from '@angular/core';
-//import { MatSnackBar } from '@angular/material';
 import Swal from 'sweetalert2'
 import * as _ from 'lodash';
+import { CART } from '../interfaces/sotarage';
+import { Store } from '@ngrx/store';
 import { DomSanitizer } from '@angular/platform-browser';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Injectable({
   providedIn: 'root'
@@ -16,20 +18,28 @@ export class ToolsService {
   dataConfig:any = {};
 
   constructor(
-    //private snackBar: MatSnackBar,
+    private snackBar: MatSnackBar,
+    private _store: Store<CART>,
     public sanitizer: DomSanitizer
   ) {
+    this._store.subscribe((store: any) => {
+      store = store.name;
+      //console.log(store);
+      if (!store) return false;
+      this.dataConfig = store.configuracion || {};
+      if( !this.dataConfig.clInformacion ) this.dataConfig.clInformacion = "3506700802"
+    });
   }
 
   async presentToast(mensaje: string, type = 'completado') {
-    //this.snackBar.open(mensaje, type, { duration: 5000 });
+    this.snackBar.open(mensaje, type, { duration: 5000 });
   }
 
   openSnack(message: string, type: string, config: any) {
     if (config) {
-      //this.snackBar.open(message, type, config);
+      this.snackBar.open(message, type, config);
     } else {
-      //this.snackBar.open(message, type, { duration: 5000 });
+      this.snackBar.open(message, type, { duration: 5000 });
     }
   }
   basic(text: string) {
@@ -45,14 +55,14 @@ export class ToolsService {
   error(text: any) {
     Swal.fire({
       icon: 'error',
-      title: 'Oops...',
+      title: text.title ||'Oops...',
       text: text.mensaje,
-      footer: text.footer || '<a href>Why do I have this issue?</a>'
+      footer: text.footer || ''
     });
   }
   tooast(text: any) {
     Swal.fire({
-      position: text.position || 'top-end',
+      // position: text.position || 'top-end',
       icon: text.icon || 'success',
       title: text.title || 'Your work has been saved',
       showConfirmButton: text.show || false,
@@ -61,13 +71,14 @@ export class ToolsService {
   }
   confirm(text: any) {
     return Swal.fire({
-      title: text.title || 'Are you sure?',
-      text: text.detalle || "You won't be able to revert this!",
+      title: text.title || '',
+      text: text.detalle || "",
       icon: text.icon || 'warning',
-      showCancelButton: true,
+      showCancelButton: text.showCancel || true,
       confirmButtonColor: text.confirColor || '#3085d6',
       cancelButtonColor: text.cancelColor || '#d33',
-      confirmButtonText: text.confir || 'Aceptar!'
+      confirmButtonText: text.confir || 'Aceptar!',
+      cancelButtonText: text.cancel || 'Cancelar!'
     });
   }
 
@@ -76,6 +87,7 @@ export class ToolsService {
       Swal.fire({
         title: opciones.title || 'Input',
         input: opciones.input || 'text',
+        inputValue: opciones.value || '',
         inputAttributes: {
           autocapitalize: 'off'
         },
@@ -92,28 +104,31 @@ export class ToolsService {
     });
   }
 
-  async alertInputSelect( config ){
-    return new Promise( async ( resolve ) =>{
-      const { value: fruit } = await Swal.fire({
-        title: config.title,
-        input: 'select',
-        inputOptions: {
-          'Opciones': config.list,
-        },
-        inputPlaceholder: 'Seleccione',
-        showCancelButton: true
-      });
-      resolve( fruit  );
-    });
+  processPhoto( data ){
+    Swal.fire({
+      imageUrl: data.photo || 'https://placeholder.pics/svg/300x1500',
+      imageHeight: 500,
+      imageAlt: data.title || 'A tall image'
+    })
+  }
 
+  openFotoAlert( foto:string ){
+    Swal.fire({
+      title: '',
+      text: '',
+      imageUrl: foto,
+      imageWidth: 400,
+      imageHeight: 200,
+      imageAlt: '',
+    })
   }
 
   ProcessTime(text: any) {
-    let timerInterval
-    /*Swal.fire({
+    /*let timerInterval
+    Swal.fire({
       title: text.title || 'Cargando...',
       html: '',
-      timer: text.tiempo || 3000,
+      timer: text.tiempo || 6000,
       timerProgressBar: true,
       onBeforeOpen: () => {
         Swal.showLoading()
@@ -127,6 +142,7 @@ export class ToolsService {
         clearInterval(timerInterval)
       }
     }).then((result) => {
+      //Read more about handling dismissals below
       if (result.dismiss === Swal.DismissReason.timer) {
         console.log('I was closed by the timer')
       }
@@ -170,6 +186,29 @@ export class ToolsService {
 
   codigo() {
     return (Date.now().toString(20).substr(2, 3) + Math.random().toString(20).substr(2, 3)).toUpperCase();
+  }
+
+  limpiarString( inputString:string ) {
+    // Eliminar espacios en blanco y caracteres especiales
+    const stringLimpio = inputString.replace(/[^\w\s]/gi, '').replace(/\s+/g, '');
+
+    return stringLimpio;
+  }
+
+  buscarConPalabraClave(array, palabraClave) {
+    // Convertir la palabra clave a minúsculas para hacer la búsqueda insensible a mayúsculas
+    const palabraClaveLowerCase = palabraClave.toLowerCase();
+
+    // Filtrar el array para incluir solo los elementos que contienen la palabra clave
+    const resultados = array.filter(elemento => {
+      // Convertir cada elemento a minúsculas para hacer la comparación insensible a mayúsculas
+      const elementoLowerCase = elemento.ventas.slug.toLowerCase();
+
+      // Verificar si el elemento contiene la palabra clave
+      return elementoLowerCase.includes(palabraClaveLowerCase);
+    });
+
+    return resultados;
   }
 
   calcularDistancia(params: any) {
@@ -241,7 +280,44 @@ export class ToolsService {
       separados = [inputNum[0]]
     }
     separados = separados.filter((row: any) => row != "");
-    return '$' + separados.join(".") + ' COP'; //+ ',' + inputNum[1];
+    return '$' + separados.join("."); //+ ',' + inputNum[1];
+  }
+  monedaChange2(cif = 3, dec = 2, valor: any) {
+    // tomamos el valor que tiene el input
+    //  console.log(valor, cif, dec)
+    if (!valor) return 0;
+    let inputNum = valor;
+    // Lo convertimos en texto
+    inputNum = inputNum.toString()
+    // separamos en un array los valores antes y después del punto
+    inputNum = inputNum.split('.')
+    // evaluamos si existen decimales
+    if (!inputNum[1]) {
+      inputNum[1] = '00'
+    }
+
+    let separados
+    // se calcula la longitud de la cadena
+    if (inputNum[0].length > cif) {
+      let uno = inputNum[0].length % cif
+      if (uno === 0) {
+        separados = []
+      } else {
+        separados = [inputNum[0].substring(0, uno)]
+      }
+      let numero: number = Number(inputNum[0].length);
+      let posiciones = Number(numero / cif)
+      for (let i = 0; i < posiciones; i++) {
+        let pos = ((i * cif) + uno)
+        // console.log(uno, pos)
+        if (inputNum[0] == "") continue;
+        separados.push(inputNum[0].substring(pos, (pos + 3)))
+      }
+    } else {
+      separados = [inputNum[0]]
+    }
+    separados = separados.filter((row: any) => row != "");
+    return separados.join("."); //+ ',' + inputNum[1];
   }
 
   seguridadIfrane( url:string ){
@@ -258,6 +334,15 @@ export class ToolsService {
     const blob = new Blob([int8Array], { type: 'application/pdf'});
     return blob;
   }
+
+  getBase64(file) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = () => resolve(reader.result);
+        reader.onerror = error => reject(error);
+   });
+}
 
   downloadPdf(base64String, fileName){
 
@@ -295,67 +380,131 @@ export class ToolsService {
     a.click(); //Downloaded file
   }
 
-  print() {
-    let printContents, popupWin;
-    printContents = document.getElementById("print").innerHTML.toString();
-    printContents = (<string>printContents + "").replace("col-sm", "col-xs");
-    // console.log(printContents);
-    popupWin = window.open("", "_blank", "top=0,left=0,height=100%,width=auto");
-    popupWin.document.open();
-    popupWin.document.write(`
-      <html>
-        <head>
-          <title>Reporte</title>
-          <meta name="viewport" content="width=10000, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-          <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-          <style>
-            .salto_pagina_despues{
-              page-break-after:always;
-            }
+  converBase64ImgToBynare( dataurl, filename ){
+    var arr = dataurl.split(','),
+          mime = arr[0].match(/:(.*?);/)[1],
+          bstr = atob(arr[1]),
+          n = bstr.length,
+          u8arr = new Uint8Array(n);
 
-            .salto_pagina_anterior{
-              page-break-before:always;
-            }
+      while(n--){
+          u8arr[n] = bstr.charCodeAt(n);
+      }
 
-            .content {
-              height: 100vh;
-              width: 100%;
-              display: flex;
-              flex-direction: column;
-            }
-
-            .img-content {
-              flex: 1;
-              display: flex;
-              justify-content: center;
-              align-items: center;
-            }
-
-            .observation {
-              height: 150px;
-              overflow: hidden;
-              overflow-y: auto;
-            }
-          </style>
-        </head>
-        <body onload="window.print();">
-          ${printContents}
-        </body>
-      </html>`);
-    /* window.close(); */
-    popupWin.document.close();
+      return new File([u8arr], filename, {type:mime});
   }
 
-  uppercaseFirstLetter( txt:any ){
-    let titleCode = txt.split(" ");
-    let finix = String();
-        for( const row of titleCode ){
-          finix+= ( row.charAt(0) ).toUpperCase();
-        }
-    return finix;
+  getScrollRoot(){
+    var html = document.documentElement, body = document.body,
+        cacheTop:any = ((typeof window.pageYOffset !== "undefined") ? window.pageYOffset : null) || body.scrollTop || html.scrollTop, // cache the window's current scroll position
+        root;
+
+    html.scrollTop = body.scrollTop = cacheTop + (cacheTop > 0) ? -1 : 1;
+    // find root by checking which scrollTop has a value larger than the cache.
+    root = (html.scrollTop !== cacheTop) ? html : body;
+
+    root.scrollTop = cacheTop; // restore the window's scroll position to cached value
+
+    return root; // return the scrolling root element
   }
+
+  handleCopyHolder( url:string ){
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = url;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+    this.openSnack('Copiado:' + ' ' + url, 'completado', false);
+  }
+
+    // Facebook share won't work if your shareUrl is localhost:port/abc, it should be genuine deployed url
+    shareOnFacebook(shareUrl: string) {
+      shareUrl = encodeURIComponent(shareUrl);
+      window.open(`https://www.facebook.com/sharer/sharer.php?u=${shareUrl}`, 'sharer');
+    }
+
+    shareOnPinterest(shareUrl: string, img: string, desc: string) {
+      shareUrl = encodeURIComponent(shareUrl);
+      img = encodeURIComponent(img);
+      desc = encodeURIComponent(desc);
+      window.open(`https://www.pinterest.com/pin/create/button?url=${shareUrl}&media=${img}&description=${desc}`, 'sharer');
+    }
+
+    shareOnTwitter(shareUrl: string, desc: string) {
+      shareUrl = encodeURIComponent(shareUrl);
+      desc = encodeURIComponent(desc);
+      window.open(`https://twitter.com/intent/tweet?url=${shareUrl}&text=${desc}`, 'sharer');
+    }
+
+    shareOnGooglePlus(shareUrl: string) {
+      shareUrl = encodeURIComponent(shareUrl);
+      window.open(`https://plus.google.com/share?url=${shareUrl}`, 'sharer');
+    }
+
+    // LinkedIn share won't work if your shareUrl is localhost:port/abc, it should be genuine deployed url
+    shareOnLinkedIn(shareUrl: string, title: string, summary: string) {
+      shareUrl = encodeURIComponent(shareUrl);
+      window.open(`https://www.linkedin.com/shareArticle?url=${shareUrl}&title=${title}&summary=${summary}`, 'sharer');
+    }
+
+    print() {
+      let printContents, popupWin;
+      printContents = document.getElementById("print").innerHTML.toString();
+      printContents = (<string>printContents + "").replace("col-sm", "col-xs");
+      // console.log(printContents);
+      popupWin = window.open("", "_blank", "top=0,left=0,height=100%,width=auto");
+      popupWin.document.open();
+      popupWin.document.write(`
+        <html>
+          <head>
+            <title>Reporte</title>
+            <meta name="viewport" content="width=10000, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+            <link rel="stylesheet"
+            href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+            integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+            <style>
+              .salto_pagina_despues{
+                page-break-after:always;
+              }
+
+              .salto_pagina_anterior{
+                page-break-before:always;
+              }
+
+              .content {
+                height: 100vh;
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+              }
+
+              .img-content {
+                flex: 1;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+              }
+
+              .observation {
+                height: 150px;
+                overflow: hidden;
+                overflow-y: auto;
+              }
+            </style>
+          </head>
+          <body onload="window.print();">
+            ${printContents}
+          </body>
+        </html>`);
+      /* window.close(); */
+      popupWin.document.close();
+    }
 
 
 }

@@ -1,0 +1,118 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+      <!-- Card stats -->
+      <div class="row">
+          <div class="col-12">
+            <span class="text-end">
+              <div ngbDropdown placement="top-end" class="d-inline-block">
+                  <button type="button" class="btn btn-primary" (click)="CrearPerfil()">{{ dataConfig.createContact }} </button>
+                  <button type="button" class="btn btn-default" (click)="CrearPerfil()">{{ dataConfig.dischargeInfo }} </button>
+                  <button type="button" class="btn btn-default" (click)="CrearPerfil()">{{ dataConfig.importContact }} </button>
+              </div>
+            </span>
+          </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container">
+  <div class="row">
+    <div class="col-12 col-sm-4">
+      <div class="row">
+        <div class="col-12">
+          <h5>{{ dataConfig.mostPopular }} </h5>
+        </div>
+        <div class="col-12">
+          <p>{{ dataConfig.mostPopularDes }} </p>
+        </div>
+        <div class="col-12">
+
+          <mat-accordion>
+            <mat-expansion-panel (opened)="panelOpenState = true"
+                                 (closed)="panelOpenState = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                {{ dataConfig.tag }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <p>
+                <mat-chip-list aria-label="Fish selection">
+                  <mat-chip *ngFor="let item of listTag" (click)="handlePushSelectTag( item, 'tag')"> {{ item.tag }} </mat-chip>
+                </mat-chip-list>
+              </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState = true"
+                                 (closed)="panelOpenState = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ dataConfig.sequences }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <p>
+                <mat-chip-list aria-label="Fish selection">
+                  <mat-chip *ngFor="let item of listSequences" (click)="handlePushSelectTag( item, 'sequences')"> {{ item.sequences }} </mat-chip>
+                </mat-chip-list>
+              </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState = true"
+                                 (closed)="panelOpenState = false">
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  {{ dataConfig.campaigns }}
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <p>
+                <mat-chip-list aria-label="Fish selection">
+                  <mat-chip *ngFor="let item of listCampaigns" (click)="handlePushSelectTag( item, 'campaigns')"> {{ item.campaigns }} </mat-chip>
+                </mat-chip-list>
+              </p>
+            </mat-expansion-panel>
+          </mat-accordion>
+
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-8">
+      <div class="row">
+        <div class="col-12">
+          <div class="row">
+            <div class="col">
+              <span>
+                {{ dataConfig.txtTemporarilyFilter }}
+              </span>
+              <mat-chip-list aria-label="Fish selection">
+                <mat-chip
+                  *ngFor="let item of listSelectTag"
+                 (click)="handleRemoveFilter( item )">
+                  {{ item.title }}
+                  <i class="ni ni-fat-remove text-orange"></i>
+                </mat-chip>
+              </mat-chip-list>
+            </div>
+            <div class="col">
+              <button class="btn btn-icon btn-3 btn-danger" type="button" (click)="handleDropFilter()">
+                <span class="btn-inner--icon"><i class="ni ni-fat-remove text-primary"></i></span>
+                <span class="btn-inner--text">{{ dataConfig.btnReset }}</span>
+              </button>
+            </div>
+            <div class="col">
+              <span [matBadge]="counterFilter" matBadgeOverlap="false">{{ dataConfig.txtUserFilter }}</span>
+            </div>
+            <div class="col">
+              <div class="form-group">
+                <label for="example-search-input" class="form-control-label">{{ dataConfig.search }}</label>
+                <input class="form-control" type="search" value="..." id="example-search-input" (change)="handleFilterSearch()">
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="" style="    margin-top: 21%;">
+            <app-tabla [_dataConfig]="_dataConfigTable"></app-tabla>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

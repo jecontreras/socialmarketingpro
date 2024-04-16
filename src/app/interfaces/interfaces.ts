@@ -35,3 +35,38 @@ export interface Fruit {
     passMoney?:number;
     passMoney2?:number;
   }
+
+  export interface Contact{
+    id?:string;
+    estado?:string
+  }
+
+  export interface Bill{
+    id?:string;
+    estado?:string;
+    numero?:number;
+    qr?:string;
+    titulo?:string;
+    user?:string;
+    frase?:string
+  }
+  export interface UserT{
+    id?: string;
+  }
+  export interface Whatsapp{
+    id?: string;
+  }
+  export interface WhatsappDetails{
+    id?: string;
+    user?:string;
+    txt?: string;
+    quien?: number;
+    to?: string;
+    from?: string;
+  }
+
+  export interface Msg{
+    txt?:string;
+    quien?: number;
+    user?:string;
+  }
