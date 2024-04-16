@@ -7,6 +7,7 @@ import { DetailContactComponent } from './detail-contact/detail-contact.componen
 import { OpenQrComponent } from './open-qr/open-qr.component';
 import { FormBellDialogComponent } from './for-bell-dialog/form-bell-dialog.component';
 import { FileDetailComponent } from './file-detail/file-detail.component';
+import { FormFlowDetailsComponent } from './form-flow-details/form-flow-details.component';
 
 
 
@@ -16,6 +17,7 @@ import { FileDetailComponent } from './file-detail/file-detail.component';
     DetailContactComponent,
     OpenQrComponent,
     FormBellDialogComponent,
+    FormFlowDetailsComponent,
     FileDetailComponent
   ],
   declarations: [
@@ -24,6 +26,7 @@ import { FileDetailComponent } from './file-detail/file-detail.component';
     OpenQrComponent,
     FormBellDialogComponent,
     FileDetailComponent,
+    FormFlowDetailsComponent,
   ],
   exports:[
     MovementItemComponent,

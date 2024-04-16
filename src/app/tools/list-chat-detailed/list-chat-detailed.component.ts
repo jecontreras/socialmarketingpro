@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { FileDetailComponent } from 'src/app/dialog/file-detail/file-detail.component';
+import { FormFlowDetailsComponent } from 'src/app/dialog/form-flow-details/form-flow-details.component';
 import { Msg, WhatsappDetails } from 'src/app/interfaces/interfaces';
 import { ChatService } from 'src/app/servicesComponent/chat.service';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
@@ -64,6 +64,7 @@ export class ListChatDetailedComponent implements OnInit {
 
     // Método para agregar un nuevo mensaje al chat
     async handleAddMessage() {
+      if( !this.msg.txt ) return false;
       let result:any = await this.handleProcessWhatsapp();
       if( result.data.whatsappTxt ){
         result = result.data;
@@ -103,7 +104,7 @@ export class ListChatDetailedComponent implements OnInit {
     }
 
     handleFile( txtFormat:string ){
-      const dialogRef = this.dialog.open(FileDetailComponent, {
+      const dialogRef = this.dialog.open(FormFlowDetailsComponent, {
         width: '50%',
         height: "600px",
         data: {

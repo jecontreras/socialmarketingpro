@@ -70,3 +70,8 @@ export interface Fruit {
     quien?: number;
     user?:string;
   }
+  export interface LOGICWHATSAPP {
+  };
+  export interface Indicador {
+    txt?: string;
+  }
