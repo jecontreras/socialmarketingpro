@@ -1,0 +1,104 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <h3> {{ dataConfig.initialDetails }} </h3>
+    </div>
+    <div class="col-12 col-sm-6 form-group">
+      <label for="exampleFormControlInput1"> {{ dataConfig.txtFormName }} </label>
+      <input type="text" class="form-control" [(ngModel)]="data.titulo">
+    </div>
+    <div class="col-12 col-sm-6 form-group">
+      <label for="exampleFormControlSelect1"> {{ dataConfig.txtFormNumber }} </label>
+      <select class="form-control" [(ngModel)]="data.numero">
+        <option [value]="item.id" *ngFor="let item of listWhatsappInfo" >
+          {{ item.titulo }} - {{ item.numero }}
+        </option>
+      </select>
+    </div>
+    <div class="col-12 form-group">
+      <label for="exampleFormControlInput1"> {{ dataConfig.description }} </label>
+      <textarea class="form-control" [(ngModel)]="data.descripcion" rows="3"></textarea>
+    </div>
+    <div class="col-12">
+      <button class="btn btn-primary" (click)="handleSubmit()" type="button"> {{ dataConfig.btnSaved }} </button>
+    </div>
+    <div class="col-12">
+      <div class="d-flex bd-highlight">
+        <div class="p-2 flex-grow-1 bd-highlight">
+          <h3>
+            {{ dataConfig.whatsappLogic }}
+          </h3>
+        </div>
+        <div class="p-2 bd-highlight">
+          <button type="button" class="btn btn-danger" (click)="handleDropList()" *ngIf="!id">{{ dataConfig.BtnClearList }} </button>
+        </div>
+        <div class="p-2 bd-highlight">
+          <button type="button" class="btn btn-primary" (click)="handlePushList()">{{ dataConfig.BtnAddFurther }} </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <ul class="list-group list-group-flush">
+        <li *ngFor="let item of listLogic; let i=index;">
+          <div class="row">
+            <div class="col-12">
+              <div class="d-flex bd-highlight mb-3">
+                <div class="p-2 bd-highlight">
+                  <button type="button" class="btn btn-primary" (click)="handlePushList()"> {{ dataConfig.BtnAddFurther }} </button>
+                </div>
+                <div class="p-2 bd-highlight">
+                  <button type="button" class="btn btn-warning" (click)="handleDouble( item )">{{ dataConfig.BtnDouble }} </button>
+                </div>
+                <div class="p-2 bd-highlight">
+                  <button type="button" class="btn btn-danger" (click)="handleDrop( item, i )"> {{ dataConfig.btnDelete }} </button>
+                </div>
+              </div>
+            </div>
+            <div class="col-12 form-group">
+              <label for="exampleFormControlInput1"> {{ dataConfig.indicatorNumber }} </label>
+              <input type="text" class="form-control"  [(ngModel)]="data.titulo">
+            </div>
+            <!--<div class="col-12 form-group">
+              <mat-form-field class="example-chip-list">
+                  <mat-chip-list #chipList [aria-label]="dataConfig.indicatorDeep">
+                      <mat-chip *ngFor="let key of item.deepIndicator"
+                          [selectable]="selectable" [removable]="removable"
+                          (removed)="remove( key, item )">
+                          {{ key.txt }}
+                          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                      </mat-chip>
+                      <input [placeholder]="dataConfig.indicatorDeep" [matChipInputFor]="chipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          [matChipInputAddOnBlur]="addOnBlur"
+                          (matChipInputTokenEnd)="add($event, item)">
+                  </mat-chip-list>
+               </mat-form-field>
+            </div>-->
+            <div class="col-12 form-group">
+              <label for="exampleFormControlInput1"> {{ dataConfig.urlMedia }} </label>
+              <select class="form-control" [(ngModel)]="item.urlMedios">
+                <option value="">
+                  None
+                </option>
+                <option [value]="item.id" *ngFor="let item of listGaleria">
+                    {{ item.titulo }}</option>
+              </select>
+            </div>
+            <div class="col-12 form-group">
+              <label for="exampleFormControlInput1"> {{ dataConfig.answer }} </label>
+              <textarea class="form-control" [(ngModel)]="item.respuesta" rows="6" ></textarea>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+    <div class="col-12">
+      <div class="d-flex bd-highlight">
+        <div class="p-2 flex-grow-1 bd-highlight"></div>
+        <div class="p-2 bd-highlight">
+          <button class="btn btn-primary" type="button" (click)="handleSubmit()"> {{ dataConfig.btnSaved }} </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

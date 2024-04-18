@@ -24,6 +24,8 @@ import { BroadcastComponent } from 'src/app/pages/broadcast/broadcast.component'
 import { LiveChatComponent } from 'src/app/pages/live-chat/live-chat.component';
 import { FlowsComponent } from 'src/app/pages/flows/flows.component';
 import { ConfigComponent } from 'src/app/pages/config/config.component';
+import { ListTagComponent } from 'src/app/pages/list-tag/list-tag.component';
+import { DetailConfigComponent } from 'src/app/pages/detail-config/detail-config.component';
 // import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -54,6 +56,8 @@ import { ConfigComponent } from 'src/app/pages/config/config.component';
     LiveChatComponent,
     FlowsComponent,
     ConfigComponent,
+    ListTagComponent,
+    DetailConfigComponent
   ]
 })
 

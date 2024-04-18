@@ -1,1 +1,16 @@
-<p>config works!</p>
+<div class="header bg-gradient-danger pb-5 pt-2 pt-md-5">
+</div>
+<div class="content container">
+  <div class="row">
+    <div class="col-12">
+      <mat-tab-group mat-align-tabs="center">
+        <mat-tab [label]="dataConfig.tag">
+          <app-list-tag></app-list-tag>
+        </mat-tab>
+        <mat-tab [label]="dataConfig.config">
+          <app-detail-config></app-detail-config>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

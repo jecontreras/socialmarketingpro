@@ -70,3 +70,26 @@ export interface Fruit {
     quien?: number;
     user?:string;
   }
+
+  export interface Block {
+    id?: number;
+    x: number;
+    y: number;
+    width: number;
+    height: number;
+    content: string;
+  }
+
+  export interface Indicator {
+    txt?: string;
+  }
+
+  export interface Flows {
+    id?: number;
+  }
+  export interface Tag {
+    id?: number;
+    user?: string;
+    tag?: string;
+  }
+

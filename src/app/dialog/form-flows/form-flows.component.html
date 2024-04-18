@@ -1,0 +1,17 @@
+<section mat-dialog-title>
+  <div class="d-flex justify-content-between">
+    <div>
+      <h4 *ngIf="!id">{{ dataConfig.txtCreateBill }} </h4>
+      <h4 *ngIf="id">{{ dataConfig.txtUpdateBill }} </h4>
+    </div>
+    <div></div>
+    <div>
+      <button mat-mini-fab color="warn" mat-dialog-close>
+        <i class="ni ni-fat-remove"></i>
+      </button>
+    </div>
+  </div>
+</section>
+<mat-dialog-content class="mat-typography" id="print">
+  <app-form-flows-hs [dataId]="data"></app-form-flows-hs>
+</mat-dialog-content>

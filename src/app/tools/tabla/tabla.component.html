@@ -1,5 +1,5 @@
 <!-- Page content -->
-<div class="container-fluid mt--7">
+<div class="container-fluid ">
     <!-- Table -->
     <div class="row">
       <div class="col">
@@ -51,18 +51,39 @@
                   }
                 " [style.background]="element.colorP"
                 >
-                  <span *ngIf="( column !='Acciones' )  && ( column !='foto' ) && ( column !='expireDate' ) && ( column !='createdAt' ) && ( column !='updatedAt' ) && ( column !='monto' ) && ( column !='openDialogContact' )">{{ element[column] }}</span>
+                  <span *ngIf="( column !='user' )  &&( column !='Acciones' )  && ( column !='foto' ) && ( column !='expireDate' ) && ( column !='createdAt' ) && ( column !='updatedAt' ) && ( column !='monto' ) && ( column !='openDialogContact' )">{{ element[column] }}</span>
+                  <span *ngIf="column =='user'">
+                    {{ element[column].name }}
+                  </span>
                   <span *ngIf="column ==='Acciones' && _dataConfig.returnHTML === 'formbell/'">
                     <button type="button" mat-mini-fab color="primary"  (click)="handleUpdateBell( element )">
-                      <i class="ni ni-active-40"></i>
+                      <mat-icon>create</mat-icon>
                     </button>
                     <button type="button" mat-mini-fab color="warn"  (click)="handleOpenDialogQr( element )">
                       <i class="ni ni-camera-compact"></i>
                     </button>
                   </span>
+                  <span *ngIf="column ==='Acciones' && _dataConfig.returnHTML === 'formFlows/'">
+                    <button type="button" mat-mini-fab color="primary"  (click)="handleOpenDialogFlows( element )">
+                      <mat-icon>create</mat-icon>
+                    </button>
+                    <button type="button" mat-mini-fab color="warn"  (click)="handleOpenDialogQr( element )">
+                      <i class="ni ni-camera-compact"></i>
+                    </button>
+                  </span>
+                  <span *ngIf="column ==='Acciones' && _dataConfig.returnHTML === 'formTag/'">
+                    <button type="button" mat-mini-fab color="primary"  (click)="handleOpenDialogTag( element )">
+                      <mat-icon>create</mat-icon>
+                    </button>
+                  </span>
+                  <span *ngIf="column ==='openDialogContact'">
+                    <button type="button" mat-mini-fab color="primary"  (click)="handleOpenDialogContact( element )">
+                      <mat-icon>remove_red_eye</mat-icon>
+                    </button>
+                  </span>
                   <span *ngIf="column ==='updateBtn'">
                     <button type="button" mat-mini-fab color="primary"  (click)="handleUpdateBell( element )">
-                      <i class="ni ni-ruler-pencil"></i>
+                      <mat-icon>create</mat-icon>
                     </button>
                   </span>
                   <div *ngIf="column === 'select' " ngbDropdownMenu class=" dropdown-menu-right dropdown-menu-arrow">

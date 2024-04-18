@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ConfigKeysService } from 'src/app/services/config-keys.service';
 
 @Component({
   selector: 'app-broadcast',
@@ -6,8 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./broadcast.component.scss']
 })
 export class BroadcastComponent implements OnInit {
-
-  constructor() { }
+  dataConfig:any = {};
+  constructor(
+    private _config: ConfigKeysService,
+  ) {
+    this.dataConfig = _config._config.keys;
+  }
 
   ngOnInit(): void {
   }

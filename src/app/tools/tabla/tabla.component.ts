@@ -14,6 +14,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { DetailContactComponent } from 'src/app/dialog/detail-contact/detail-contact.component';
 import { OpenQrComponent } from 'src/app/dialog/open-qr/open-qr.component';
 import { FormBellDialogComponent } from 'src/app/dialog/for-bell-dialog/form-bell-dialog.component';
+import { FormFlowsComponent } from 'src/app/dialog/form-flows/form-flows.component';
+import { FormTagComponent } from 'src/app/dialog/form-tag/form-tag.component';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -286,6 +288,28 @@ export class TablaComponent implements OnInit {
     const dialogRef = this.dialog.open(FormBellDialogComponent, {
       width: '50%',
       height: "600px",
+      data: item || {},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  handleOpenDialogFlows(item){
+    const dialogRef = this.dialog.open(FormFlowsComponent, {
+      width: '100%',
+      data: item || {},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  handleOpenDialogTag(item){
+    const dialogRef = this.dialog.open(FormTagComponent, {
+      width: '50%',
       data: item || {},
     });
 

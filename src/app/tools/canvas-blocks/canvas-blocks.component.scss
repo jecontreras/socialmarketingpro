@@ -1,0 +1,29 @@
+.canvas-container {
+  width: 800px;
+  height: 600px;
+  border: 1px solid black;
+}
+
+canvas {
+  cursor: pointer;
+}
+
+
+.canvas-container {
+  position: relative;
+  width: 800px;
+  height: 600px;
+  border: 1px solid black;
+}
+
+.block {
+  position: absolute;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  background-color: #f0f0f0;
+  padding: 10px;
+}
+
+.block.selected {
+  border-color: blue;
+}

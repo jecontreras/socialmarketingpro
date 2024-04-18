@@ -1,36 +1,33 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { Bill, UserT } from 'src/app/interfaces/interfaces';
+import { Tag, UserT } from 'src/app/interfaces/interfaces';
 import { STORAGES } from 'src/app/interfaces/sotarage';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ToolsService } from 'src/app/services/tools.service';
-import { WhatsappInfoService } from 'src/app/servicesComponent/whatsapp-info.service';
+import { TagService } from 'src/app/servicesComponent/tag.service';
+import * as _ from 'lodash';
 
 @Component({
-  selector: 'app-for-bell-dialog',
-  templateUrl: './form-bell-dialog.component.html',
-  styleUrls: ['./form-bell-dialog.component.scss']
+  selector: 'app-form-tag',
+  templateUrl: './form-tag.component.html',
+  styleUrls: ['./form-tag.component.scss']
 })
-export class FormBellDialogComponent implements OnInit {
+export class FormTagComponent implements OnInit {
   dataConfig:any = {};
   id:any;
-  data:Bill = {};
+  data:Tag = {};
   btnDisabled:boolean = false;
   dataUser:UserT = {};
 
   constructor(
-    private _tools: ToolsService,
     private _config: ConfigKeysService,
-    public dialogRef: MatDialogRef<FormBellDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public datas: any,
-    private _whatsappInfo: WhatsappInfoService,
     private _store: Store<STORAGES>,
+    public dialogRef: MatDialogRef<FormTagComponent>,
+    @Inject(MAT_DIALOG_DATA) public datas: any,
+    private _tools: ToolsService,
+    private _tagServices: TagService
   ) {
-    this._store.subscribe((store: any) => {
-      store = store.name;
-      this.dataUser = store.user || {};
-    });
     this.dataConfig = _config._config.keys;
   }
 
@@ -57,22 +54,32 @@ export class FormBellDialogComponent implements OnInit {
       else this._tools.basic( this.dataConfig.txtCreate );
     }
     this.btnDisabled = false;
+    this.closeDialog();
   }
 
-  handleUpdate( data:Bill ){
+  handleUpdate( data:Tag ){
     return new Promise( resolve =>{
-      this._whatsappInfo.update( data ).subscribe( res =>{
+      data = _.omit(data, [ 'user' ])
+      data = _.omitBy(data, _.isNull);
+      this._tagServices.update( data ).subscribe( res =>{
         resolve( res );
       },( error)=> resolve( error ) );
     })
   }
 
-  handleCreate( data:Bill ){
+  handleCreate( data:Tag ){
+    data = _.omitBy(data, _.isNull);
     return new Promise( resolve =>{
-      this._whatsappInfo.create( data ).subscribe( res =>{
+      this._tagServices.create( data ).subscribe( res =>{
         resolve( res );
       },( error)=> resolve( error ) );
     })
   }
+
+
+  closeDialog(){
+    this.dialogRef.close();
+  }
+
 
 }

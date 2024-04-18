@@ -37,6 +37,7 @@
     "core-js": "3.21.1",
     "file-saver": "^2.0.5",
     "html2canvas": "^1.4.1",
+    "konva": "^9.3.6",
     "lodash": "^4.17.21",
     "mdb-angular-ui-kit": "^2.3.0",
     "memory-cache": "^0.2.0",

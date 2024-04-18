@@ -1,1 +1,34 @@
-<p>broadcast works!</p>
+<div class="header bg-gradient-danger pb-5 pt-2 pt-md-5">
+</div>
+<div class="content container">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex bd-highlight">
+        <div class="p-2 flex-grow-1 bd-highlight">
+          <h4> {{ dataConfig.broadcasts }} </h4>
+        </div>
+        <div class="p-2 bd-highlight">
+          <div class="d-flex bd-highlight mb-3">
+            <div class="p-2 bd-highlight">
+              <a href="#">{{ dataConfig.activeScheduled }} </a>
+            </div>
+            <div class="p-2 bd-highlight">
+              <a href="#">{{ dataConfig.drafts }} </a>
+            </div>
+            <div class="p-2 bd-highlight">
+              <a href="#">{{ dataConfig.history }} </a>
+            </div>
+          </div>
+        </div>
+        <div class="p-2 bd-highlight">
+          <button class="btn btn-primary" type="button">
+            {{ dataConfig.addNewBroadcast }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+
+    </div>
+  </div>
+</div>

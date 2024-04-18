@@ -52,7 +52,24 @@ export class ConfigKeysService {
       btnAddC: "Guardar cambios",
       txtPleaseDon: "Por favor, no termines esta frase con un punto (.), signo de exclamación (!) o signo de interrogación (?)",
       mine: "mis chats",
-      unassigned: "Todos ocupados"
+      unassigned: "Todos ocupados",
+      initialDetails: "Detalle Inicial",
+      description: "Descripcion",
+      btnSaved: "Guardar",
+      whatsappLogic: "Logica de Whatsapp",
+      BtnClearList: "Limpiar lista",
+      BtnAddFurther: "Agregar Mas",
+      BtnDouble: "Duplicar",
+      btnDelete: "Borrar",
+      indicatorNumber: "Numero / indicador:",
+      indicatorDeep: "Indicador Profundo",
+      urlMedia: "urlMedios",
+      answer: "Respuesta",
+      broadcasts: "Transmisión",
+      addNewBroadcast: "Crear nueva transmisión",
+      activeScheduled: "Activas y programadas",
+      drafts: "Borradores",
+      history: "Historial"
     }
   };
   constructor() { }

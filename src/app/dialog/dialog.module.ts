@@ -7,6 +7,9 @@ import { DetailContactComponent } from './detail-contact/detail-contact.componen
 import { OpenQrComponent } from './open-qr/open-qr.component';
 import { FormBellDialogComponent } from './for-bell-dialog/form-bell-dialog.component';
 import { FileDetailComponent } from './file-detail/file-detail.component';
+import { FormFlowsComponent } from './form-flows/form-flows.component';
+import { ToolsModule } from '../tools/tools.module';
+import { FormTagComponent } from './form-tag/form-tag.component';
 
 
 
@@ -16,7 +19,10 @@ import { FileDetailComponent } from './file-detail/file-detail.component';
     DetailContactComponent,
     OpenQrComponent,
     FormBellDialogComponent,
-    FileDetailComponent
+    FileDetailComponent,
+    FormFlowsComponent,
+    FormTagComponent
+
   ],
   declarations: [
     MovementItemComponent,
@@ -24,17 +30,24 @@ import { FileDetailComponent } from './file-detail/file-detail.component';
     OpenQrComponent,
     FormBellDialogComponent,
     FileDetailComponent,
+    FormFlowsComponent,
+    FormTagComponent
+    ,
   ],
   exports:[
     MovementItemComponent,
     DetailContactComponent,
     OpenQrComponent,
     FormBellDialogComponent,
-    FileDetailComponent
+    FileDetailComponent,
+    FormFlowsComponent,
+    FormTagComponent
+
   ],
   imports: [
     CommonModule,
     FormsModule,
+    ToolsModule,
     MyOwnCustomMaterialModule
 
   ]

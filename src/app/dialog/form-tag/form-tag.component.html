@@ -1,0 +1,28 @@
+<section mat-dialog-title>
+  <div class="d-flex justify-content-between">
+    <div>
+      <h4 *ngIf="!id">{{ dataConfig.txtCreateBill }} </h4>
+      <h4 *ngIf="id">{{ dataConfig.txtUpdateBill }} </h4>
+    </div>
+    <div></div>
+    <div>
+      <button mat-mini-fab color="warn" mat-dialog-close>
+        <i class="ni ni-fat-remove"></i>
+      </button>
+    </div>
+  </div>
+</section>
+<mat-dialog-content class="mat-typography" id="print">
+  <div class="row">
+    <div class="col-12 form-group">
+      <label> {{ dataConfig.tag }} </label>
+      <input type="text" class="form-control" [(ngModel)]="data.tag">
+    </div>
+    <div class="col-12">
+      <button type="button" class="btn btn-primary btn-lg btn-block" (click)="handleSubmit()" [disabled]="btnDisabled">
+        <span *ngIf="!id">{{ dataConfig.btnAddC }}</span>
+        <span *ngIf="id">{{ dataConfig.txtUpdate }}</span>
+      </button>
+    </div>
+  </div>
+</mat-dialog-content>

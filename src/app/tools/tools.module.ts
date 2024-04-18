@@ -13,6 +13,8 @@ import { ListChatComponent } from './list-chat/list-chat.component';
 import { ListChatDetailedComponent } from './list-chat-detailed/list-chat-detailed.component';
 import { FullConnectionService } from '../servicesComponent/full-connection.service';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
+import { CanvasBlocksComponent } from './canvas-blocks/canvas-blocks.component';
+import { FormFlowsHsComponent } from './form-flows-hs/form-flows-hs.component';
 
 @NgModule({
   declarations: [
@@ -21,13 +23,17 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
     TableStatisticsComponent,
     ListChatComponent,
     ListChatDetailedComponent,
+    CanvasBlocksComponent,
+    FormFlowsHsComponent,
   ],
   exports:[
     TablaComponent,
     TableStatisticsComponent,
     ArchivosComponent,
     ListChatComponent,
-    ListChatDetailedComponent
+    ListChatDetailedComponent,
+    CanvasBlocksComponent,
+    FormFlowsHsComponent
   ],
   imports: [
     CommonModule,
