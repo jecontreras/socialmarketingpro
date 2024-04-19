@@ -52,6 +52,8 @@ export interface Fruit {
   }
   export interface UserT{
     id?: string;
+    email?: string;
+    empresa?: string;
   }
   export interface Whatsapp{
     id?: string;
@@ -72,7 +74,7 @@ export interface Fruit {
   }
 
   export interface Block {
-    id?: number;
+    id?: string;
     x: number;
     y: number;
     width: number;
@@ -85,10 +87,10 @@ export interface Fruit {
   }
 
   export interface Flows {
-    id?: number;
+    id?: string;
   }
   export interface Tag {
-    id?: number;
+    id?: string;
     user?: string;
     tag?: string;
   }
@@ -97,3 +99,13 @@ export interface Fruit {
   export interface Indicador {
     txt?: string;
   }
+export interface Broadcast{
+  id?: string;
+  user?: string;
+  titulo?: string;
+  numero?: number;
+  checkSmartDelay?: string;
+  checkProgram?: boolean;
+  timeMessage?: string;
+  idFlow?: string;
+}

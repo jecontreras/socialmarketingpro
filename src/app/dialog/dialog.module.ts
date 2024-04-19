@@ -10,6 +10,7 @@ import { FileDetailComponent } from './file-detail/file-detail.component';
 import { FormFlowsComponent } from './form-flows/form-flows.component';
 import { ToolsModule } from '../tools/tools.module';
 import { FormTagComponent } from './form-tag/form-tag.component';
+import { FormBroadcastComponent } from './form-broadcast/form-broadcast.component';
 
 
 
@@ -31,7 +32,8 @@ import { FormTagComponent } from './form-tag/form-tag.component';
     FormBellDialogComponent,
     FileDetailComponent,
     FormFlowsComponent,
-    FormTagComponent
+    FormTagComponent,
+    FormBroadcastComponent
     ,
   ],
   exports:[

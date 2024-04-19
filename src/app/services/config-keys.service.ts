@@ -69,7 +69,28 @@ export class ConfigKeysService {
       addNewBroadcast: "Crear nueva transmisión",
       activeScheduled: "Activas y programadas",
       drafts: "Borradores",
-      history: "Historial"
+      history: "Historial",
+      txtCreateBroadcast: "Crear transmisión",
+      txtUpdateBroadcast: "Actualizar transmisión",
+      txtBroadcastConfig: "Configuraciones de transmisión",
+      txtFlow: "Flujo",
+      delay: "Retraso",
+      smartDelay: "Retraso Inteligente",
+      manuallyDelay: "Retraso manual",
+      seconds: "Segundos",
+      txtDelay: "Configura el retraso de tiempo con el que funcionará tu transmisión. Cuanto mayor sea el retraso, menos probable es que tu transmisión se confunda con spam, pero las transmisiones grandes pueden durar mucho tiempo",
+      veryShort: "Muy corto 1-5s",
+      short: "Corto 5-20s",
+      medium: "Medio 20-50s",
+      long: "Largo 50-120s",
+      veryLong: "Muy largo 120-300s",
+      setTimeLater: "Establecer hora y ejecutar más tarde",
+      targeting: "Segmentación",
+      txtUserBroadcast: "Usuarios que recibirán esta transmisión:",
+      btnShowUsers: "Mostrar usuarios",
+      addFilterAudience: "Agregar filtros para refinar su audiencia",
+      btnStartNow: "Iniciar Ahora"      ,
+      btnStartSchedule: "Iniciar Programación"
     }
   };
   constructor() { }

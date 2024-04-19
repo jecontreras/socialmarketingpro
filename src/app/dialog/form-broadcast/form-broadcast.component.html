@@ -1,0 +1,114 @@
+<section mat-dialog-title>
+  <div class="d-flex justify-content-between">
+    <div>
+      <h1 *ngIf="!id">{{ dataConfig.txtCreateBroadcast }} </h1>
+      <h1 *ngIf="id">{{ dataConfig.txtUpdateBroadcast }} </h1>
+    </div>
+    <div></div>
+    <div>
+      <button mat-mini-fab color="warn" mat-dialog-close>
+        <i class="ni ni-fat-remove"></i>
+      </button>
+    </div>
+  </div>
+</section>
+<mat-dialog-content class="mat-typography" id="print">
+  <div class="row">
+    <div class="col-12 col-sm-4">
+      <div class="row list-container">
+        <div class="col-12">
+          <h4> {{ dataConfig.txtBroadcastConfig }} </h4>
+        </div>
+        <div class="col-12 form-group">
+          <label> {{ dataConfig.txtFormName }} </label>
+          <input type="text" class="form-control" [(ngModel)]="data.titulo">
+        </div>
+        <div class="col-12 form-group">
+          <label> {{ dataConfig.txtFlow }} </label>
+          <select class="form-control" [(ngModel)]="data.idFlow">
+            <option [value]="item.id" *ngFor="let item of listFlow" >
+              {{ item.titulo }}
+            </option>
+          </select>
+        </div>
+        <div class="col-12 form-group">
+          <section class="example-section">
+            <mat-radio-group [(ngModel)]="data.checkSmartDelay">
+              <mat-radio-button class="example-margin" value="smartDelay">{{ dataConfig.smartDelay }}</mat-radio-button> &nbsp;
+              <mat-radio-button class="example-margin" value="manuallyDelay">{{ dataConfig.manuallyDelay }}</mat-radio-button>
+            </mat-radio-group>
+          </section>
+        </div>
+        <div class="col-12 form-group">
+          <p>
+            {{ dataConfig.txtDelay }}
+          </p>
+        </div>
+        <div class="col-12" *ngIf="true">
+          <span class="example-list-section">
+            <mat-radio-group [(ngModel)]="data.timeMessage">
+              <mat-radio-button
+                *ngFor="let item of listTime"
+                class="example-margin" [value]="item.time">{{ item.name }}
+              </mat-radio-button> &nbsp;
+            </mat-radio-group>
+          </span>
+        </div>
+        <div class="col-12" *ngIf="false">
+          <label> {{ dataConfig.seconds }} </label>
+          <input type="text" class="form-control" [(ngModel)]="data.timeBetween">
+        </div>
+        <div class="col-12">
+          <button type="button" class="btn btn-primary btn-lg btn-block" (click)="handleSubmit()" [disabled]="btnDisabled"> {{ dataConfig.btnAddC }} </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-12 col-sm-8">
+      <div class="row">
+        <div class="col-12">
+          <div class="d-flex bd-highlight mb-3">
+            <div class="p-2 bd-highlight">
+              <h4> {{ dataConfig.targeting }} </h4>
+              <p> {{ dataConfig.txtUserBroadcast }} </p>
+            </div>
+            <div class="ml-auto p-2 bd-highlight">
+              <button class="btn btn-primary" type="button"> {{ dataConfig.btnShowUsers }} </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <div class="d-flex justify-content-center">
+            <div>
+              <h5> {{ dataConfig.addFilterAudience }} </h5>
+              <button class="btn btn-primary" type="button"> {{ dataConfig.addFilter }} </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="row" style="width: 100%;">
+    <div class="col-12">
+      <div class="d-flex justify-content-between">
+        <div>
+          <h4>
+            {{ dataConfig.setTimeLater }}
+            <mat-checkbox class="example-margin" [(ngModel)]="data.checkProgram"> </mat-checkbox>
+          </h4>
+        </div>
+        <div></div>
+        <div>
+          <button mat-button (click)="handleSubmit()" class="btn btn-success">
+            <span *ngIf="!data.checkProgram"> {{ dataConfig.btnStartNow }} </span>
+            <span *ngIf="data.checkProgram"> {{ dataConfig.btnStartSchedule }} </span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>
+
+
