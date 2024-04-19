@@ -21,7 +21,7 @@ import { FormTagComponent } from './form-tag/form-tag.component';
     FormBellDialogComponent,
     FileDetailComponent,
     FormFlowsComponent,
-    FormTagComponent
+    FormTagComponent,
 
   ],
   declarations: [

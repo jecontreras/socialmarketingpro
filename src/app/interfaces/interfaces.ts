@@ -92,4 +92,8 @@ export interface Fruit {
     user?: string;
     tag?: string;
   }
-
+  export interface LOGICWHATSAPP {
+  };
+  export interface Indicador {
+    txt?: string;
+  }
