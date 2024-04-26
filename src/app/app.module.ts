@@ -33,7 +33,7 @@ import { MyOwnCustomMaterialModule } from './app.material.module';
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Retains last 25 states
       logOnly: environment.production, // Restrict extension to log-only mode
-    }),
+    })
   ],
   declarations: [
     AppComponent,

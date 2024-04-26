@@ -57,6 +57,11 @@ export interface Fruit {
   }
   export interface Whatsapp{
     id?: string;
+    to?: string;
+    txt?: string;
+    foto?: string;
+    createdAt?: string;
+    from?: string;
   }
   export interface WhatsappDetails{
     id?: string;
@@ -65,12 +70,14 @@ export interface Fruit {
     quien?: number;
     to?: string;
     from?: string;
+    urlMedios?: string;
   }
 
   export interface Msg{
     txt?:string;
     quien?: number;
     user?:string;
+    msx?:any;
   }
 
   export interface Block {

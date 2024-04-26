@@ -13,36 +13,36 @@ const socketOptions = {
 export class ChatService {
 
   private socket: any;
-  private url = environment.url; // Cambia esto por la URL de tu servidor Sails.js
+  private url = "http://localhost:3000"; // Cambia esto por la URL de tu servidor Sails.js
 
   constructor() {
     this.socket = io(this.url, socketOptions);
-    setTimeout(()=>{
-      console.log("***PErra")
-      this.socket.on('connect', () => {
-        console.log('Conexión establecida con el servidor');
-      });
-      this.socket.on('nuevoMensaje', (data) => {
-        console.log('Mensaje recibido del servidor:', data);
-        // Aquí puedes llamar a tu función recibirMensajes con la data recibida
+    this.socket.on('connect', () => {
+      console.log('Conexión establecida con el servidor');
+    });
+    this.socket.on('nuevoMensaje', (data) => {
+      console.log('Mensaje recibido del servidor:', data);
+      // Aquí puedes llamar a tu función recibirMensajes con la data recibida
 
-      });
-      this.socket.on('error', (error) => {
-        console.error('Error en la conexión con el servidor:', error);
-      });
-    }, 300)
+    });
+    this.socket.on('error', (error) => {
+      console.error('Error en la conexión con el servidor:', error);
+    });
   }
 
   enviarMensaje(txt: any) {
-    this.socket.emit('enviarMensaje', { txt: txt });
+    this.socket.emit('sendMessage', { txt: txt });
   }
 
   recibirMensajes( ): Observable<any> {
     return new Observable<any>(observer => {
-      this.socket.on('nuevoMensaje', (data: any) => {
-        console.log("***RRR", data)
-        observer.next(data);
-      });
+      this.socket.on('sendMessage2', (data: any) => observer.next(data) );
+    });
+  }
+
+  receiveMessageInit( ): Observable<any> {
+    return new Observable<any>(observer => {
+      this.socket.on('sendMessage', (data: any) => observer.next(data) );
     });
   }
 }

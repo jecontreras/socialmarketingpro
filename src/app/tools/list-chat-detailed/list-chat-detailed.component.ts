@@ -26,8 +26,20 @@ export class ListChatDetailedComponent implements OnInit {
 
   async ngOnInit() {
     this.childEmitter.emit( this.data );
-    this.chatService.recibirMensajes().subscribe((data: Msg) => {
-      console.log("****31", data)
+    this.chatService.recibirMensajes().subscribe(async (data: Msg) => {
+      //console.log("****31", data)
+      let filter = await this.listDetails.find( row => row.id === data.msx.id );
+      if( !filter ) this.listDetails.push( {
+        to: data.msx.to,
+        from: data.msx.from,
+        id: data.msx.id,
+        quien: data.msx.quien,
+        urlMedios: data.msx.urlMedios,
+        user: data.msx.user,
+        txt: data.msx.body
+       });
+       this.invertMessagesOrder();
+      this.scrollToBottom();
       //this.listDetails.push(data.txt);
     });
   }
@@ -86,13 +98,19 @@ export class ListChatDetailedComponent implements OnInit {
                 "to": this.data.to,
                 "body": this.msg.txt,
                 "urlMedios": "",
-                "quien": 1
+                "quien": 1,
+                "id": 1
             },
             "user": { "id": "6545ad04f9b6e13d24d91870"}
         };
-        /*this.chatService.enviarMensaje(data);*/
         this._whatsappDetails.createNewTxtWhatsapp( data ).subscribe( res =>{
-          resolve( res );
+          try {
+            data.msx.id = res.data.Whatsapphistorial.id;
+            this.chatService.enviarMensaje( data );
+            resolve( res );
+          } catch (error) {
+            resolve( false );
+          }
         },(error)=>resolve( error ) );
       })
     }
@@ -100,7 +118,7 @@ export class ListChatDetailedComponent implements OnInit {
       // Método para invertir el orden de los mensajes
     invertMessagesOrder(): void {
       //this.listDetails.reverse();
-      console.log("**60", this.listDetails)
+      //console.log("**60", this.listDetails)
     }
 
     handleFile( txtFormat:string ){

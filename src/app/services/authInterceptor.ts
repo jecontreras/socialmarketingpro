@@ -8,7 +8,7 @@ import { USER } from '../interfaces/user';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-    
+
     token:string = "";
     constructor(
         private _store: Store<USER>,
