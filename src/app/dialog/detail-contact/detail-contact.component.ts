@@ -13,6 +13,7 @@ import { Router } from '@angular/router';
 import { TagUserService } from 'src/app/servicesComponent/tag-user.service';
 import { SequencesService } from 'src/app/servicesComponent/sequences.service';
 import { CampaignsService } from 'src/app/servicesComponent/campaigns.service';
+import { ChatService } from 'src/app/servicesComponent/chat.service';
 
 declare interface BROADCAST{
   contact?:CONTACT;
@@ -45,7 +46,8 @@ export class DetailContactComponent implements OnInit {
     private _router: Router,
     private _tagUser: TagUserService,
     private _sequencesService: SequencesService,
-    private _campaignsService: CampaignsService
+    private _campaignsService: CampaignsService,
+    private _chatServices: ChatService
   ) {
 
     this._store.subscribe((store: any) => {
@@ -62,15 +64,15 @@ export class DetailContactComponent implements OnInit {
   }
 
   async ngOnInit(){
-    console.log("****", this.datas)
     this.data.contact = this.datas.contactId;
     if( this.data.contact.id ) {
-      let result:any = await this.getAssignedUser( this.data.contact.id );
+      let result:any = await this.getAssignedUser( this.dataUser.id, this.datas.id );
       this.data.assigned = result || {};
     }
     this.listTag = await this.getListTag();
     this.listSequences = await this.getListSequences();
     this.listCampaigns = await this.getListCampaigns();
+    console.log("****", this.datas, ">>>>>>>>>", this.data )
   }
 
   getListTag():any{
@@ -133,9 +135,9 @@ export class DetailContactComponent implements OnInit {
     });
   }
 
-  getAssignedUser( userId ){
+  getAssignedUser( userId, whatsappId ){
     return new Promise( resolve =>{
-      this._assignedWhatsappServices.get( { where: { userId: userId } }).subscribe( res => resolve( res.data[0] ),error => resolve( error ) );
+      this._assignedWhatsappServices.get( { where: { userId: userId, whatsappId: whatsappId } }).subscribe( res => resolve( res.data[0] ),error => resolve( error ) );
     })
   }
   async handleSubmitAssigned(){
@@ -157,8 +159,10 @@ export class DetailContactComponent implements OnInit {
         };
       }
     }
+    this._chatServices.sendContactAssigned( this.data.assigned );
     this._tools.basic(this.dataConfig.txtUpdate );
     this.btnDisabled = false;
+    this.closeDialog( 'chat' );
   }
 
   async  processAssignedCreate(){
@@ -169,7 +173,6 @@ export class DetailContactComponent implements OnInit {
         msxId = this.datas.id;
         this.ProcessMessageUserUpdate();
       }
-      console.log("***172", this.datas)
       let data:WHATSAPPINFOUSER = {
         userId: this.dataUser.id,
         estado: 0,
@@ -202,8 +205,8 @@ export class DetailContactComponent implements OnInit {
             "urlMedios": "",
             "quien": 1,
             "id": 1
-        },
-        "user": { "id": this.dataUser.id }
+        },// TODO USUARIO CABEZA DE TODO
+        "user": { "id": this.dataUser.cabeza }
         }
       ).subscribe( res => {
         resolve( res.data.whatsappTxt.id )}, error => resolve( error ) );
@@ -222,20 +225,22 @@ export class DetailContactComponent implements OnInit {
             "quien": 1,
             "id": 1
         },
-        "user": { "id": this.dataUser.id }
+        "user": { "id": this.dataUser.cabeza }
         }
-      ).subscribe( res => resolve( res.data.whatsappTxt.id ), error => resolve( error ) );
+      ).subscribe( res => {
+        resolve( res.data.whatsappTxt.id )
+      }, error => resolve( error ) );
     })
   }
 
   handleOpenChat(){
     this._router.navigate(['/liveChat', this.datas.id ] );
-    this.closeDialog();
+    this.closeDialog( 'chat' );
   }
 
 
-  closeDialog(){
-    this.dialogRef.close();
+  closeDialog( opt:string ){
+    this.dialogRef.close( opt );
   }
 
 }

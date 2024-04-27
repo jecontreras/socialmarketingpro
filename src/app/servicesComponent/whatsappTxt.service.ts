@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { ServiciosService } from '../services/servicios.service';
 import { LOGICWHATSAPP } from '../interfaces/interfaces';
+import { map } from 'rxjs';
+import { ChatService } from './chat.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +10,8 @@ import { LOGICWHATSAPP } from '../interfaces/interfaces';
 export class WhatsappTxtService {
 
   constructor(
-    private _model: ServiciosService
+    private _model: ServiciosService,
+    private chatService: ChatService
   ) { }
 
   get(query:any){
@@ -38,7 +41,12 @@ export class WhatsappTxtService {
   }
 
   createNewTxtWhatsapp(query:any){
-    return this._model.querys('WhatsappHistorial/send',query, 'post');
+    return this._model.querys('WhatsappHistorial/send',query, 'post')
+    .pipe( map( ( data:any ) => {
+      query.msx.id = data.data.Whatsapphistorial.id;
+      this.chatService.enviarMensaje( query );
+      return data;
+    } ) ) ;
   }
 
   getInfoWhatsapp(query: any){

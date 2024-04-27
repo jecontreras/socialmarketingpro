@@ -39,16 +39,22 @@ export class FormAllChatComponent implements OnInit {
 
   async ngOnInit() {
     this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
-      this.nexProcess( data );
+      this.nexProcessNewWhatsapp( data );
     });
     this.chatService.receiveMessageInit().subscribe(async (data: MSG) => {
-      this.nexProcess( data );
+      this.nexProcessNewWhatsapp( data );
     });
-    let result:any = await this.getListChat();
+
+    this.chatService.receiveChatAssigned().subscribe(async (data: MSG) => {
+      console.log("****49", data)
+      this.nexProcessAssigned( data );
+    });
+
+    let result:any = await this.getListChat( { where: { }, limit: 10, page: 0 } );
     this.listChat = result;
   }
 
-  nexProcess( data ){
+  nexProcessNewWhatsapp( data ){
     try {
       let index = _.findIndex( this.listChat, ['to', data.msx.to ] );
       //console.log("****32", index)
@@ -60,34 +66,44 @@ export class FormAllChatComponent implements OnInit {
             from: data.msx.from,
             to: data.msx.to,
             id: data.msx.id,
-            txt: data.msx.body
+            txt: data.msx.body,
+            contactId: data.msx.contactId.id
           }
         )
       }
     } catch (error) { }
   }
 
+  async nexProcessAssigned( data ){
+    data = data.txt;
+    if( data.assignedMe === 0 )this.listChat = this.listChat.filter( row => row.id === data.whatsappId );
+    else {
+      let resData = await this.getListChat( { where: { id: data.whatsappId }, limit: 1 } );
+      this.listChat.push( resData );
+    }
+  }
 
-  getListChat(){
+
+
+
+  getListChat( querys ){
     return new Promise( resolve =>{
-      this._whatsappTxt.get( {
-        where:{ }
-      }).subscribe( res =>{
+      this._whatsappTxt.get( querys ).subscribe( res =>{
         resolve( res.data );
       });
     })
   }
 
   async handleSelectChat( item ){
-    let contact = await this.getContactId( item.contactId );
+    let contact = await this.getContactId( item.contactId.id || item.contactId );
     item.contactId = contact;
     const dialogRef = this.dialog.open(DetailContactComponent, {
       data: item,
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      this.closeDialog();
+      console.log('The dialog was closed', result);
+      if( result ) this.closeDialog();
     });
   }
 

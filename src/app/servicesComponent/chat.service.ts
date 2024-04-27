@@ -34,6 +34,10 @@ export class ChatService {
     this.socket.emit('sendMessage', { txt: txt });
   }
 
+  sendContactAssigned(txt: any) {
+    this.socket.emit('contactAssigned', { txt: txt });
+  }
+
   recibirMensajes( ): Observable<any> {
     return new Observable<any>(observer => {
       this.socket.on('sendMessage2', (data: any) => observer.next(data) );
@@ -43,6 +47,11 @@ export class ChatService {
   receiveMessageInit( ): Observable<any> {
     return new Observable<any>(observer => {
       this.socket.on('sendMessage', (data: any) => observer.next(data) );
+    });
+  }
+  receiveChatAssigned( ): Observable<any> {
+    return new Observable<any>(observer => {
+      this.socket.on('contactAssigned', (data: any) => observer.next(data) );
     });
   }
 }

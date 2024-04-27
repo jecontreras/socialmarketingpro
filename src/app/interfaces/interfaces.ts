@@ -35,6 +35,7 @@ export interface Componente {
     updatedAt?: string;
     celular?: string;
     name?: string;
+    cabeza?:string;
   }
   export interface WHATSAPP{
     id?: string;
@@ -44,6 +45,7 @@ export interface Componente {
     createdAt?: string;
     from?: string;
     updatedAt?: string;
+    contactId?: any;
   }
   export interface WHATSAPPDETAILS{
     id?: string;
@@ -62,6 +64,7 @@ export interface Componente {
     quien?: number;
     user?:string;
     msx?:any;
+    contactId?:any;
   }
 
   export interface BLOCK {

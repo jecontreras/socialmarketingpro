@@ -131,12 +131,10 @@ export class ListChatDetailedComponent implements OnInit {
                 "quien": 1,
                 "id": 1
             },
-            "user": { "id": this.dataUser.id }
+            "user": { "id": this.dataUser.cabeza }
         };
         this._whatsappDetails.createNewTxtWhatsapp( data ).subscribe( res =>{
           try {
-            data.msx.id = res.data.Whatsapphistorial.id;
-            this.chatService.enviarMensaje( data );
             resolve( res );
           } catch (error) {
             resolve( false );

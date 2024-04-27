@@ -51,7 +51,8 @@ export class ListChatComponent implements OnInit {
     return new Promise( resolve =>{
       this._whatsappTxtUserService.getChatUser( {
         where:{
-          userId: this.dataUser.id
+          userId: this.dataUser.id,
+          assignedMe: 0
         }
       }).subscribe( res =>{
         resolve( res.data );
