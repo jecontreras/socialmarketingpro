@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { Tag, UserT } from 'src/app/interfaces/interfaces';
+import { TAG, USERT } from 'src/app/interfaces/interfaces';
 import { STORAGES } from 'src/app/interfaces/sotarage';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ToolsService } from 'src/app/services/tools.service';
@@ -16,9 +16,9 @@ import * as _ from 'lodash';
 export class FormTagComponent implements OnInit {
   dataConfig:any = {};
   id:any;
-  data:Tag = {};
+  data:TAG = {};
   btnDisabled:boolean = false;
-  dataUser:UserT = {};
+  dataUser:USERT = {};
 
   constructor(
     private _config: ConfigKeysService,
@@ -57,7 +57,7 @@ export class FormTagComponent implements OnInit {
     this.closeDialog();
   }
 
-  handleUpdate( data:Tag ){
+  handleUpdate( data:TAG ){
     return new Promise( resolve =>{
       data = _.omit(data, [ 'user' ])
       data = _.omitBy(data, _.isNull);
@@ -67,7 +67,7 @@ export class FormTagComponent implements OnInit {
     })
   }
 
-  handleCreate( data:Tag ){
+  handleCreate( data:TAG ){
     data = _.omitBy(data, _.isNull);
     return new Promise( resolve =>{
       this._tagServices.create( data ).subscribe( res =>{

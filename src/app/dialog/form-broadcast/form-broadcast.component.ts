@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { Broadcast, Flows, UserT } from 'src/app/interfaces/interfaces';
+import { BROADCAST, FLOWS, USERT } from 'src/app/interfaces/interfaces';
 import { STORAGES } from 'src/app/interfaces/sotarage';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ToolsService } from 'src/app/services/tools.service';
@@ -16,10 +16,10 @@ import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.servic
 export class FormBroadcastComponent implements OnInit {
   dataConfig:any = {};
   id:any;
-  data:Broadcast = {};
+  data:BROADCAST = {};
   btnDisabled:boolean = false;
-  dataUser:UserT = {};
-  listFlow: Flows[] = [];
+  dataUser:USERT = {};
+  listFlow: FLOWS[] = [];
   listTime = [];
 
   constructor(

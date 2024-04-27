@@ -1,52 +1,83 @@
-<section mat-dialog-title>
+<section mat-dialog-title *ngIf="data">
   <div class="d-flex justify-content-between">
     <div>
       <h3>
-        {{ data.name }}
+        {{ data.contact.name }}
         <i class="ni ni-check-bold"></i>
       </h3>
     </div>
     <div></div>
     <div>
-      <i class="ni ni-button-pause"></i>
-      <i class="ni ni-bullet-list-67"></i>
+      <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon">
+        <mat-icon>description</mat-icon>
+      </button>
+      <button mat-mini-fab color="accent" aria-label="Example icon button with a menu icon">
+        <mat-icon>more_vert</mat-icon>
+      </button>
       <button mat-mini-fab color="warn" mat-dialog-close>
         <i class="ni ni-fat-remove"></i>
       </button>
     </div>
   </div>
 </section>
-<mat-dialog-content class="mat-typography" id="print">
+<mat-dialog-content class="mat-typography" id="print" *ngIf="data.contact">
   <div class="row">
     <div class="col-12 col-sm-4">
       <div class="row">
         <div class="col-12">
-          <span>{{ dataConfig.tag }} </span>
-          <span class="example-spacer"></span>
-          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-            <i class="ni ni-fat-add"></i>
-          </button>
+          <div class="d-flex bd-highlight">
+            <div class="p-2 flex-grow-1 bd-highlight">
+              <span>{{ dataConfig.tag }} </span>
+            </div>
+            <div class="p-2 bd-highlight">
+              <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
+          <div>
+            <p>
+              <mat-chip-list aria-label="Fish selection">
+                <mat-chip *ngFor="let item of listTag" (click)="handlePushSelectTag( item, 'tag')"> {{ item.tag }} </mat-chip>
+              </mat-chip-list>
+            </p>
+          </div>
         </div>
         <div class="col-12">
-          <span>{{ dataConfig.sequences }} </span>
-          <span class="example-spacer"></span>
-          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-            <i class="ni ni-fat-add"></i>
-          </button>
+          <div class="d-flex bd-highlight">
+            <div class="p-2 flex-grow-1 bd-highlight">
+              <span>{{ dataConfig.sequences }}</span>
+            </div>
+            <div class="p-2 bd-highlight">
+              <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
         </div>
         <div class="col-12">
-          <span>{{ dataConfig.campaigns }} </span>
-          <span class="example-spacer"></span>
-          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-            <i class="ni ni-fat-add"></i>
-          </button>
+          <div class="d-flex bd-highlight">
+            <div class="p-2 flex-grow-1 bd-highlight">
+              <span>{{ dataConfig.campaigns }}</span>
+            </div>
+            <div class="p-2 bd-highlight">
+              <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
         </div>
         <div class="col-12">
-          <span>{{ dataConfig.variables }} </span>
-          <span class="example-spacer"></span>
-          <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
-            <i class="ni ni-fat-add"></i>
-          </button>
+          <div class="d-flex bd-highlight">
+            <div class="p-2 flex-grow-1 bd-highlight">
+              <span>{{ dataConfig.variables }}</span>
+            </div>
+            <div class="p-2 bd-highlight">
+              <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+                <mat-icon>add</mat-icon>
+              </button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -54,8 +85,8 @@
       <div class="row">
         <div class="col-12">
           <div class="d-flex justify-content-center">
-            <a href="#!" class="avatar avatar-xl rounded-circle">
-              <img alt="Image placeholder" [src]="data.foto">
+            <a href="#!" class="avatar avatar-xl rounded-circle" style="height: 122px !important; width: 124px !important;">
+              <img alt="Image placeholder" [src]="data.contact.foto" (error)="handleImageError()">
             </a>
           </div>
         </div>
@@ -64,17 +95,17 @@
           <div class="d-flex justify-content-center">
             <div>
               <p>
-                {{ dataConfig.txtChat }} <a class="pointer" *ngIf="data.estado === 'cerrado'"> {{ dataConfig.closed }} </a>
-                <a class="pointer" *ngIf="data.estado === 'abierto'"> {{ dataConfig.opened }} </a>
+                {{ dataConfig.txtChat }} <a class="pointer" *ngIf="data.contact.estado === 'cerrado'"> {{ dataConfig.closed }} </a>
+                <a class="pointer" *ngIf="data.contact.estado === 'abierto'"> {{ dataConfig.opened }} </a>
                 &nbsp; &nbsp;
               </p>
             </div>
             <div>
-              <button class="btn btn-icon btn-3 btn-primary" type="button" *ngIf="data.estado === 'abierto'" (click)="handleChatClose()">
+              <button class="btn btn-icon btn-3 btn-primary" type="button" *ngIf="data.contact.estado === 'abierto'" (click)="handleChatClose()">
                 <span class="btn-inner--icon"><i class="ni ni-check-bold"></i></span>
                 <span class="btn-inner--text">{{ dataConfig.btnMarkClosed }} </span>
               </button>
-              <button class="btn btn-icon btn-3 btn-primary" type="button" *ngIf="data.estado === 'cerrado'" (click)="handleChatOpen()">
+              <button class="btn btn-icon btn-3 btn-primary" type="button" *ngIf="data.contact.estado === 'cerrado'" (click)="handleChatOpen()">
                 <span class="btn-inner--icon"><i class="ni ni-check-bold"></i></span>
                 <span class="btn-inner--text">{{ dataConfig.btnReopen }} </span>
               </button>
@@ -87,21 +118,21 @@
               <div class="d-flex justify-content-between displayWidth">
                 <div><i class="ni ni-mobile-button"></i> {{ dataConfig.phone }} </div>
                 <div></div>
-                <div><h4> {{ data.whatsapp }} </h4></div>
+                <div><h4> {{ data.contact.whatsapp }} </h4></div>
               </div>
             </mat-list-item>
             <mat-list-item role="listitem">
               <div class="d-flex justify-content-between displayWidth">
                 <div><i class="ni ni-email-83"></i> {{ dataConfig.email }} </div>
                 <div></div>
-                <div><h4> {{ data.email }} </h4></div>
+                <div><h4> {{ data.contact.email }} </h4></div>
               </div>
             </mat-list-item>
             <mat-list-item role="listitem">
               <div class="d-flex justify-content-between displayWidth">
                 <div><i class="ni ni-button-pause"></i> {{ dataConfig.subscribed }} </div>
                 <div></div>
-                <div><h4> {{ data.createdAt | date:'medium' }} </h4></div>
+                <div><h4> {{ data.contact.createdAt | date:'medium' }} </h4></div>
               </div>
             </mat-list-item>
             <mat-list-item role="listitem">
@@ -118,7 +149,7 @@
             <div style="width: 55%;">
               <div class="row">
                 <div class="col-12" style="text-align: center;">
-                  <button class="btn btn-primary" type="button">{{ dataConfig.txtGotoChat }} <i class="ni ni-chat-round"></i> </button>
+                  <button class="btn btn-primary" type="button" (click)="handleOpenChat()">{{ dataConfig.txtGotoChat }} <i class="ni ni-chat-round"></i> </button>
                 </div>
                 <div class="col-12" style="text-align: center;">
                   <p>{{ dataConfig.txtAutomationUser }} </p>
@@ -129,7 +160,10 @@
                   </span>
                 </div>
                 <div class="col-12" style="text-align: center;">
-                  <button type="button" class="btn btn-outline-primary"> {{ dataConfig.unassignMe }} </button>
+                  <button type="button" class="btn btn-outline-primary" (click)="handleSubmitAssigned()">
+                    <span *ngIf="data.assigned.assignedMe"> {{ dataConfig.unassignMe }} </span>
+                    <span *ngIf="!data.assigned.assignedMe"> {{ dataConfig.assignedMe  }} </span>
+                  </button>
                   <button type="button" class="btn btn-outline-primary">
                     {{ dataConfig.assignedTo }}
                     <i class="ni ni-bold-down"></i>

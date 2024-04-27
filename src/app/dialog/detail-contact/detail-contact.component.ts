@@ -4,7 +4,20 @@ import { MovementItemComponent } from '../movement-item/movement-item.component'
 import { ToolsService } from 'src/app/services/tools.service';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ContactService } from 'src/app/servicesComponent/contact.service';
-import { Contact } from 'src/app/interfaces/interfaces';
+import { CONTACTDIALOG, CONTACT, WHATSAPPINFOUSER, USERT, TAGUSER, SEQUENCES, CAMPAIGNS } from 'src/app/interfaces/interfaces';
+import { WhatsappTxtUserService } from 'src/app/servicesComponent/whatsapp-txt-user.service';
+import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
+import { Store } from '@ngrx/store';
+import { USER } from 'src/app/interfaces/user';
+import { Router } from '@angular/router';
+import { TagUserService } from 'src/app/servicesComponent/tag-user.service';
+import { SequencesService } from 'src/app/servicesComponent/sequences.service';
+import { CampaignsService } from 'src/app/servicesComponent/campaigns.service';
+
+declare interface BROADCAST{
+  contact?:CONTACT;
+  assigned?: WHATSAPPINFOUSER;
+};
 
 @Component({
   selector: 'app-detail-contact',
@@ -13,45 +26,103 @@ import { Contact } from 'src/app/interfaces/interfaces';
 })
 export class DetailContactComponent implements OnInit {
   dataConfig:any = {};
-  data:any = {};
+  data:BROADCAST;
+  btnDisabled:boolean = false;
+  dataUser: USERT;
+  listTag:TAGUSER[];
+  listSequences:SEQUENCES[];
+  listCampaigns:CAMPAIGNS[];
 
   constructor(
     public dialogRef: MatDialogRef<MovementItemComponent>,
-    @Inject(MAT_DIALOG_DATA) public datas: any,
+    @Inject(MAT_DIALOG_DATA) public datas: CONTACTDIALOG,
     private _tools: ToolsService,
     private _config: ConfigKeysService,
-    private _contac: ContactService
+    private _contac: ContactService,
+    private _assignedWhatsappServices: WhatsappTxtUserService,
+    private _whatsappTxtService: WhatsappTxtService,
+    private _store: Store<USER>,
+    private _router: Router,
+    private _tagUser: TagUserService,
+    private _sequencesService: SequencesService,
+    private _campaignsService: CampaignsService
   ) {
+
+    this._store.subscribe((store: any) => {
+      store = store.name;
+      if(!store) return false;
+      this.dataUser = store.user || {};
+    });
+
     this.dataConfig = _config._config.keys;
+    this.data = {
+      contact: { },
+      assigned: { }
+    }
   }
 
-  ngOnInit(): void {
-    this.data = this.datas;
+  async ngOnInit(){
+    console.log("****", this.datas)
+    this.data.contact = this.datas.contactId;
+    if( this.data.contact.id ) {
+      let result:any = await this.getAssignedUser( this.data.contact.id );
+      this.data.assigned = result || {};
+    }
+    this.listTag = await this.getListTag();
+    this.listSequences = await this.getListSequences();
+    this.listCampaigns = await this.getListCampaigns();
   }
+
+  getListTag():any{
+    return new Promise( resolve =>{
+      this._tagUser.get( { where: { contact: this.data.contact.id } } ).subscribe( res=>{
+        resolve( res.data );
+      });
+    })
+  }
+  getListSequences():any{
+    return new Promise( resolve =>{
+      this._sequencesService.get( { where: { contact: this.data.contact.id } } ).subscribe( res=>{
+        resolve( res.data );
+      });
+    })
+  }
+  getListCampaigns():any{
+    return new Promise( resolve =>{
+      this._campaignsService.get( { where: { contact: this.data.contact.id } } ).subscribe( res=>{
+        resolve( res.data );
+      });
+    })
+  }
+
 
   async handleChatClose(){
     let data = {
-      id: this.data.id,
+      id: this.data.contact.id,
       estado: "cerrado"
     };
-    let result:Contact = await this.nextProcessContact( data );
+    let result:CONTACT = await this.nextProcessContact( data );
     if( result.id ) {
       this._tools.basic( this.dataConfig.txtUpdate );
-      this.data.estado = result.estado;
+      this.data.contact.estado = result.estado;
     }else this._tools.basic( this.dataConfig.txtError );
 
   }
 
   async handleChatOpen(){
     let data = {
-      id: this.data.id,
+      id: this.data.contact.id,
       estado: "abierto"
     };
-    let result:Contact = await this.nextProcessContact( data );
+    let result:CONTACT = await this.nextProcessContact( data );
     if( result.id ) {
       this._tools.basic( this.dataConfig.txtUpdate );
-      this.data.estado = result.estado;
+      this.data.contact.estado = result.estado;
     }else this._tools.basic( this.dataConfig.txtError );
+  }
+
+  handleImageError() {
+    this.data.contact.foto = './assets/img/theme/team-4-800x800.jpg';
   }
 
   nextProcessContact( data ){
@@ -60,6 +131,111 @@ export class DetailContactComponent implements OnInit {
         resolve( res );
       },(err)=>resolve(err))
     });
+  }
+
+  getAssignedUser( userId ){
+    return new Promise( resolve =>{
+      this._assignedWhatsappServices.get( { where: { userId: userId } }).subscribe( res => resolve( res.data[0] ),error => resolve( error ) );
+    })
+  }
+  async handleSubmitAssigned(){
+    if( this.btnDisabled ) return false;
+    this.btnDisabled = true;
+    if( this.data.assigned.id ) {
+     let result:any = await this.processAssignedUpdate();
+     this.data.assigned.assignedMe = result.assignedMe;
+    }
+    else {
+      let result:any = await  this.processAssignedCreate();
+      if( result.id ){
+        this.data.assigned = {
+          ...result,
+          whatsappId: result.whatsappId.id,
+          userId: result.userId ? result.userId.id : result.userId,
+          tagId: result.tagId ?result.tagId.id : result.tagId,
+          sequenceId: result.sequenceId ? result.sequenceId.id : result.sequenceId
+        };
+      }
+    }
+    this._tools.basic(this.dataConfig.txtUpdate );
+    this.btnDisabled = false;
+  }
+
+  async  processAssignedCreate(){
+    return new Promise( async( resolve ) =>{
+      let msxId:string;
+      if( !this.datas.id ) msxId = await this.ProcessMessageUserNew();
+      else {
+        msxId = this.datas.id;
+        this.ProcessMessageUserUpdate();
+      }
+      console.log("***172", this.datas)
+      let data:WHATSAPPINFOUSER = {
+        userId: this.dataUser.id,
+        estado: 0,
+        whatsappId: msxId,
+        assignedMe: 0
+      };
+      this._assignedWhatsappServices.create( data ).subscribe( res => resolve( res ), error => resolve( error ) );
+    });
+  }
+
+  processAssignedUpdate(){
+    return new Promise( resolve =>{
+      let data:WHATSAPPINFOUSER = {
+        id: this.data.assigned.id,
+        estado: 0,
+        assignedMe: this.data.assigned.assignedMe === 0 ? 1 : 0
+      };
+      this._assignedWhatsappServices.update( data ).subscribe( res => resolve( res ), error => resolve( error ) );
+    });
+  }
+
+  ProcessMessageUserNew():any{
+    return new Promise( resolve =>{
+      this._whatsappTxtService.createNewTxtWhatsapp(
+        {
+          "msx": {
+            "from": this.dataUser.celular,
+            "to": this.data.contact.whatsapp,
+            "body": "Asesor Asignado " + this.dataUser.name,
+            "urlMedios": "",
+            "quien": 1,
+            "id": 1
+        },
+        "user": { "id": this.dataUser.id }
+        }
+      ).subscribe( res => {
+        resolve( res.data.whatsappTxt.id )}, error => resolve( error ) );
+    })
+  }
+
+  ProcessMessageUserUpdate():any{
+    return new Promise( resolve =>{
+      this._whatsappTxtService.createNewTxtWhatsapp(
+        {
+          "msx": {
+            "from": this.datas.from,
+            "to": this.datas.to,
+            "body": "Asesor Asignado " + this.dataUser.name,
+            "urlMedios": "",
+            "quien": 1,
+            "id": 1
+        },
+        "user": { "id": this.dataUser.id }
+        }
+      ).subscribe( res => resolve( res.data.whatsappTxt.id ), error => resolve( error ) );
+    })
+  }
+
+  handleOpenChat(){
+    this._router.navigate(['/liveChat', this.datas.id ] );
+    this.closeDialog();
+  }
+
+
+  closeDialog(){
+    this.dialogRef.close();
   }
 
 }

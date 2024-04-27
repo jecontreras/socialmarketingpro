@@ -11,6 +11,7 @@ import { FormFlowsComponent } from './form-flows/form-flows.component';
 import { ToolsModule } from '../tools/tools.module';
 import { FormTagComponent } from './form-tag/form-tag.component';
 import { FormBroadcastComponent } from './form-broadcast/form-broadcast.component';
+import { FormAllChatComponent } from './form-all-chat/form-all-chat.component';
 
 
 
@@ -23,6 +24,7 @@ import { FormBroadcastComponent } from './form-broadcast/form-broadcast.componen
     FileDetailComponent,
     FormFlowsComponent,
     FormTagComponent,
+    FormAllChatComponent
 
   ],
   declarations: [
@@ -33,7 +35,8 @@ import { FormBroadcastComponent } from './form-broadcast/form-broadcast.componen
     FileDetailComponent,
     FormFlowsComponent,
     FormTagComponent,
-    FormBroadcastComponent
+    FormBroadcastComponent,
+    FormAllChatComponent
     ,
   ],
   exports:[
@@ -43,7 +46,8 @@ import { FormBroadcastComponent } from './form-broadcast/form-broadcast.componen
     FormBellDialogComponent,
     FileDetailComponent,
     FormFlowsComponent,
-    FormTagComponent
+    FormTagComponent,
+    FormAllChatComponent
 
   ],
   imports: [

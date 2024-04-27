@@ -1,11 +1,10 @@
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
-import { CampaignsService } from 'src/app/servicesComponent/campaigns.service';
 import { ContactService } from 'src/app/servicesComponent/contact.service';
-import { PerfilService } from 'src/app/servicesComponent/perfil.service';
-import { SequencesService } from 'src/app/servicesComponent/sequences.service';
+import { InfoWhatsappService } from 'src/app/servicesComponent/info-whatsapp.service';
 import { TagService } from 'src/app/servicesComponent/tag.service';
+import { WhatsappInfoService } from 'src/app/servicesComponent/whatsapp-info.service';
 
 @Component({
   selector: 'app-audience',
@@ -48,8 +47,8 @@ export class AudienceComponent implements OnInit {
     private _contact: ContactService,
     private _config: ConfigKeysService,
     private _tag: TagService,
-    private _sequences: SequencesService,
-    private _campaigns: CampaignsService
+    private _infoWhatsappServices: InfoWhatsappService,
+    private _whatsappInfoServices: WhatsappInfoService
   ) {
     this.dataConfig = _config._config.keys;
 
@@ -71,14 +70,14 @@ export class AudienceComponent implements OnInit {
   }
   getListSequences(){
     return new Promise( resolve =>{
-      this._sequences.get( { where: { } } ).subscribe( res=>{
+      this._infoWhatsappServices.get( { where: {  estado: 0 } } ).subscribe( res=>{
         resolve( res.data );
       });
     })
   }
   getListCampaigns(){
     return new Promise( resolve =>{
-      this._campaigns.get( { where: { } } ).subscribe( res=>{
+      this._whatsappInfoServices.get( { where: { } } ).subscribe( res=>{
         resolve( res.data );
       });
     })

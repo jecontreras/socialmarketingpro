@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { Bill, UserT } from 'src/app/interfaces/interfaces';
+import { BILL, USERT } from 'src/app/interfaces/interfaces';
 import { STORAGES } from 'src/app/interfaces/sotarage';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ToolsService } from 'src/app/services/tools.service';
@@ -15,9 +15,9 @@ import { WhatsappInfoService } from 'src/app/servicesComponent/whatsapp-info.ser
 export class FormBellDialogComponent implements OnInit {
   dataConfig:any = {};
   id:any;
-  data:Bill = {};
+  data:BILL = {};
   btnDisabled:boolean = false;
-  dataUser:UserT = {};
+  dataUser:USERT = {};
 
   constructor(
     private _tools: ToolsService,
@@ -59,7 +59,7 @@ export class FormBellDialogComponent implements OnInit {
     this.btnDisabled = false;
   }
 
-  handleUpdate( data:Bill ){
+  handleUpdate( data:BILL ){
     return new Promise( resolve =>{
       this._whatsappInfo.update( data ).subscribe( res =>{
         resolve( res );
@@ -67,7 +67,7 @@ export class FormBellDialogComponent implements OnInit {
     })
   }
 
-  handleCreate( data:Bill ){
+  handleCreate( data:BILL ){
     return new Promise( resolve =>{
       this._whatsappInfo.create( data ).subscribe( res =>{
         resolve( res );

@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Store } from '@ngrx/store';
-import { Flows, UserT } from 'src/app/interfaces/interfaces';
+import { FLOWS, USERT } from 'src/app/interfaces/interfaces';
 import { STORAGES } from 'src/app/interfaces/sotarage';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ToolsService } from 'src/app/services/tools.service';
@@ -16,9 +16,9 @@ export class FormFlowsComponent implements OnInit {
 
   dataConfig:any = {};
   id:any;
-  data:Flows;
+  data:FLOWS;
   btnDisabled:boolean = false;
-  dataUser:UserT = {};
+  dataUser:USERT = {};
 
   constructor(
     private _tools: ToolsService,

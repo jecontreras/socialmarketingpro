@@ -5,43 +5,18 @@ export interface Componente {
     disabled: boolean;
 }
 
-export interface Fruit {
-    color: string;
-    id: string;
-    estado: boolean;
-    foto: string;
-    listTallas: any;
-  }
-  export interface FacturaDto{
+  export interface CONTACT{
     id?:string;
-    codigo?: string;
-    fecha?:string;
-    nombreCliente?:string;
-    monto?:number;
-    entrada?: number;
-    provedor?: string;
-    qr?:string;
-    descripcion?:string;
+    estado?:string;
+    email?:string;
+    createdAt ?: string;
+    name?:string;
     foto?:string;
-    estado?: number;
-    user?: string;
-    tipoFactura?: number;
-    asentado?: boolean;
-    fechaasentado?: string;
-    coinFinix?: boolean;
-    check?: boolean;
-    amountPass?: number;
-    remaining?:number;
-    passMoney?:number;
-    passMoney2?:number;
+    whatsapp?: string;
+    updatedAt?:string;
   }
 
-  export interface Contact{
-    id?:string;
-    estado?:string
-  }
-
-  export interface Bill{
+  export interface BILL{
     id?:string;
     estado?:string;
     numero?:number;
@@ -49,21 +24,28 @@ export interface Fruit {
     titulo?:string;
     user?:string;
     frase?:string
+    createdAt?: string;
+    updatedAt?: string;
   }
-  export interface UserT{
+  export interface USERT{
     id?: string;
     email?: string;
     empresa?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    celular?: string;
+    name?: string;
   }
-  export interface Whatsapp{
+  export interface WHATSAPP{
     id?: string;
     to?: string;
     txt?: string;
     foto?: string;
     createdAt?: string;
     from?: string;
+    updatedAt?: string;
   }
-  export interface WhatsappDetails{
+  export interface WHATSAPPDETAILS{
     id?: string;
     user?:string;
     txt?: string;
@@ -71,42 +53,50 @@ export interface Fruit {
     to?: string;
     from?: string;
     urlMedios?: string;
+    createdAt?: string;
+    updatedAt?: string;
   }
 
-  export interface Msg{
+  export interface MSG{
     txt?:string;
     quien?: number;
     user?:string;
     msx?:any;
   }
 
-  export interface Block {
+  export interface BLOCK {
     id?: string;
     x: number;
     y: number;
     width: number;
     height: number;
     content: string;
+    createdAt?: string;
+    updatedAt?: string;
   }
 
-  export interface Indicator {
+  export interface INDICATOR {
     txt?: string;
   }
 
-  export interface Flows {
+  export interface FLOWS {
     id?: string;
+    createdAt?: string;
+    updatedAt?: string;
   }
-  export interface Tag {
+  export interface TAG {
     id?: string;
     user?: string;
     tag?: string;
+    createdAt?: string;
+    updatedAt?: string;
   }
   export interface LOGICWHATSAPP {
+    id?: string;
+    createdAt?: string;
+    updatedAt?: string;
   };
-  export interface Indicador {
-    txt?: string;
-  }
-export interface Broadcast{
+export interface BROADCAST{
   id?: string;
   user?: string;
   titulo?: string;
@@ -115,4 +105,105 @@ export interface Broadcast{
   checkProgram?: boolean;
   timeMessage?: string;
   idFlow?: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
+
+export interface WHATSAPPINFO {
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+};
+
+
+export interface WHATSAPPINFOUSER {
+  id?: string;
+  userId?:string;
+  user?: USERT;
+  whatsappId?:string;
+  whatsapp?: WHATSAPPINFO;
+  estado?:number;
+  assignedMe?:number;
+  tagId?:string;
+  tag?: TAG;
+  sequenceId?: string;
+  sequence?: INFOWHATSAPP;
+  createdAt?: string;
+  updatedAt?: string;
+
+}
+
+export interface INFOWHATSAPP {
+ id?: string;
+ createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface CONTACTDIALOG{
+  contactId?:CONTACT;
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  to?: string;
+  from?: string;
+  user?: string;
+}
+
+export interface TAGUSER{
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  tag?: string;
+  tagList?: TAG;
+  user?: string;
+  userList?: USERT;
+  estado?: number;
+  contact: string;
+  contactList?: CONTACT;
+}
+
+export interface SEQUENCES{
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  sequence?: string;
+  state?: string;
+  user?: string;
+  userList?: USERT;
+  contact: string;
+  contactList?: CONTACT;
+}
+
+export interface CAMPAIGNS{
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  campaigns?: string;
+  state?: string;
+  user?: string;
+  userList?: USERT;
+  contact: string;
+  contactList?: CONTACT;
+}
+
+export interface WHATSAPPTXT{
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface WHATSAPPTXTUSER{
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  userId?: string;
+  userIdList?: USERT;
+  whatsappId: string;
+  whatsappIdList?: WHATSAPPTXT;
+  estado?: number;
+  assignedMe?: number;
+  tagId?: TAG;
+  sequenceId?: string;
+  sequenceIdList?:SEQUENCES;
+}
+

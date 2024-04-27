@@ -24,6 +24,7 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'bell',           component: BellComponent },
     { path: 'broadcast',           component: BroadcastComponent },
     { path: 'liveChat',           component: LiveChatComponent },
+    { path: 'liveChat/:id',           component: LiveChatComponent },
     { path: 'flows',           component: FlowsComponent },
     { path: 'config',           component: ConfigComponent },
 ];

@@ -9,7 +9,7 @@ import { USER } from 'src/app/interfaces/user';
 import { GaleriaService } from 'src/app/servicesComponent/galeria.service';
 import * as _ from 'lodash';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { Flows, Indicator } from 'src/app/interfaces/interfaces';
+import { FLOWS, INDICATOR } from 'src/app/interfaces/interfaces';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import { FormFlowsComponent } from 'src/app/dialog/form-flows/form-flows.component';
@@ -20,7 +20,7 @@ import { FormFlowsComponent } from 'src/app/dialog/form-flows/form-flows.compone
   styleUrls: ['./form-flows-hs.component.scss']
 })
 export class FormFlowsHsComponent implements OnInit {
-  @Input() dataId:Flows = {};
+  @Input() dataId:FLOWS = {};
   data:any = {
 
   };
@@ -326,7 +326,7 @@ export class FormFlowsHsComponent implements OnInit {
     }
   }
 
-  async remove(fruit: Indicator, item) {
+  async remove(fruit: INDICATOR, item) {
     const index = item.deepIndicator.indexOf(fruit);
 
     if (index >= 0) {

@@ -42,6 +42,7 @@ export class ConfigKeysService {
       txtAutomationUser: "La automatización está desactivada para el usuario",
       txtPauseAutomation: "Iniciará",
       unassignMe: "Desasignarme",
+      assignedMe: "Asignarme",
       assignedTo: "Asignado a:",
       btnCreateCampaign: "Create nueva Camapaña",
       txtUpdateBill: "Editar Campaña",
@@ -90,7 +91,8 @@ export class ConfigKeysService {
       btnShowUsers: "Mostrar usuarios",
       addFilterAudience: "Agregar filtros para refinar su audiencia",
       btnStartNow: "Iniciar Ahora"      ,
-      btnStartSchedule: "Iniciar Programación"
+      btnStartSchedule: "Iniciar Programación",
+      universalMessages: "Mensajes Universales"
     }
   };
   constructor() { }

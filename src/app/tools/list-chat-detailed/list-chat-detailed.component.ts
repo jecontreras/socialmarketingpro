@@ -1,7 +1,10 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute } from '@angular/router';
+import { Store } from '@ngrx/store';
 import { FormFlowsComponent } from 'src/app/dialog/form-flows/form-flows.component';
-import { Msg, WhatsappDetails } from 'src/app/interfaces/interfaces';
+import { MSG, USERT, WHATSAPPDETAILS } from 'src/app/interfaces/interfaces';
+import { USER } from 'src/app/interfaces/user';
 import { ChatService } from 'src/app/servicesComponent/chat.service';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
 
@@ -11,42 +14,69 @@ import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.servic
   styleUrls: ['./list-chat-detailed.component.scss']
 })
 export class ListChatDetailedComponent implements OnInit {
-  @Input() data:WhatsappDetails = {};
+  @Input() data:WHATSAPPDETAILS = {};
   @Output() childEmitter = new EventEmitter<object>();
   @ViewChild('chatContainer') chatContainer!: ElementRef;
-  listDetails:WhatsappDetails[];
-  msg: Msg= { txt: "", quien: 1  };
+  listDetails:WHATSAPPDETAILS[] = [];
+  msg: MSG= { txt: "", quien: 1  };
   disabledEmoji:boolean = false;
+  dataUser:USERT;
 
   constructor(
     private _whatsappDetails: WhatsappTxtService,
     public dialog: MatDialog,
-    private chatService: ChatService
-  ) { }
+    private chatService: ChatService,
+    private _store: Store<USER>,
+    private activate: ActivatedRoute,
+  ) {
+    this._store.subscribe((store: any) => {
+      store = store.name;
+      if(!store) return false;
+      this.dataUser = store.user || {};
+    });
+
+  }
 
   async ngOnInit() {
+    let id = (this.activate.snapshot.paramMap.get('id'));
+    if( id ) {
+      await this.getWhatsappInit( id );
+      this.handleEventFater();
+    }
+
     this.childEmitter.emit( this.data );
-    this.chatService.recibirMensajes().subscribe(async (data: Msg) => {
+    this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
       //console.log("****31", data)
-      let filter = await this.listDetails.find( row => row.id === data.msx.id );
-      if( !filter ) this.listDetails.push( {
-        to: data.msx.to,
-        from: data.msx.from,
-        id: data.msx.id,
-        quien: data.msx.quien,
-        urlMedios: data.msx.urlMedios,
-        user: data.msx.user,
-        txt: data.msx.body
-       });
-       this.invertMessagesOrder();
-      this.scrollToBottom();
+      try {
+        let filter = await this.listDetails.find( row => row.id === data.msx.id );
+        if( !filter ) this.listDetails.push( {
+          to: data.msx.to,
+          from: data.msx.from,
+          id: data.msx.id,
+          quien: data.msx.quien,
+          urlMedios: data.msx.urlMedios,
+          user: data.msx.user,
+          txt: data.msx.body
+        });
+        this.invertMessagesOrder();
+        this.scrollToBottom();
+      } catch (error) { }
       //this.listDetails.push(data.txt);
     });
   }
 
+  getWhatsappInit( id:string ){
+    return new Promise( resolve =>{
+      this._whatsappDetails.get( { where: { id: id } } ).subscribe( res =>{
+        this.data = res.data[0] || {};
+        resolve( true );
+      }, error => resolve( false ) );
+    })
+  }
+
   async handleEventFater() {
     // Lógica que deseas ejecutar cuando se llama desde el padre
-    console.log('Función ejecutada desde el hijo, entre');
+    console.log('Función ejecutada desde el hijo, entre', this.data );
     setTimeout(async()=>{
       if( this.data.id ) {
         console.log("**310",this.data)
@@ -59,11 +89,11 @@ export class ListChatDetailedComponent implements OnInit {
   }
 
   scrollToBottom(): void {
-    try {
-      setTimeout(()=>{
+    setTimeout(()=>{
+      try {
         this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
-      }, 100 )
-    } catch(err) { }
+      } catch (error) {}
+    }, 100 )
   }
 
   getWhatsappDetails(){
@@ -101,7 +131,7 @@ export class ListChatDetailedComponent implements OnInit {
                 "quien": 1,
                 "id": 1
             },
-            "user": { "id": "6545ad04f9b6e13d24d91870"}
+            "user": { "id": this.dataUser.id }
         };
         this._whatsappDetails.createNewTxtWhatsapp( data ).subscribe( res =>{
           try {

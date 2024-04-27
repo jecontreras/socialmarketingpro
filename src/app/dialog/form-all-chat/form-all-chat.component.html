@@ -1,0 +1,58 @@
+<section mat-dialog-title>
+  <div class="d-flex justify-content-between">
+    <div>
+      <h4 >{{ dataConfig.universalMessages }} </h4>
+    </div>
+    <div></div>
+    <div>
+      <button mat-mini-fab color="warn" mat-dialog-close>
+        <i class="ni ni-fat-remove"></i>
+      </button>
+    </div>
+  </div>
+</section>
+<mat-dialog-content class="mat-typography" id="print">
+  <div class="row">
+    <div class="col-12">
+      <div class="form-group">
+        <input class="form-control" type="search"[placeholder]="dataConfig.search">
+      </div>
+    </div>
+    <div class="col-12 container">
+      <mat-list>
+        <mat-list-item *ngFor="let item of listChat" class="mat-elevation-z2 mouse" (click)="handleSelectChat( item )">
+          <div mat-line>
+            <div class="chat-room__content r9">
+            <div class="chat-room__users-avatar-container">
+              <img alt="Default Avatar" class="chat-room__users-avatar r2"
+                src="{{ item.foto || './assets/img/theme/team-4-800x800.jpg' }}?stp=dst-jpg_s96x96&amp;ccb=11-4&amp;oh=01_ASBO06DXF88XYlaIfx-YqvV1eJejfPAe8FjEoSPkUYzd8w&amp;oe=66268F45&amp;_nc_sid=e6ed6c&amp;_nc_cat=111"
+              />
+            </div>
+            <div class="chat-room__info r3">
+              <div>
+                <div class="chat-room__user-name r8">
+                  <span class="full-name-text r1"> {{ item.to }} </span>
+                  <span class="r4"> {{ item.createdAt | date:'M/d/yy, h:mm a' }} </span>
+                </div>
+              </div>
+              <div class="chat-room__info-row r5">
+                <div class="chat-room__last-message r6">
+                  <div class="chat-room-last-message__container">
+                    <span class="last-message last-message-pre">{{ item.txt }} </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          </div>
+        </mat-list-item>
+      </mat-list>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" mat-dialog-close><i class="ni ni-fat-remove"></i></button>
+</mat-dialog-actions>
+
+

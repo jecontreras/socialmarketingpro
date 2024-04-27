@@ -261,10 +261,9 @@ export class TablaComponent implements OnInit {
   }
 
   handleOpenDialogContact( item:any ){
+    let data = { contactId: item || {} }
     const dialogRef = this.dialog.open(DetailContactComponent, {
-      width: '50%',
-      height: "600px",
-      data: item,
+      data: data,
     });
 
     dialogRef.afterClosed().subscribe(result => {

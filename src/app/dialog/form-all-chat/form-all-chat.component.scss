@@ -1,0 +1,61 @@
+.mat-list-icon {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.r1 {
+  color: #313940;
+  font-size: 13px;
+  font-weight: 600;
+  left: 0px;
+  line-height: 18px;
+  max-width: 62%;
+  overflow: hidden;
+  position: absolute;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+  top: 0px;
+}
+
+.r2 {
+  background-color: lightsteelblue;
+  background-size: cover;
+  border-radius: 50%;
+  height: 36px;
+  width: 36px;
+}
+
+.r3 {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 259px;
+}
+
+.r4 {
+  color: #848b91;
+  font-size: 10px;
+  line-height: 13px;
+  position: absolute;
+  right: -240%;
+  text-align: right;
+}
+
+.r5{
+  align-items: center; display: flex; flex-direction: row; justify-content: space-between;
+}
+
+.r6{
+  color: #848b91; font-size: 12px; line-height: 16px;
+}
+
+.r8{
+  min-height: 20px; position: relative;
+}
+
+.r9{
+  align-items: center; display: flex; gap: 5px; margin-right: 10px; width: 300px;
+}
+.list-container {
+  max-height: 72vh;
+  overflow-y: auto; /* Habilita el desplazamiento vertical */
+}

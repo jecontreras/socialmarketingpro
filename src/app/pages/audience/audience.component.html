@@ -51,7 +51,7 @@
               </mat-expansion-panel-header>
               <p>
                 <mat-chip-list aria-label="Fish selection">
-                  <mat-chip *ngFor="let item of listSequences" (click)="handlePushSelectTag( item, 'sequences')"> {{ item.sequences }} </mat-chip>
+                  <mat-chip *ngFor="let item of listSequences" (click)="handlePushSelectTag( item, 'titulo')"> {{ item.titulo }} </mat-chip>
                 </mat-chip-list>
               </p>
             </mat-expansion-panel>
@@ -64,7 +64,7 @@
               </mat-expansion-panel-header>
               <p>
                 <mat-chip-list aria-label="Fish selection">
-                  <mat-chip *ngFor="let item of listCampaigns" (click)="handlePushSelectTag( item, 'campaigns')"> {{ item.campaigns }} </mat-chip>
+                  <mat-chip *ngFor="let item of listCampaigns" (click)="handlePushSelectTag( item, 'titulo')"> {{ item.titulo }} </mat-chip>
                 </mat-chip-list>
               </p>
             </mat-expansion-panel>
