@@ -2,9 +2,12 @@ import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild }
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
-import { FormFlowsComponent } from 'src/app/dialog/form-flows/form-flows.component';
+import { FileDetailComponent } from 'src/app/dialog/file-detail/file-detail.component';
 import { MSG, USERT, WHATSAPPDETAILS } from 'src/app/interfaces/interfaces';
 import { USER } from 'src/app/interfaces/user';
+import { ConfigKeysService } from 'src/app/services/config-keys.service';
+import { ToolsService } from 'src/app/services/tools.service';
+import { AudioRecorderServiceService } from 'src/app/servicesComponent/audio-recorder-service.service';
 import { ChatService } from 'src/app/servicesComponent/chat.service';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
 
@@ -21,6 +24,9 @@ export class ListChatDetailedComponent implements OnInit {
   msg: MSG= { txt: "", quien: 1  };
   disabledEmoji:boolean = false;
   dataUser:USERT;
+  valueSpinner:number = 0;
+  recording = false;
+  dataConfig:any = {};
 
   constructor(
     private _whatsappDetails: WhatsappTxtService,
@@ -28,7 +34,11 @@ export class ListChatDetailedComponent implements OnInit {
     private chatService: ChatService,
     private _store: Store<USER>,
     private activate: ActivatedRoute,
+    private _audioRecorderService: AudioRecorderServiceService,
+    private _tools: ToolsService,
+    private _config: ConfigKeysService,
   ) {
+    this.dataConfig = _config._config.keys;
     this._store.subscribe((store: any) => {
       store = store.name;
       if(!store) return false;
@@ -46,23 +56,36 @@ export class ListChatDetailedComponent implements OnInit {
 
     this.childEmitter.emit( this.data );
     this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
-      //console.log("****31", data)
-      try {
-        let filter = await this.listDetails.find( row => row.id === data.msx.id );
-        if( !filter ) this.listDetails.push( {
-          to: data.msx.to,
-          from: data.msx.from,
-          id: data.msx.id,
-          quien: data.msx.quien,
-          urlMedios: data.msx.urlMedios,
-          user: data.msx.user,
-          txt: data.msx.body
-        });
-        this.invertMessagesOrder();
-        this.scrollToBottom();
-      } catch (error) { }
-      //this.listDetails.push(data.txt);
+      //console.log("****31", data, this.listDetails)
+      this.processMessage( data );
     });
+
+    this.chatService.receiveMessageInit().subscribe(async (data: MSG) => {
+      //console.log("****31", data, this.listDetails)
+      this.processMessage( data );
+    });
+  }
+
+  processMessage( data ){
+    try {
+      let filter = this.listDetails.find( row => ( row.id === data.msx.id ) );
+      if( !filter ) {
+        filter =  this.listDetails.find( row => ( row.to === data.msx.to ) );
+        if( filter ){
+          this.listDetails.push( {
+            to: data.msx.to,
+            from: data.msx.from,
+            id: data.msx.id,
+            quien: data.msx.quien,
+            urlMedios: data.msx.urlMedios,
+            user: data.msx.user,
+            txt: data.msx.body
+          });
+        }
+      }
+      this.invertMessagesOrder();
+      this.scrollToBottom();
+    } catch (error) { }
   }
 
   getWhatsappInit( id:string ){
@@ -77,6 +100,8 @@ export class ListChatDetailedComponent implements OnInit {
   async handleEventFater() {
     // Lógica que deseas ejecutar cuando se llama desde el padre
     console.log('Función ejecutada desde el hijo, entre', this.data );
+    this.listDetails = [];
+    this.processSpinnerValue('init');
     setTimeout(async()=>{
       if( this.data.id ) {
         console.log("**310",this.data)
@@ -84,8 +109,16 @@ export class ListChatDetailedComponent implements OnInit {
         this.listDetails = result;
         this.invertMessagesOrder();
         this.scrollToBottom();
+        this.processSpinnerValue('end');
       }else this.listDetails = [];
     }, 200)
+  }
+
+  processSpinnerValue( opt:string ){
+    let interval = setInterval(()=>{
+      this.valueSpinner++;
+    }, 1000 );
+    if( opt === 'end') clearInterval( interval );
   }
 
   scrollToBottom(): void {
@@ -107,7 +140,7 @@ export class ListChatDetailedComponent implements OnInit {
     // Método para agregar un nuevo mensaje al chat
     async handleAddMessage() {
       if( !this.msg.txt ) return false;
-      let result:any = await this.handleProcessWhatsapp();
+      let result:any = await this.handleProcessWhatsapp(this.msg.txt, 'txt');
       if( result.data.whatsappTxt ){
         result = result.data;
         this.listDetails.push({
@@ -120,16 +153,20 @@ export class ListChatDetailedComponent implements OnInit {
       }
     }
 
-    handleProcessWhatsapp(){
+    handleProcessWhatsapp( txt:string, type: string ){
       return new Promise( resolve =>{
+        let urlHalf = type === 'txt'? '' : txt;
+        let Txt = type === 'txt'? txt : '';
         let data = {
             "msx": {
                 "from": this.data.from,
                 "to": this.data.to,
-                "body": this.msg.txt,
-                "urlMedios": "",
+                "body": Txt,
+                "urlMedios": urlHalf,
+                "typeTxt": type,
                 "quien": 1,
-                "id": 1
+                "id": 1,
+                "userCreate": this.dataUser.id
             },
             "user": { "id": this.dataUser.cabeza }
         };
@@ -150,7 +187,7 @@ export class ListChatDetailedComponent implements OnInit {
     }
 
     handleFile( txtFormat:string ){
-      const dialogRef = this.dialog.open(FormFlowsComponent, {
+      const dialogRef = this.dialog.open(FileDetailComponent, {
         width: '50%',
         height: "600px",
         data: {
@@ -159,8 +196,12 @@ export class ListChatDetailedComponent implements OnInit {
         },
       });
 
-      dialogRef.afterClosed().subscribe(result => {
+      dialogRef.afterClosed().subscribe(async  ( result ) => {
         console.log('The dialog was closed');
+        if( result ) {
+          for( let row of result ) await this.handleProcessWhatsapp( row, 'photo');
+        }
+
       });
     }
 
@@ -169,6 +210,22 @@ export class ListChatDetailedComponent implements OnInit {
       try {
         this.msg.txt+= $event.emoji.native;
       } catch (error) { }
+    }
+
+
+    async handleOpenAudioRecorder(){
+      this.recording = true;
+      await this._audioRecorderService.startRecording();
+    }
+
+    async handleStartRecording() {
+      this.recording = false;
+      const audioBlob = await this._audioRecorderService.stopRecording();
+      let result:any = await this._audioRecorderService.uploadAudio( audioBlob );
+      if( !result.audioFileUrl ) return this._tools.basic( this.dataConfig.txtError );
+      this.handleProcessWhatsapp( result.audioFileUrl, 'audio');
+      //this._tools.openSnack("Enviado");
+      // Aquí puedes enviar el audioBlob al servidor
     }
 
 }

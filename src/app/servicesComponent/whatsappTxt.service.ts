@@ -43,8 +43,10 @@ export class WhatsappTxtService {
   createNewTxtWhatsapp(query:any){
     return this._model.querys('WhatsappHistorial/send',query, 'post')
     .pipe( map( ( data:any ) => {
-      query.msx.id = data.data.Whatsapphistorial.id;
-      this.chatService.enviarMensaje( query );
+      try {
+        query.msx.id = data.data.Whatsapphistorial.id;
+        this.chatService.enviarMensaje( query );
+      } catch (error) { }
       return data;
     } ) ) ;
   }

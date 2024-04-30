@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ServiciosService } from '../services/servicios.service';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -7,12 +9,13 @@ import { ServiciosService } from '../services/servicios.service';
 export class ArchivosService {
 
   constructor(
-    private _model: ServiciosService
+    private _model: ServiciosService,
+    private http: HttpClient
   ) { }
-  
+
   create(query:any){
     //this.FileFirebase( query );
-    return this._model.querys('archivos/file',query, 'post');
+    return this.http.post<void>(environment.urlFile+'/archivos/file', query).toPromise();
   }
 
   getBase64(file) {
@@ -23,5 +26,5 @@ export class ArchivosService {
       reader.onerror = error => reject(error);
     });
   }
-  
+
 }

@@ -8,7 +8,7 @@
         </div>
       </div>
       <div class="opened-chat-room__content list-container" #chatContainer>
-        <div class="chat-container" [scrollTop]="chatContainer.scrollHeight">
+        <div class="chat-container" [scrollTop]="chatContainer.scrollHeight" *ngIf="listDetails.length">
           <div *ngFor="let item of listDetails">
             <div class="chat-message another toStyle" *ngIf="item.quien === 0">
               <div class="chat-message__box another undefined-box">
@@ -41,6 +41,22 @@
                     !!
                   </div>
                 </span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="chat-container" *ngIf="listDetails.length === 0">
+          <div class="row">
+            <div class="col-12">
+              <div class="d-flex justify-content-center">
+                <div>
+                  <mat-progress-spinner
+                      class="example-margin"
+                      color="warn"
+                      mode="determinate"
+                      [value]="valueSpinner">
+                  </mat-progress-spinner>
+                </div>
               </div>
             </div>
           </div>
@@ -96,7 +112,10 @@
                 <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="handleAddMessage()">
                   <mat-icon>send</mat-icon>
                 </button>
-                <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon">
+                <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="handleStartRecording()" *ngIf="recording">
+                  <mat-icon>stop</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="handleOpenAudioRecorder()" *ngIf="!recording">
                   <mat-icon>settings_voice</mat-icon>
                 </button>
               </div>

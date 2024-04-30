@@ -149,7 +149,7 @@
             <div style="width: 55%;">
               <div class="row">
                 <div class="col-12" style="text-align: center;">
-                  <button class="btn btn-primary" type="button" (click)="handleOpenChat()">{{ dataConfig.txtGotoChat }} <i class="ni ni-chat-round"></i> </button>
+                  <button class="btn btn-primary" type="button" *ngIf="data.assigned.assignedMe === 0" (click)="handleOpenChat()">{{ dataConfig.txtGotoChat }} <i class="ni ni-chat-round"></i> </button>
                 </div>
                 <div class="col-12" style="text-align: center;">
                   <p>{{ dataConfig.txtAutomationUser }} </p>

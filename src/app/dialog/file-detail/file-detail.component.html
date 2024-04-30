@@ -1,1 +1,51 @@
-<p>file-detail works!</p>
+<section mat-dialog-title>
+  <div class="d-flex justify-content-between">
+    <div>
+      <h1>{{ dataConfig.txtFile }} </h1>
+    </div>
+    <div>
+      <button mat-mini-fab color="warn" mat-dialog-close>
+        <i class="ni ni-fat-remove"></i>
+      </button>
+    </div>
+  </div>
+</section>
+<mat-dialog-content class="mat-typography" id="print">
+  <div class="row">
+    <div class="col-12">
+      <app-archivos (actionEvent)="handleChildAction( $event )"></app-archivos>
+    </div>
+    <div class="col-12">
+      <div class="gallery">
+        <mat-card *ngFor="let photo of listGallery" class="example-card">
+          <img mat-card-image [src]="photo" alt="Photo">
+          <mat-card-content>
+
+          </mat-card-content>
+          <mat-card-actions>
+            <button mat-button (click)="handleSelectImg( photo )">{{ dataConfig.txtSelect }} </button>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+  <div class="row" style="width: 100%;">
+    <div class="col-12">
+      <div class="d-flex justify-content-between">
+        <div>
+        </div>
+        <div></div>
+        <div>
+          <button mat-mini-fab color="primary" (click)="handleEndFile()">
+            {{ dataConfig.txtSend }}
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</mat-dialog-actions>
+
+

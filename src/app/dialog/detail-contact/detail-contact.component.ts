@@ -226,7 +226,8 @@ export class DetailContactComponent implements OnInit {
             "body": "Asesor Asignado " + this.dataUser.name,
             "urlMedios": "",
             "quien": 1,
-            "id": 1
+            "id": 1,
+            userCreate: this.dataUser.id
         },
         "user": { "id": this.dataUser.cabeza }
         }
@@ -237,8 +238,10 @@ export class DetailContactComponent implements OnInit {
   }
 
   handleOpenChat(){
-    this._router.navigate(['/liveChat', this.datas.id ] );
-    this.closeDialog( 'chat' );
+    if( this.data.assigned.assignedMe === 0 ){
+      this._router.navigate(['/liveChat', this.datas.id ] );
+      this.closeDialog( 'chat' );
+    }
   }
 
 

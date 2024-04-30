@@ -1,0 +1,10 @@
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.example-card {
+  margin: 10px;
+  width: 300px; /* Ajusta el ancho de las tarjetas según tus necesidades */
+}

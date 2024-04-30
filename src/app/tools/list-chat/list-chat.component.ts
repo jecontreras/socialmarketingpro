@@ -38,6 +38,13 @@ export class ListChatComponent implements OnInit {
       if(!store) return false;
       this.dataUser = store.user || {};
     });
+    navigator.mediaDevices.getUserMedia({ audio: true })
+      .then((stream) => {
+        console.log('Permission granted');
+      })
+      .catch((err) => {
+        console.error('Permission denied:', err);
+      });
   }
 
   async ngOnInit() {

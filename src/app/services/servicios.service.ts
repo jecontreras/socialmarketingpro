@@ -13,6 +13,7 @@ const headers = new HttpHeaders({
 });
 
 const URL = environment.url;
+const URLFILE = environment.urlFile;
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +31,7 @@ export class ServiciosService {
     private _store: Store<USER>,
     private Router: Router,
     private _tools: ToolsService
-  ) { 
+  ) {
     this._store.subscribe((store: any) => {
       //console.log(store);
       store = store.name;
@@ -43,7 +44,7 @@ export class ServiciosService {
       }
     });
     //this.conectionSocket();
-    //this.createsocket("emitir", {mensaje:"inicial"}); 
+    //this.createsocket("emitir", {mensaje:"inicial"});
     if( !this.activador ) this.privateDataUser();
     //this.getConfig();
   }
@@ -98,6 +99,16 @@ export class ServiciosService {
     data.skip = datas.page ? datas.page : 0;
     data.limit = datas.limit ? datas.limit : 10;
     query = URL+`/${query}`;
+    return this.ejecutarQuery(query, data, METODO);
+  }
+
+  querys2(query:string, datas:any, METODO:string){
+    let data = datas;
+    if(!datas.where) datas.where = {};
+    data.skip = datas.page ? datas.page : 0;
+    data.limit = datas.limit ? datas.limit : 10;
+    query = URLFILE+`/${query}`;
+    delete data.where.app;
     return this.ejecutarQuery(query, data, METODO);
   }
 

@@ -59,6 +59,8 @@ export class FormAllChatComponent implements OnInit {
   }
 
   nexProcessNewWhatsapp( data ){
+    console.log("****", data, this.listChat)
+    if( data.msx.assignedMe === true ) return false;
     try {
       let index = _.findIndex( this.listChat, ['to', data.msx.to ] );
       //console.log("****32", index)

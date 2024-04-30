@@ -92,7 +92,11 @@ export class ConfigKeysService {
       addFilterAudience: "Agregar filtros para refinar su audiencia",
       btnStartNow: "Iniciar Ahora"      ,
       btnStartSchedule: "Iniciar Programación",
-      universalMessages: "Mensajes Universales"
+      universalMessages: "Mensajes Universales",
+      txtFile: "Archivos",
+      btnTxtFile: "Subir Archivos",
+      txtSend: "Enviar",
+      txtSelect: "Seleccionar"
     }
   };
   constructor() { }

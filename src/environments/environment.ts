@@ -5,6 +5,7 @@
 export const environment = {
   production: false,
   url: "http://localhost:1338",
+  urlFile: "http://localhost:1337"
   //url: "https://1337-jecontreras-socialmarke-5zz4ycanzj9.ws-us110.gitpod.io"
 };
 
