@@ -133,6 +133,7 @@ export interface WHATSAPPINFOUSER {
   sequence?: INFOWHATSAPP;
   createdAt?: string;
   updatedAt?: string;
+  companyId?: string;
 
 }
 
@@ -145,6 +146,7 @@ export interface INFOWHATSAPP {
 export interface CONTACTDIALOG{
   contactId?:CONTACT;
   id?: string;
+  ids?: string;
   createdAt?: string;
   updatedAt?: string;
   to?: string;

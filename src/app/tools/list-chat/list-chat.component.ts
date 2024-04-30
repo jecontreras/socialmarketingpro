@@ -20,6 +20,8 @@ export class ListChatComponent implements OnInit {
   dataSelect:WHATSAPPDETAILS = {};
   listChat:WHATSAPP[] = [];
   dataUser: USERT;
+  loader:boolean = true;
+  txtFilter:string;
 
   @ViewChild('sonChat') sonChat: ListChatDetailedComponent;
 
@@ -39,22 +41,37 @@ export class ListChatComponent implements OnInit {
   }
 
   async ngOnInit() {
-    let result:any = await this.getListChat();
+    let result:any = await this.getListChat( {
+      where:{
+        userId: this.dataUser.id,
+        assignedMe: 0
+      },
+      limit: 10,
+      page: 0
+    });
     this.listChat = result;
+    this.chatService.receiveChatAssigned().subscribe(async (data: MSG) => {
+      console.log("****45", data, this.listChat)
+      this.nexProcessNewWhatsapp( data );
+    });
+  }
+
+  nexProcessNewWhatsapp( data ){
+    try {
+      data = data.txt;
+      if( this.dataUser.id !== data.userId.id ) return false;
+      if( data.assignedMe === 0 ) this.listChat.push( { ...data, whatsappIdList: data.whatsappId, userIdList: data.userId, whatsappId: data.whatsappId.id, userId: data.userId.id } );
+      else this.listChat = this.listChat.filter( item => item.id !== data.id );
+    } catch (error) { }
   }
 
   handleEventSon() {
     this.sonChat.handleEventFater();
   }
 
-  getListChat(){
+  getListChat( querys:any ){
     return new Promise( resolve =>{
-      this._whatsappTxtUserService.getChatUser( {
-        where:{
-          userId: this.dataUser.id,
-          assignedMe: 0
-        }
-      }).subscribe( res =>{
+      this._whatsappTxtUserService.getChatUser( querys ).subscribe( res =>{
         resolve( res.data );
       });
     })
@@ -63,6 +80,8 @@ export class ListChatComponent implements OnInit {
   handleOpenAllChat(){
     const dialogRef = this.dialog.open(FormAllChatComponent, {
       data: { },
+      width: '50%',
+      height: "600px",
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -73,6 +92,31 @@ export class ListChatComponent implements OnInit {
   handleSelectChat( item ){
     this.dataSelect = item;
     setTimeout(()=>this.handleEventSon(), 200)
+  }
+
+  async handleFilter(){
+    this.loader = true;
+    this.listChat = [];
+    let query:any = {};
+    //console.log(this.datoBusqueda);
+    this.txtFilter = this.txtFilter.trim();
+    query = {
+      where:{
+        cat_padre: null
+      },
+      limit: 100
+    };
+    if (this.txtFilter != '') {
+      query.where.or = [
+        {
+          to: {
+            contains: this.txtFilter|| ''
+          }
+        },
+      ];
+    }
+    let result:any = await this.getListChat( query );
+    this.listChat = result;
   }
 
 }

@@ -35,6 +35,11 @@ export class FormAllChatComponent implements OnInit {
     private chatService: ChatService,
   ) {
     this.dataConfig = _config._config.keys;
+    this._store.subscribe((store: any) => {
+      store = store.name;
+      if(!store) return false;
+      this.dataUser = store.user || {};
+    });
   }
 
   async ngOnInit() {
@@ -46,11 +51,10 @@ export class FormAllChatComponent implements OnInit {
     });
 
     this.chatService.receiveChatAssigned().subscribe(async (data: MSG) => {
-      console.log("****49", data)
       this.nexProcessAssigned( data );
     });
 
-    let result:any = await this.getListChat( { where: { }, limit: 10, page: 0 } );
+    let result:any = await this.getListChat( { where: {  user: this.dataUser.cabeza }, companyId: this.dataUser.cabeza, userId: this.dataUser.id, limit: 10, page: 0 } );
     this.listChat = result;
   }
 
@@ -61,11 +65,12 @@ export class FormAllChatComponent implements OnInit {
       if( index >= 0 ){
         this.listChat[index].txt = data.msx.body;
       }else{
+        //if( this.dataUser.cabeza === data.msx.)
         this.listChat.push(
           {
             from: data.msx.from,
             to: data.msx.to,
-            id: data.msx.id,
+            id: data.msx.ids || data.msx.id,
             txt: data.msx.body,
             contactId: data.msx.contactId.id
           }
@@ -76,9 +81,9 @@ export class FormAllChatComponent implements OnInit {
 
   async nexProcessAssigned( data ){
     data = data.txt;
-    if( data.assignedMe === 0 )this.listChat = this.listChat.filter( row => row.id === data.whatsappId );
+    if( data.assignedMe === 0 )this.listChat = this.listChat.filter( row => row.id !== data.whatsappId );
     else {
-      let resData = await this.getListChat( { where: { id: data.whatsappId }, limit: 1 } );
+      let resData = await this.getListChat( { where: { id: data.whatsappId },companyId: this.dataUser.cabeza, userId: this.dataUser.id, limit: 1 } );
       this.listChat.push( resData );
     }
   }

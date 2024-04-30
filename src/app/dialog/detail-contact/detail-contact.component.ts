@@ -143,12 +143,13 @@ export class DetailContactComponent implements OnInit {
   async handleSubmitAssigned(){
     if( this.btnDisabled ) return false;
     this.btnDisabled = true;
+    let result:any;
     if( this.data.assigned.id ) {
-     let result:any = await this.processAssignedUpdate();
+     result= await this.processAssignedUpdate();
      this.data.assigned.assignedMe = result.assignedMe;
     }
     else {
-      let result:any = await  this.processAssignedCreate();
+      result = await  this.processAssignedCreate();
       if( result.id ){
         this.data.assigned = {
           ...result,
@@ -159,7 +160,8 @@ export class DetailContactComponent implements OnInit {
         };
       }
     }
-    this._chatServices.sendContactAssigned( this.data.assigned );
+    console.log("****1620", this.data)
+    this._chatServices.sendContactAssigned( result );
     this._tools.basic(this.dataConfig.txtUpdate );
     this.btnDisabled = false;
     this.closeDialog( 'chat' );
@@ -175,6 +177,7 @@ export class DetailContactComponent implements OnInit {
       }
       let data:WHATSAPPINFOUSER = {
         userId: this.dataUser.id,
+        companyId: this.dataUser.cabeza,
         estado: 0,
         whatsappId: msxId,
         assignedMe: 0

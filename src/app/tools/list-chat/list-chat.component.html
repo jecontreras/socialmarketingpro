@@ -15,7 +15,7 @@
       </div>
       <div class="col-12">
         <div class="form-group">
-          <input class="form-control" type="search" [placeholder]="dataConfig.search" id="example-search-input">
+          <input class="form-control" type="search" [placeholder]="dataConfig.search" id="example-search-input" (change)="handleFilter()">
         </div>
       </div>
       <div class="col-12 list-container">
