@@ -57,6 +57,8 @@ export interface Componente {
     urlMedios?: string;
     createdAt?: string;
     updatedAt?: string;
+    viewFile?: string;
+    typeTxt?: string;
   }
 
   export interface MSG{

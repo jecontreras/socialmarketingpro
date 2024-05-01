@@ -17,6 +17,7 @@ export class ArchivosComponent implements OnInit {
   listComplete:any = [];
   @Output() actionEvent = new EventEmitter<void>();
   dataConfig:any = {};
+  @Input() acceptFile: string;
 
   constructor(
     private _archivos: ArchivosService,
@@ -51,12 +52,25 @@ export class ArchivosComponent implements OnInit {
       let form: any = new FormData();
       form.append('file', row);
       this._tools.ProcessTime({});
+      console.log("***55", row)
       //this._archivos.create( this.files[0] );
-      let res:any = await this._archivos.create(form);
-      this.listComplete.push( res.files );
+      let res:any;
+      if( row.type === "image/gif" ) res = await this._archivos.createGif(form);
+      else if( row.type === "application/pdf" ) res = await this.processFile(row);
+      else if( ( row.type === "video/mp4" ) || ( row.type === "video/x-m4v" ) || ( row.type === "video/*" ) ) res = await this._archivos.createMedia(form);
+      else res = await this._archivos.create(form);
+      this.listComplete.push( { href: res.files, type: row.type } );
       this._tools.presentToast("Subido exitoso!!");
       resolve( res.files );
     });
+  }
+
+  async processFile( file ){
+    let base = await this._tools.getBase64( file );
+    let res:any = await this._archivos.createFile( {
+      fileBase64: base
+    } )
+    return { files: res.url, }
   }
 
 }

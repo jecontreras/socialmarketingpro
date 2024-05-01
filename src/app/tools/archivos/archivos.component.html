@@ -1,6 +1,6 @@
 <div class="row">
   <div class="col-12">
-    <ngx-dropzone (change)="onSelect($event)" [multiple]="true" accept="image/jpeg,image/jpg,image/png,image/gif">
+    <ngx-dropzone (change)="onSelect($event)" [multiple]="true" [accept]="acceptFile">
       <ngx-dropzone-label> {{ dataConfig.txtFile}} </ngx-dropzone-label>
       <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
         <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>

@@ -1,7 +1,7 @@
 <section mat-dialog-title>
   <div class="d-flex justify-content-between">
     <div>
-      <h1>{{ dataConfig.txtFile }} </h1>
+      <h1>{{ dataConfig.txtFile }} - {{ datas.format }} </h1>
     </div>
     <div>
       <button mat-mini-fab color="warn" mat-dialog-close>
@@ -13,17 +13,18 @@
 <mat-dialog-content class="mat-typography" id="print">
   <div class="row">
     <div class="col-12">
-      <app-archivos (actionEvent)="handleChildAction( $event )"></app-archivos>
+      <app-archivos (actionEvent)="handleChildAction( $event )" [acceptFile]="selectAcceptFile"></app-archivos>
     </div>
     <div class="col-12">
       <div class="gallery">
-        <mat-card *ngFor="let photo of listGallery" class="example-card">
-          <img mat-card-image [src]="photo" alt="Photo">
+        <mat-card *ngFor="let item of listGallery" class="example-card">
+          <img *ngIf="item.type === 'image/png' "  mat-card-image [src]="item.href" [alt]="item.textParams">
+          <iframe *ngIf="item.type !== 'image/png' " [src]="item.viewFile" frameborder="0"></iframe>
           <mat-card-content>
 
           </mat-card-content>
           <mat-card-actions>
-            <button mat-button (click)="handleSelectImg( photo )">{{ dataConfig.txtSelect }} </button>
+            <button mat-button (click)="handleSelectImg( item )">{{ dataConfig.txtSelect }} </button>
           </mat-card-actions>
         </mat-card>
       </div>

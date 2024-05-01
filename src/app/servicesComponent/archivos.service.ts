@@ -18,6 +18,21 @@ export class ArchivosService {
     return this.http.post<void>(environment.urlFile+'/archivos/file', query).toPromise();
   }
 
+  createFile(query:any){
+    //this.FileFirebase( query );
+    return this.http.post<void>(environment.urlFile+'/archivos/fileTotal', query).toPromise();
+  }
+
+  createGif(query:any){
+    //this.FileFirebase( query );
+    return this.http.post<void>(environment.urlFile+'/archivos/fileGif', query).toPromise();
+  }
+
+  createMedia(query:any){
+    //this.FileFirebase( query );
+    return this.http.post<void>(environment.urlFile+'/archivos/media', query).toPromise();
+  }
+
   getBase64(file) {
     return new Promise((resolve, reject) => {
       const reader = new FileReader();

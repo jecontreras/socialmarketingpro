@@ -35,7 +35,7 @@ export class ListChatDetailedComponent implements OnInit {
     private _store: Store<USER>,
     private activate: ActivatedRoute,
     private _audioRecorderService: AudioRecorderServiceService,
-    private _tools: ToolsService,
+    private _toolsService: ToolsService,
     private _config: ConfigKeysService,
   ) {
     this.dataConfig = _config._config.keys;
@@ -64,6 +64,12 @@ export class ListChatDetailedComponent implements OnInit {
       //console.log("****31", data, this.listDetails)
       this.processMessage( data );
     });
+  }
+
+  processIframeWeb( item ){
+    item.viewFile = this._toolsService.seguridadIfrane( item.urlMedios || item.href );
+    this.invertMessagesOrder();
+    this.scrollToBottom();
   }
 
   processMessage( data ){
@@ -143,11 +149,11 @@ export class ListChatDetailedComponent implements OnInit {
       let result:any = await this.handleProcessWhatsapp(this.msg.txt, 'txt');
       if( result.data.whatsappTxt ){
         result = result.data;
-        this.listDetails.push({
+        /*this.listDetails.push({
           id: result.whatsappTxt.id,
           txt: this.msg.txt,
           quien: 1
-        });
+        });*/
         this.scrollToBottom();
         this.msg.txt = "";
       }
@@ -197,9 +203,13 @@ export class ListChatDetailedComponent implements OnInit {
       });
 
       dialogRef.afterClosed().subscribe(async  ( result ) => {
-        console.log('The dialog was closed');
+        console.log('The dialog was closed', result );
         if( result ) {
-          for( let row of result ) await this.handleProcessWhatsapp( row, 'photo');
+          for( let row of result ) {
+            if( row.type === "application/pdf" ) await this.handleProcessWhatsapp( row.href, 'document');
+            else if( row.type === "video/mp4" ) await this.handleProcessWhatsapp( row.href, 'video');
+            else  await this.handleProcessWhatsapp( row.href, 'photo');
+          }
         }
 
       });
@@ -222,7 +232,7 @@ export class ListChatDetailedComponent implements OnInit {
       this.recording = false;
       const audioBlob = await this._audioRecorderService.stopRecording();
       let result:any = await this._audioRecorderService.uploadAudio( audioBlob );
-      if( !result.audioFileUrl ) return this._tools.basic( this.dataConfig.txtError );
+      if( !result.audioFileUrl ) return this._toolsService.basic( this.dataConfig.txtError );
       this.handleProcessWhatsapp( result.audioFileUrl, 'audio');
       //this._tools.openSnack("Enviado");
       // Aquí puedes enviar el audioBlob al servidor

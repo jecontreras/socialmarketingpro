@@ -9,7 +9,7 @@
       </div>
       <div class="opened-chat-room__content list-container" #chatContainer>
         <div class="chat-container" [scrollTop]="chatContainer.scrollHeight" *ngIf="listDetails.length">
-          <div *ngFor="let item of listDetails">
+          <div *ngFor="let item of listDetails ">
             <div class="chat-message another toStyle" *ngIf="item.quien === 0">
               <div class="chat-message__box another undefined-box">
                 <div class="replied-container">
@@ -24,7 +24,15 @@
                 </div>
                 <span class="content" [innerHTML]="item.txt">
                 </span>
-                <p *ngIf="item.urlMedios"> <img [src]="item.urlMedios" alt="" srcset="" style="width: 30%;"></p>
+                <a [href]="item.urlMedios" target="_blank" *ngIf="item.urlMedios">
+                  <img *ngIf="(  item.typeTxt === 'photo' )" [src]="item.urlMedios" alt="" srcset="" style="width: 30%;">
+                  <span *ngIf="( item.typeTxt === 'video' ) || ( item.typeTxt === 'document' ) ">
+                    <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="processIframeWeb( item );" *ngIf="!item.viewFile">
+                      <mat-icon>remove_red_eye</mat-icon>
+                    </button>
+                    <iframe *ngIf="item.viewFile" [src]="item.viewFile" frameborder="0"></iframe>
+                  </span>
+                </a>
                 <span class="right-bottom">
                   <span class="date date-from-another"> {{ item.date }} </span>
                 </span>
@@ -34,7 +42,15 @@
               <div class="chat-message__box my undefined-box">
                 <span class="content" [innerHTML]="item.txt">
                 </span>
-                <p *ngIf="item.urlMedios"> <img [src]="item.urlMedios" alt="" srcset="" style="width: 30%;"></p>
+                <a [href]="item.urlMedios" target="_blank" *ngIf="item.urlMedios">
+                  <img *ngIf="(  item.typeTxt === 'photo' )" [src]="item.urlMedios" alt="" srcset="" style="width: 30%;">
+                  <span *ngIf="( item.typeTxt === 'video' ) || ( item.typeTxt === 'document' ) ">
+                    <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="processIframeWeb( item );" *ngIf="!item.viewFile">
+                      <mat-icon>remove_red_eye</mat-icon>
+                    </button>
+                    <iframe *ngIf="item.viewFile" [src]="item.viewFile" frameborder="0"></iframe>
+                  </span>
+                </a>
                 <span class="right-bottom">
                   <span class="date">{{ item.date }}</span>
                   <div class="status">
