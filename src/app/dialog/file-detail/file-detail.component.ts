@@ -44,7 +44,7 @@ export class FileDetailComponent implements OnInit {
   handleChildAction( event ) {
     console.log('Se recibió una acción del hijo', event);
     this.listGallery = event;
-    for( let row of this.listGallery ){
+    for( let row of this.listGallery ){ this.handleSelectImg( row );
       if( row.type !== 'image/png' ) row.viewFile = this._toolsService.seguridadIfrane( row.href )
     }
   }
@@ -53,6 +53,11 @@ export class FileDetailComponent implements OnInit {
     let filter = this.selectList.find( item => item.href === key.href );
     if( filter ) return false;
     this.selectList.push( key );
+  }
+
+  handleDeSelectImg( key ){
+    key.check = false;
+    this.selectList = this.selectList.filter( item => item.href !== key.href );
   }
 
   handleEndFile(){

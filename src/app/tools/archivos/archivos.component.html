@@ -1,18 +1,18 @@
 <div class="row">
   <div class="col-12">
-    <ngx-dropzone (change)="onSelect($event)" [multiple]="true" [accept]="acceptFile">
-      <ngx-dropzone-label> {{ dataConfig.txtFile}} </ngx-dropzone-label>
-      <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
-        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-      </ngx-dropzone-preview>
-    </ngx-dropzone>
-  </div>
-  <div class="col-12">
     <div class="d-flex bd-highlight">
       <div class="p-2 flex-grow-1 bd-highlight"></div>
       <div class="p-2 bd-highlight">
         <button mat-flat-button color="primary" (click)="handleProcessFile()">{{ dataConfig.btnTxtFile }} </button>
       </div>
     </div>
+  </div>
+  <div class="col-12">
+    <ngx-dropzone (change)="onSelect($event)" [multiple]="true" [accept]="acceptFile">
+      <ngx-dropzone-label> {{ dataConfig.txtFile}} </ngx-dropzone-label>
+      <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+      </ngx-dropzone-preview>
+    </ngx-dropzone>
   </div>
 </div>

@@ -96,7 +96,8 @@ export class ConfigKeysService {
       txtFile: "Archivos",
       btnTxtFile: "Subir Archivos",
       txtSend: "Enviar",
-      txtSelect: "Seleccionar"
+      txtSelect: "Seleccionar",
+      txtDeSelect: "Deseleccionar"
     }
   };
   constructor() { }

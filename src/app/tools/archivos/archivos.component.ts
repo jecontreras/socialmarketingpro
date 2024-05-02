@@ -59,7 +59,7 @@ export class ArchivosComponent implements OnInit {
       else if( row.type === "application/pdf" ) res = await this.processFile(row);
       else if( ( row.type === "video/mp4" ) || ( row.type === "video/x-m4v" ) || ( row.type === "video/*" ) ) res = await this._archivos.createMedia(form);
       else res = await this._archivos.create(form);
-      this.listComplete.push( { href: res.files, type: row.type } );
+      this.listComplete.push( { href: res.files, type: row.type, check: true } );
       this._tools.presentToast("Subido exitoso!!");
       resolve( res.files );
     });
