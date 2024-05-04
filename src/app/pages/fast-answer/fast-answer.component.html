@@ -1,0 +1,68 @@
+<div class="container">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex bd-highlight">
+        <div class="p-2 flex-grow-1 bd-highlight"></div>
+        <div class="p-2 bd-highlight">
+          <button mat-raised-button color="accent" (click)="handleCreateNewResponse()">
+            {{ dataConfig.btnCreateNewResponse }}
+          </button>
+        </div>
+        <div class="p-2 bd-highlight">
+          <button mat-raised-button color="primary" (click)="handleSubmit()">
+            {{ dataConfig.txtUpdate }}
+          </button>
+        </div>
+        <div class="p-2 bd-highlight">
+          <button mat-raised-button color="warn" (click)="handleDrop()">
+            {{ dataConfig.btnDrop }}
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <!-- Checkbox Column -->
+        <ng-container matColumnDef="check">
+          <th mat-header-cell *matHeaderCellDef>
+            <mat-checkbox (change)="$event ? masterToggle() : null"
+                          [checked]="selection.hasValue() && isAllSelected()"
+                          [indeterminate]="selection.hasValue() && !isAllSelected()"
+                          [aria-label]="checkboxLabel()">
+            </mat-checkbox>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <mat-checkbox (click)="$event.stopPropagation()"
+                          (change)="$event ? selection.toggle(row) : null"
+                          [checked]="selection.isSelected(row)"
+                          [aria-label]="checkboxLabel(row)">
+            </mat-checkbox>
+          </td>
+        </ng-container>
+
+        <!-- Name Column -->
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef> {{ dataConfig.name }} </th>
+          <td mat-cell *matCellDef="let element">
+            <input type="text" class="form-control" [(ngModel)]="element.title">
+          </td>
+        </ng-container>
+
+        <!-- Weight Column -->
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef> {{ dataConfig.descripcion }} </th>
+          <td mat-cell *matCellDef="let element">
+            <textarea class="form-control" [(ngModel)]="element.description" rows="3"></textarea>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+            (click)="selection.toggle(row)">
+        </tr>
+      </table>
+
+    </div>
+  </div>
+</div>

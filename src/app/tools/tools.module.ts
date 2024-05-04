@@ -15,6 +15,7 @@ import { FullConnectionService } from '../servicesComponent/full-connection.serv
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { CanvasBlocksComponent } from './canvas-blocks/canvas-blocks.component';
 import { FormFlowsHsComponent } from './form-flows-hs/form-flows-hs.component';
+import { MatListModule } from '@angular/material/list';
 
 @NgModule({
   declarations: [
@@ -42,6 +43,7 @@ import { FormFlowsHsComponent } from './form-flows-hs/form-flows-hs.component';
     NgxDropzoneModule,
     NgxSpinnerModule,
     MyOwnCustomMaterialModule,
+    MatListModule ,
     FormsModule,
     PickerModule
   ],

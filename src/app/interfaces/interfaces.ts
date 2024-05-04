@@ -214,3 +214,16 @@ export interface WHATSAPPTXTUSER{
   sequenceIdList?:SEQUENCES;
 }
 
+export interface FASTANSWER{
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  check?: boolean;
+  title?: string;
+  description?: string;
+  companyId?: string;
+  companyIdList?: USERT;
+  userCreationId?: string;
+  userCreationIdList?: USERT
+}
+

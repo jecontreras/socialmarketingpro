@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { WhatsappTxtUserService } from 'src/app/servicesComponent/whatsapp-txt-user.service';
 import { USER } from 'src/app/interfaces/user';
 import { Store } from '@ngrx/store';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-list-chat',
   templateUrl: './list-chat.component.html',
@@ -31,6 +32,7 @@ export class ListChatComponent implements OnInit {
     private chatService: ChatService,
     public dialog: MatDialog,
     private _store: Store<USER>,
+    private _router: Router,
   ) {
     this.dataConfig = _config._config.keys;
     this._store.subscribe((store: any) => {
@@ -67,7 +69,7 @@ export class ListChatComponent implements OnInit {
     try {
       data = data.txt;
       if( this.dataUser.id !== data.userId.id ) return false;
-      if( data.assignedMe === 0 ) this.listChat.push( { ...data, whatsappIdList: data.whatsappId, userIdList: data.userId, whatsappId: data.whatsappId.id, userId: data.userId.id } );
+      if( data.assignedMe === 0 ) this.listChat.push( { ...data, whatsappIdList: data.whatsappId, userIdList: data.userId, whatsappId: data.whatsappId.id, userId: data.userId.id , contactIdList:{ foto: "./assets/brand/favicon.png" }} );
       else this.listChat = this.listChat.filter( item => item.id !== data.id );
     } catch (error) { }
   }
@@ -97,7 +99,9 @@ export class ListChatComponent implements OnInit {
   }
 
   handleSelectChat( item ){
+    console.log("***", item)
     this.dataSelect = item;
+    this._router.navigate(['/liveChat', this.dataSelect.id ] );
     setTimeout(()=>this.handleEventSon(), 200)
   }
 

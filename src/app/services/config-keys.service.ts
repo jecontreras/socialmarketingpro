@@ -97,7 +97,16 @@ export class ConfigKeysService {
       btnTxtFile: "Subir Archivos",
       txtSend: "Enviar",
       txtSelect: "Seleccionar",
-      txtDeSelect: "Deseleccionar"
+      txtDeSelect: "Deseleccionar",
+      fastAnswer: "Respuesta rapida",
+      teamMembers: "Miembros del equipo",
+      officeHours: "Horario de oficina",
+      defaultFlows: "Flujos predeterminados",
+      check: "Check",
+      name: "Nombre",
+      descripcion: "Descripcion",
+      btnCreateNewResponse: "Create Nueva Respuesta",
+      btnDrop: "Eliminar"
     }
   };
   constructor() { }

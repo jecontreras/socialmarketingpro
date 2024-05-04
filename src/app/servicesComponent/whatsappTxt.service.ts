@@ -17,6 +17,9 @@ export class WhatsappTxtService {
   get(query:any){
     return this._model.querys('WhatsappTxt/querys',query, 'post');
   }
+  getId(query:any){
+    return this._model.querys('WhatsappTxt/querysId',query, 'post');
+  }
   create(query:any){
     return this._model.querys('WhatsappTxt',query, 'post');
   }

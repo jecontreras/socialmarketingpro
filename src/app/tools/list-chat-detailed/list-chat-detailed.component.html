@@ -2,7 +2,7 @@
   <div class="current-chat">
     <div class="opened-chat-room__container p-3">
       <div class="d-flex flex-row bd-highlight mb-3 mat-elevation-z2">
-        <div class="p-2 bd-highlight"><img alt="Default Avatar" class="opened-chat-room__users-avatar" src="{{ data.foto }}?stp=dst-jpg_s96x96&amp;ccb=11-4&amp;oh=01_ASBO06DXF88XYlaIfx-YqvV1eJejfPAe8FjEoSPkUYzd8w&amp;oe=66268F45&amp;_nc_sid=e6ed6c&amp;_nc_cat=111"></div>
+        <div class="p-2 bd-highlight"><img alt="Default Avatar" class="opened-chat-room__users-avatar" src="{{ data.contactIdList.foto || '' }}?stp=dst-jpg_s96x96&amp;ccb=11-4&amp;oh=01_ASBO06DXF88XYlaIfx-YqvV1eJejfPAe8FjEoSPkUYzd8w&amp;oe=66268F45&amp;_nc_sid=e6ed6c&amp;_nc_cat=111"></div>
         <div class="p-2 bd-highlight" style="margin-top: 10px;">
           <div class="opened-chat-room__user-name"> {{ data.to }} </div>
         </div>
@@ -32,6 +32,12 @@
                     </button>
                     <iframe *ngIf="item.viewFile" [src]="item.viewFile" frameborder="0"></iframe>
                   </span>
+                  <span *ngIf="(  item.typeTxt === 'audio' )">
+                    <audio controls>
+                      <source [src]="item.urlMedios" type="audio/ogg">
+                      Tu navegador no soporta el elemento de audio.
+                    </audio>
+                  </span>
                 </a>
                 <span class="right-bottom">
                   <span class="date date-from-another"> {{ item.date }} </span>
@@ -49,6 +55,12 @@
                       <mat-icon>remove_red_eye</mat-icon>
                     </button>
                     <iframe *ngIf="item.viewFile" [src]="item.viewFile" frameborder="0"></iframe>
+                  </span>
+                  <span *ngIf="(  item.typeTxt === 'audio' )">
+                    <audio controls>
+                      <source [src]="item.urlMedios" type="audio/ogg">
+                      Tu navegador no soporta el elemento de audio.
+                    </audio>
                   </span>
                 </a>
                 <span class="right-bottom">
@@ -78,8 +90,67 @@
           </div>
         </div>
       </div>
-
-      <div class="opened-chat-bottom__container">
+      <div class="container" *ngIf="breakpoint === 1">
+        <div class="row">
+          <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div>
+                <div class="dropdown">
+                  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                    <mat-icon>add_circle_outline</mat-icon>
+                  </button>
+                  <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <li><a class="dropdown-item" href="#" (click)="handleFile('document')"><mat-icon>file_copy</mat-icon> Document</a></li>
+                    <li><a class="dropdown-item" href="#" (click)="handleFile('video')"><mat-icon>movie</mat-icon> Video</a></li>
+                    <li><a class="dropdown-item" href="#" (click)="handleFile('photo')"><mat-icon>insert_photo</mat-icon> Photo</a></li>
+                  </ul>
+                </div>
+              </div>
+              <div>
+                <button mat-mini-fab color="warn" aria-label="Emoji" (click)="disabledEmoji = !disabledEmoji;">
+                  <mat-icon>sentiment_satisfied_alt</mat-icon>
+                </button>
+              </div>
+              <div>
+                <button mat-mini-fab color="warn" aria-label="Add">
+                  <mat-icon>add</mat-icon>
+                </button>
+              </div>
+              <div>
+                <button mat-mini-fab color="warn" aria-label="User">
+                  <mat-icon>person</mat-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <form>
+              <textarea class="form-control" rows="3" [(ngModel)]="msg.txt"></textarea>
+            </form>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="d-flex justify-content-end">
+              <button mat-mini-fab color="warn" aria-label="Open Audio Recorder" *ngIf="!recording" (click)="handleOpenAudioRecorder()">
+                <mat-icon>mic</mat-icon>
+              </button>
+              <button mat-mini-fab color="warn" aria-label="Start Recording" *ngIf="recording && !audioBlob" (click)="handleStartRecording()">
+                <mat-icon>stop</mat-icon>
+              </button>
+              <button mat-mini-fab color="warn" aria-label="Trash Recording" *ngIf="audioBlob" (click)="handleTrashRecording()">
+                <mat-icon>delete</mat-icon>
+              </button>
+              <button mat-mini-fab color="warn" aria-label="Send" (click)="handleAddMessage()">
+                <mat-icon>send</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="opened-chat-bottom__container" *ngIf="breakpoint === 6">
         <div class="row" style="width: 100%;">
           <div class="col-12">
             <div class="d-flex bd-highlight">
@@ -113,7 +184,7 @@
                     </button>
                   </div>
                   <div class="bd-highlight">
-                    <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon">
+                    <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheet()">
                       <i class="ni ni-user-run"></i>
                     </button>
                   </div>
@@ -125,14 +196,17 @@
                 </form>
               </div>
               <div class="p-2 bd-highlight">
-                <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="handleAddMessage()">
-                  <mat-icon>send</mat-icon>
+                <button mat-mini-fab color="warn" (click)="handleOpenAudioRecorder()" *ngIf="!recording">
+                  <mat-icon>settings_voice</mat-icon>
                 </button>
-                <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="handleStartRecording()" *ngIf="recording">
+                <button mat-mini-fab color="warn" (click)="handleStartRecording()" *ngIf="recording && !audioBlob">
                   <mat-icon>stop</mat-icon>
                 </button>
-                <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="handleOpenAudioRecorder()" *ngIf="!recording">
-                  <mat-icon>settings_voice</mat-icon>
+                <button mat-mini-fab color="warn" (click)="handleTrashRecording()" *ngIf="audioBlob">
+                  <mat-icon>restore_from_trash</mat-icon>
+                </button>
+                <button mat-mini-fab color="warn" (click)="handleAddMessage()">
+                  <mat-icon>send</mat-icon>
                 </button>
               </div>
             </div>

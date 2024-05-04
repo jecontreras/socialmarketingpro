@@ -26,6 +26,10 @@ import { FlowsComponent } from 'src/app/pages/flows/flows.component';
 import { ConfigComponent } from 'src/app/pages/config/config.component';
 import { ListTagComponent } from 'src/app/pages/list-tag/list-tag.component';
 import { DetailConfigComponent } from 'src/app/pages/detail-config/detail-config.component';
+import { FastAnswerComponent } from 'src/app/pages/fast-answer/fast-answer.component';
+import { TeamMembersComponent } from 'src/app/pages/team-members/team-members.component';
+import { OfficeHoursComponent } from 'src/app/pages/office-hours/office-hours.component';
+import { DefaultFlowsComponent } from 'src/app/pages/default-flows/default-flows.component';
 // import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -57,7 +61,11 @@ import { DetailConfigComponent } from 'src/app/pages/detail-config/detail-config
     FlowsComponent,
     ConfigComponent,
     ListTagComponent,
-    DetailConfigComponent
+    DetailConfigComponent,
+    FastAnswerComponent,
+    TeamMembersComponent,
+    OfficeHoursComponent,
+    DefaultFlowsComponent
   ]
 })
 

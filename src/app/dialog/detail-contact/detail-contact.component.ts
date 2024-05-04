@@ -204,10 +204,12 @@ export class DetailContactComponent implements OnInit {
           "msx": {
             "from": this.dataUser.celular,
             "to": this.data.contact.whatsapp,
-            "body": "Asesor Asignado " + this.dataUser.name,
+            "body": "*Asesor Asignado* " + this.dataUser.name,
             "urlMedios": "",
             "quien": 1,
-            "id": 1
+            "id": 1,
+            "typeTxt": 'txt',
+            "userCreate": this.dataUser.id
         },// TODO USUARIO CABEZA DE TODO
         "user": { "id": this.dataUser.cabeza }
         }
@@ -223,11 +225,12 @@ export class DetailContactComponent implements OnInit {
           "msx": {
             "from": this.datas.from,
             "to": this.datas.to,
-            "body": "Asesor Asignado " + this.dataUser.name,
+            "body": "*Asesor Asignado* " + this.dataUser.name,
             "urlMedios": "",
             "quien": 1,
             "id": 1,
-            userCreate: this.dataUser.id
+            "typeTxt": 'txt',
+            "userCreate": this.dataUser.id
         },
         "user": { "id": this.dataUser.cabeza }
         }
