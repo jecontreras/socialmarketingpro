@@ -252,7 +252,15 @@ export class ListChatDetailedComponent implements OnInit {
     }
 
     openBottomSheet(): void {
-      this._bottomSheet.open(BottomSheetOverviewExampleSheet);
+      const bottomSheetRef = this._bottomSheet.open(BottomSheetSheetFastAnswer);
+
+      // Escucha el evento después de que se cierre el bottom sheet
+      bottomSheetRef.afterDismissed().subscribe((result) => {
+        // Maneja el valor devuelto aquí
+        console.log('Valor devuelto:', result);
+        this.msg.txt = result.description;
+      });
+
     }
 
 }
@@ -262,10 +270,10 @@ export class ListChatDetailedComponent implements OnInit {
   selector: 'bottom-sheet-overview-example-sheet',
   templateUrl: 'bottom-sheet-fast-answer.html',
 })
-export class BottomSheetOverviewExampleSheet {
+export class BottomSheetSheetFastAnswer {
   listFastAnswer:FASTANSWER[];
   dataUser: USERT;
-  constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheetOverviewExampleSheet>, private _fastAnswerService: FastAnswerService,private _store: Store<USER>,) {
+  constructor(private _bottomSheetRef: MatBottomSheetRef<BottomSheetSheetFastAnswer>, private _fastAnswerService: FastAnswerService,private _store: Store<USER>,) {
     this._store.subscribe((store: any) => {
       store = store.name;
       if(!store) return false;
@@ -282,8 +290,8 @@ export class BottomSheetOverviewExampleSheet {
       this._fastAnswerService.get( querys ).subscribe( res => resolve( res.data ) , error => resolve( error ) );
     });
   }
-  openLink(event: MouseEvent): void {
-    this._bottomSheetRef.dismiss();
-    event.preventDefault();
+  openLink(event: any): void {
+    this._bottomSheetRef.dismiss( event );
+    //event.preventDefault();
   }
 }
