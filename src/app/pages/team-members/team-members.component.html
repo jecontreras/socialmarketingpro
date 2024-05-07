@@ -55,13 +55,16 @@
           <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight"></div>
             <div class="p-2 bd-highlight">
-              <button mat-raised-button color="primary" (click)="handleSubmit()"> {{ dataConfig.createContact }} </button>
+              <button mat-raised-button color="primary" (click)="handleSubmit()">
+                <span *ngIf="data.id">{{ dataConfig.txtUpdateBtn }}</span>
+                <span *ngIf="!data.id">{{ dataConfig.createContact }}</span>
+               </button>
             </div>
           </div>
         </div>
         <div class="col-12">
           <mat-list role="list">
-            <mat-list-item *ngFor="let item of listUser" >
+            <mat-list-item *ngFor="let item of listUser" (click)="handleEventUser( item )">
               Username: {{ item.name }} - Email {{ item.email }}
             </mat-list-item>
           </mat-list>

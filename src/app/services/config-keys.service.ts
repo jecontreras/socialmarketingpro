@@ -110,7 +110,8 @@ export class ConfigKeysService {
       lastname: "Apellido",
       username: "Usuario de plataforma",
       cel: "Celular",
-      password: "Contraseña"
+      password: "Contraseña",
+      txtUpdateBtn: "Actualizar"
     }
   };
   constructor() { }

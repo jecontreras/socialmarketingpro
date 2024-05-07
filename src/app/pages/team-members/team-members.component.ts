@@ -43,14 +43,25 @@ export class TeamMembersComponent implements OnInit {
   }
 
   async handleSubmit(){
-    let data = {};
-    await this.handleCreateUser( data );
+    let data = {... this.data };
+    if( data.id) await this.handleCreateUser( data );
+    else this.handleUpdateUser( data );
   }
 
   handleCreateUser( data ){
     return new Promise( resolve =>{
       this._userServices.create( data ).subscribe( res => resolve( res ), error => resolve( error ) );
     })
+  }
+
+  handleUpdateUser( data ){
+    return new Promise( resolve =>{
+      this._userServices.update( data ).subscribe( res => resolve( res ), error => resolve( error ) );
+    })
+  }
+
+  handleEventUser( item ){
+    this.data = item;
   }
 
 
