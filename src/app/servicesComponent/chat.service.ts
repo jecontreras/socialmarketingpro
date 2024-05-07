@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { io } from 'socket.io-client';
 import { Observable } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import { USERT } from '../interfaces/interfaces';
+import { USER } from '../interfaces/user';
+import { Store } from '@ngrx/store';
 
 const socketOptions = {
   transports: ['websocket'], // Especifica los métodos de transporte compatibles
@@ -14,8 +16,17 @@ export class ChatService {
 
   private socket: any;
   private url = "http://localhost:3000"; // Cambia esto por la URL de tu servidor Sails.js
-
-  constructor() {
+  //private url = "https://whatsappemulator-349d443b5acb.herokuapp.com"; // Cambia esto por la URL de tu servidor Sails.js
+  dataUser:USERT;
+  constructor(
+    private _store: Store<USER>,
+  ) {
+    this._store.subscribe((store: any) => {
+      store = store.name;
+      if(!store) return false;
+      this.dataUser = store.user || {};
+      this.url = this.dataUser.urlSocket || this.url;
+    });
     this.socket = io(this.url, socketOptions);
     this.socket.on('connect', () => {
       console.log('Conexión establecida con el servidor');

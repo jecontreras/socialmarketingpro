@@ -50,9 +50,18 @@
     </div>
   </div>
 </mat-dialog-content>
-<!--
+
 <mat-dialog-actions align="end">
-  <button mat-raised-button color="warn" mat-dialog-close><i class="ni ni-fat-remove"></i></button>
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex bd-highlight">
+        <div class="p-2 flex-grow-1 bd-highlight"></div>
+        <div class="p-2 bd-highlight">
+          <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[5, 10, 25, 100]" (page)="pageEvent($event)"></mat-paginator>
+        </div>
+      </div>
+    </div>
+  </div>
 </mat-dialog-actions>
--->
+
 

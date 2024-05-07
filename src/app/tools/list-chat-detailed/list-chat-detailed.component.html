@@ -2,7 +2,7 @@
   <div class="current-chat">
     <div class="opened-chat-room__container p-3">
       <div class="d-flex flex-row bd-highlight mb-3 mat-elevation-z2">
-        <div class="p-2 bd-highlight"><img alt="Default Avatar" class="opened-chat-room__users-avatar" src="{{ data.contactIdList.foto || '' }}?stp=dst-jpg_s96x96&amp;ccb=11-4&amp;oh=01_ASBO06DXF88XYlaIfx-YqvV1eJejfPAe8FjEoSPkUYzd8w&amp;oe=66268F45&amp;_nc_sid=e6ed6c&amp;_nc_cat=111"></div>
+        <div class="p-2 bd-highlight"><img alt="Default Avatar" class="opened-chat-room__users-avatar" src="{{ data['contactIdList']?.foto || '' }}?stp=dst-jpg_s96x96&amp;ccb=11-4&amp;oh=01_ASBO06DXF88XYlaIfx-YqvV1eJejfPAe8FjEoSPkUYzd8w&amp;oe=66268F45&amp;_nc_sid=e6ed6c&amp;_nc_cat=111"></div>
         <div class="p-2 bd-highlight" style="margin-top: 10px;">
           <div class="opened-chat-room__user-name"> {{ data.to }} </div>
         </div>
@@ -179,12 +179,12 @@
                     </button>
                   </div>
                   <div class="bd-highlight">
-                    <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon">
+                    <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFlows()">
                       <i class="ni ni-fat-add"></i>
                     </button>
                   </div>
                   <div class="bd-highlight">
-                    <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheet()">
+                    <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFastAnswer()">
                       <i class="ni ni-user-run"></i>
                     </button>
                   </div>

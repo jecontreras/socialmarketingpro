@@ -4,13 +4,14 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FileDetailComponent } from 'src/app/dialog/file-detail/file-detail.component';
-import { FASTANSWER, MSG, USERT, WHATSAPPDETAILS } from 'src/app/interfaces/interfaces';
+import { FASTANSWER, INFOWHATSAPP, MSG, USERT, WHATSAPPDETAILS } from 'src/app/interfaces/interfaces';
 import { USER } from 'src/app/interfaces/user';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { AudioRecorderServiceService } from 'src/app/servicesComponent/audio-recorder-service.service';
 import { ChatService } from 'src/app/servicesComponent/chat.service';
 import { FastAnswerService } from 'src/app/servicesComponent/fast-answer.service';
+import { InfoWhatsappService } from 'src/app/servicesComponent/info-whatsapp.service';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
 
 @Component({
@@ -96,8 +97,9 @@ export class ListChatDetailedComponent implements OnInit {
         }
       }
       this.invertMessagesOrder();
-      this.scrollToBottom();
+      //this.scrollToBottom();
     } catch (error) { }
+    console.log( this.listDetails )
   }
 
   getWhatsappInit( id:string ){
@@ -156,11 +158,11 @@ export class ListChatDetailedComponent implements OnInit {
       let result:any = await this.handleProcessWhatsapp(this.msg.txt, 'txt');
       if( result.data.whatsappTxt ){
         result = result.data;
-        /*this.listDetails.push({
-          id: result.whatsappTxt.id,
+        this.listDetails.push({
+          id: result.Whatsapphistorial.id,
           txt: this.msg.txt,
           quien: 1
-        });*/
+        });
         this.scrollToBottom();
         this.msg.txt = "";
       }
@@ -251,7 +253,7 @@ export class ListChatDetailedComponent implements OnInit {
       this.audioBlob = null;
     }
 
-    openBottomSheet(): void {
+    openBottomSheetFastAnswer(): void {
       const bottomSheetRef = this._bottomSheet.open(BottomSheetSheetFastAnswer);
 
       // Escucha el evento después de que se cierre el bottom sheet
@@ -263,11 +265,23 @@ export class ListChatDetailedComponent implements OnInit {
 
     }
 
+    openBottomSheetFlows(): void {
+
+      const bottomSheetRef = this._bottomSheet.open(BottomSheetSheetFlows);
+
+      // Escucha el evento después de que se cierre el bottom sheet
+      bottomSheetRef.afterDismissed().subscribe((result) => {
+        // Maneja el valor devuelto aquí
+        console.log('Valor devuelto:', result);
+        //this.msg.txt = result.description;
+      });
+    }
+
 }
 
 
 @Component({
-  selector: 'bottom-sheet-overview-example-sheet',
+  selector: 'bottom-sheet-fas-answer',
   templateUrl: 'bottom-sheet-fast-answer.html',
 })
 export class BottomSheetSheetFastAnswer {
@@ -280,7 +294,7 @@ export class BottomSheetSheetFastAnswer {
       this.dataUser = store.user || {};
     });
     (async ()=>{
-      let list:any = await this.getListFastAnswer( { where:{ userCreationId: this.dataUser.id, check: true } } );
+      let list:any = await this.getListFastAnswer( { where:{ userCreationId: this.dataUser.id, check: true }, limit: 1000, page: 0 } );
       this.listFastAnswer = list;
     })();
   }
@@ -288,6 +302,41 @@ export class BottomSheetSheetFastAnswer {
   getListFastAnswer( querys ){
     return new Promise( resolve =>{
       this._fastAnswerService.get( querys ).subscribe( res => resolve( res.data ) , error => resolve( error ) );
+    });
+  }
+  openLink(event: any): void {
+    this._bottomSheetRef.dismiss( event );
+    //event.preventDefault();
+  }
+}
+
+
+@Component({
+  selector: 'bottom-sheet-flows',
+  templateUrl: 'bottom-sheet-flows.html',
+})
+export class BottomSheetSheetFlows {
+  listInfoWhatsapp:INFOWHATSAPP[];
+  dataUser: USERT;
+  constructor(
+    private _bottomSheetRef: MatBottomSheetRef<BottomSheetSheetFlows>,
+    private infoWhatsappService: InfoWhatsappService,
+    private _store: Store<USER>
+  ) {
+    this._store.subscribe((store: any) => {
+      store = store.name;
+      if(!store) return false;
+      this.dataUser = store.user || {};
+    });
+    (async ()=>{
+      let list:any = await this.getListInfoWhatsapp( { where:{ estado: 0, user: this.dataUser.cabeza }, limit: 1000, page: 0 } );
+      this.listInfoWhatsapp = list;
+    })();
+  }
+
+  getListInfoWhatsapp( querys ){
+    return new Promise( resolve =>{
+      this.infoWhatsappService.get( querys ).subscribe( res => resolve( res.data ) , error => resolve( error ) );
     });
   }
   openLink(event: any): void {

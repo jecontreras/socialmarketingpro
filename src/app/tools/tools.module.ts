@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { NgbAlertModule, NgbDatepickerModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { TableStatisticsComponent } from './table-statistics/table-statistics.component';
 import { ListChatComponent } from './list-chat/list-chat.component';
-import { BottomSheetSheetFastAnswer, ListChatDetailedComponent } from './list-chat-detailed/list-chat-detailed.component';
+import { BottomSheetSheetFastAnswer, BottomSheetSheetFlows, ListChatDetailedComponent } from './list-chat-detailed/list-chat-detailed.component';
 import { FullConnectionService } from '../servicesComponent/full-connection.service';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { CanvasBlocksComponent } from './canvas-blocks/canvas-blocks.component';
@@ -26,7 +26,8 @@ import { MatListModule } from '@angular/material/list';
     ListChatDetailedComponent,
     CanvasBlocksComponent,
     FormFlowsHsComponent,
-    BottomSheetSheetFastAnswer
+    BottomSheetSheetFastAnswer,
+    BottomSheetSheetFlows
   ],
   exports:[
     TablaComponent,
@@ -36,7 +37,8 @@ import { MatListModule } from '@angular/material/list';
     ListChatDetailedComponent,
     CanvasBlocksComponent,
     FormFlowsHsComponent,
-    BottomSheetSheetFastAnswer
+    BottomSheetSheetFastAnswer,
+    BottomSheetSheetFlows
   ],
   imports: [
     CommonModule,

@@ -35,7 +35,11 @@ export interface Componente {
     updatedAt?: string;
     celular?: string;
     name?: string;
-    cabeza?:string;
+    cabeza?: string;
+    urlSocket?: string;
+    lastname?: string;
+    username?: string;
+    password?: string;
   }
   export interface WHATSAPP{
     id?: string;

@@ -15,12 +15,12 @@ export class ArchivosService {
 
   create(query:any){
     //this.FileFirebase( query );
-    return this.http.post<void>(environment.urlFile+'/archivos/file', query).toPromise();
+    return this.http.post<void>(environment.urlFile+'/archivos/fileapiwhatsapp', query).toPromise();
   }
 
   createFile(query:any){
     //this.FileFirebase( query );
-    return this.http.post<void>(environment.urlFile+'/archivos/fileTotal', query).toPromise();
+    return this.http.post<void>(environment.urlFile+'/archivos/fileTotalapiwhatsapp', query).toPromise();
   }
 
   createGif(query:any){
@@ -30,7 +30,7 @@ export class ArchivosService {
 
   createMedia(query:any){
     //this.FileFirebase( query );
-    return this.http.post<void>(environment.urlFile+'/archivos/media', query).toPromise();
+    return this.http.post<void>(environment.urlFile+'/archivos/mediaapiwhatsapp', query).toPromise();
   }
 
   getBase64(file) {

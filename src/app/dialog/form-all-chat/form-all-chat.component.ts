@@ -22,6 +22,10 @@ export class FormAllChatComponent implements OnInit {
   btnDisabled:boolean = false;
   dataUser:USERT = {};
   listChat:WHATSAPP[] = [];
+  querys = { where: {  user: "" }, companyId: "", userId: "", limit: 10, page: 0 };
+  isLoadingResults = true;
+  isRateLimitReached = false;
+  resultsLength:number = 0;
 
   constructor(
     private _config: ConfigKeysService,
@@ -54,7 +58,9 @@ export class FormAllChatComponent implements OnInit {
       this.nexProcessAssigned( data );
     });
 
-    let result:any = await this.getListChat( { where: {  user: this.dataUser.cabeza }, companyId: this.dataUser.cabeza, userId: this.dataUser.id, limit: 10, page: 0 } );
+    this.querys = { where: {  user: this.dataUser.cabeza }, companyId: this.dataUser.cabeza, userId: this.dataUser.id, limit: 10, page: 0 }
+
+    let result:any = await this.getListChat( this.querys );
     this.listChat = result;
   }
 
@@ -90,12 +96,10 @@ export class FormAllChatComponent implements OnInit {
     }
   }
 
-
-
-
   getListChat( querys ){
     return new Promise( resolve =>{
       this._whatsappTxt.get( querys ).subscribe( res =>{
+        this.resultsLength = res.count;
         resolve( res.data );
       });
     })
@@ -120,6 +124,16 @@ export class FormAllChatComponent implements OnInit {
         id: id
       }, limit: 1} ).subscribe( res => resolve( res.data[0] ), error=> resolve( error ) );
     })
+  }
+
+  async pageEvent(ev: any) {
+    this.querys.page = ev.pageIndex;
+    this.querys.limit = ev.pageSize;
+    this.isLoadingResults = true;
+    this.isRateLimitReached = true;
+    let result:any = await this.getListChat( this.querys );
+    this.listChat.push( ...result );
+    this.listChat =_.unionBy(this.listChat || [], result, 'id');
   }
 
 

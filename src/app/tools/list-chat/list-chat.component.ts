@@ -90,7 +90,6 @@ export class ListChatComponent implements OnInit {
     const dialogRef = this.dialog.open(FormAllChatComponent, {
       data: { },
       width: '50%',
-      height: "600px",
     });
 
     dialogRef.afterClosed().subscribe(result => {

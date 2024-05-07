@@ -35,7 +35,7 @@ export class ConfigKeysService {
       txtCreate: "Creado",
       txtError: "Error",
       phone: "Teléfono",
-      email: "email",
+      email: "Email",
       subscribed: "Fecha de inscripción",
       cpf: "CPF",
       txtGotoChat: "Ir al chat",
@@ -106,7 +106,11 @@ export class ConfigKeysService {
       name: "Nombre",
       descripcion: "Descripcion",
       btnCreateNewResponse: "Create Nueva Respuesta",
-      btnDrop: "Eliminar"
+      btnDrop: "Eliminar",
+      lastname: "Apellido",
+      username: "Usuario de plataforma",
+      cel: "Celular",
+      password: "Contraseña"
     }
   };
   constructor() { }

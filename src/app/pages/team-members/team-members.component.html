@@ -1,1 +1,72 @@
-<p>team-members works!</p>
+<div class="row">
+  <div class="col-12">
+    <div class="d-flex justify-content-center">
+      <div>
+        <h1>Miembros del Equipos</h1>
+      </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-sm-6">
+          <div class="form-group">
+            <label for="exampleFormControlInput1"> {{ dataConfig.name }} </label>
+            <input type="text" class="form-control" [(ngModel)]="data.name" placeholder="name@example.com">
+          </div>
+        </div>
+        <div class="col-12 col-sm-6">
+          <div class="form-group">
+            <label for="exampleFormControlInput1"> {{ dataConfig.lastname }} </label>
+            <input type="text" class="form-control" [(ngModel)]="data.lastname" placeholder="name@example.com">
+          </div>
+        </div>
+        <div class="col-12 col-sm-6">
+          <div class="form-group">
+            <label for="exampleFormControlInput1"> {{ dataConfig.username }} </label>
+            <input type="text" class="form-control" [(ngModel)]="data.username" placeholder="name@example.com">
+          </div>
+        </div>
+        <div class="col-12 col-sm-6">
+          <div class="form-group">
+            <label for="exampleFormControlInput1"> {{ dataConfig.username }} </label>
+            <input type="text" class="form-control" [(ngModel)]="data.username" placeholder="name@example.com">
+          </div>
+        </div>
+        <div class="col-12 col-sm-6">
+          <div class="form-group">
+            <label for="exampleFormControlInput1"> {{ dataConfig.cel }} </label>
+            <input type="number" class="form-control" [(ngModel)]="data.celular" placeholder="name@example.com">
+          </div>
+        </div>
+        <div class="col-12 col-sm-6">
+          <div class="form-group">
+            <label for="exampleFormControlInput1"> {{ dataConfig.email }} </label>
+            <input type="email" class="form-control" [(ngModel)]="data.email" placeholder="name@example.com">
+          </div>
+        </div>
+        <div class="col-12 col-sm-6">
+          <div class="form-group">
+            <label for="exampleFormControlInput1"> {{ dataConfig.password }} </label>
+            <input type="text" class="form-control" [(ngModel)]="data.password" placeholder="name@example.com">
+          </div>
+        </div>
+        <div class="col-12 col-sm-6">
+          <div class="d-flex bd-highlight">
+            <div class="p-2 flex-grow-1 bd-highlight"></div>
+            <div class="p-2 bd-highlight">
+              <button mat-raised-button color="primary" (click)="handleSubmit()"> {{ dataConfig.createContact }} </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <mat-list role="list">
+            <mat-list-item *ngFor="let item of listUser" >
+              Username: {{ item.name }} - Email {{ item.email }}
+            </mat-list-item>
+          </mat-list>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
