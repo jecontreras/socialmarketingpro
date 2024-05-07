@@ -12,49 +12,46 @@
         <div class="col-12 col-sm-6">
           <div class="form-group">
             <label for="exampleFormControlInput1"> {{ dataConfig.name }} </label>
-            <input type="text" class="form-control" [(ngModel)]="data.name" placeholder="name@example.com">
+            <input type="text" class="form-control" [(ngModel)]="data.name">
           </div>
         </div>
         <div class="col-12 col-sm-6">
           <div class="form-group">
             <label for="exampleFormControlInput1"> {{ dataConfig.lastname }} </label>
-            <input type="text" class="form-control" [(ngModel)]="data.lastname" placeholder="name@example.com">
+            <input type="text" class="form-control" [(ngModel)]="data.lastname">
           </div>
         </div>
         <div class="col-12 col-sm-6">
           <div class="form-group">
             <label for="exampleFormControlInput1"> {{ dataConfig.username }} </label>
-            <input type="text" class="form-control" [(ngModel)]="data.username" placeholder="name@example.com">
-          </div>
-        </div>
-        <div class="col-12 col-sm-6">
-          <div class="form-group">
-            <label for="exampleFormControlInput1"> {{ dataConfig.username }} </label>
-            <input type="text" class="form-control" [(ngModel)]="data.username" placeholder="name@example.com">
+            <input type="text" class="form-control" [(ngModel)]="data.username">
           </div>
         </div>
         <div class="col-12 col-sm-6">
           <div class="form-group">
             <label for="exampleFormControlInput1"> {{ dataConfig.cel }} </label>
-            <input type="number" class="form-control" [(ngModel)]="data.celular" placeholder="name@example.com">
+            <input type="number" class="form-control" [(ngModel)]="data.celular">
           </div>
         </div>
         <div class="col-12 col-sm-6">
           <div class="form-group">
             <label for="exampleFormControlInput1"> {{ dataConfig.email }} </label>
-            <input type="email" class="form-control" [(ngModel)]="data.email" placeholder="name@example.com">
+            <input type="email" class="form-control" [(ngModel)]="data.email">
           </div>
         </div>
         <div class="col-12 col-sm-6">
           <div class="form-group">
             <label for="exampleFormControlInput1"> {{ dataConfig.password }} </label>
-            <input type="text" class="form-control" [(ngModel)]="data.password" placeholder="name@example.com">
+            <input type="text" class="form-control" [(ngModel)]="data.password">
           </div>
         </div>
         <div class="col-12 col-sm-6">
           <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight"></div>
             <div class="p-2 bd-highlight">
+              <button mat-raised-button color="warn" (click)="handleClean()" *ngIf="data.id">
+                {{ dataConfig.btnClean }}
+              </button>
               <button mat-raised-button color="primary" (click)="handleSubmit()">
                 <span *ngIf="data.id">{{ dataConfig.txtUpdateBtn }}</span>
                 <span *ngIf="!data.id">{{ dataConfig.createContact }}</span>
@@ -63,11 +60,28 @@
           </div>
         </div>
         <div class="col-12">
-          <mat-list role="list">
-            <mat-list-item *ngFor="let item of listUser" (click)="handleEventUser( item )">
-              Username: {{ item.name }} - Email {{ item.email }}
-            </mat-list-item>
-          </mat-list>
+          <ul class="list-group list-group-flush list my--3">
+            <li class="list-group-item px-0" *ngFor="let item of listUser" >
+              <div class="row align-items-center">
+                <div class="col-auto">
+                  <!-- Avatar -->
+                  <a href="#" class="avatar rounded-circle">
+                    <img alt="Image placeholder" [src]="item.foto">
+                  </a>
+                </div>
+                <div class="col ml--2">
+                  <h4 class="mb-0">
+                    <a href="#!">{{ item.name }} - {{ item.email }} </a>
+                  </h4>
+                  <span class="text-success">●</span>
+                  <small>Online</small>
+                </div>
+                <div class="col-auto">
+                  <button type="button" class="btn btn-sm btn-primary" (click)="handleEventUser( item )" >Add</button>
+                </div>
+              </div>
+            </li>
+          </ul>
         </div>
       </div>
     </div>

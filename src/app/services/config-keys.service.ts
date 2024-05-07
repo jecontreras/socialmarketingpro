@@ -111,7 +111,8 @@ export class ConfigKeysService {
       username: "Usuario de plataforma",
       cel: "Celular",
       password: "Contraseña",
-      txtUpdateBtn: "Actualizar"
+      txtUpdateBtn: "Actualizar",
+      btnClean: "Limpiar"
     }
   };
   constructor() { }

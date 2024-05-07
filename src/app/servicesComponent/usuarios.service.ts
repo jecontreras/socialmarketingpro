@@ -13,7 +13,7 @@ export class UsuariosService {
   get(query:any){
     return this._model.querys('user/querys',query, 'post');
   }
-  
+
   getOn(query:any){
     return this._model.querys('user/querysOn',query, 'post');
   }
@@ -29,13 +29,13 @@ export class UsuariosService {
   darPuntos(query:any){
     return this._model.querys('user/guardarPunto',query, 'post');
   }
-  
+
   getNivel(query:any){
     return this._model.querys('user/nivelUser',query, 'post');
   }
 
-  cambioPass(query:any){
-    return this._model.querys('user/cambioPass',query, 'post');
+  keyChange(query:any){
+    return this._model.querys('user/keyChange',query, 'post');
   }
 
   login(query:any){
@@ -49,7 +49,7 @@ export class UsuariosService {
   update(query:any){
     return this._model.querys('user/'+query.id, query, 'put');
   }
-  
+
   delete(query:any){
     return this._model.querys('user/'+query.id, query, 'delete');
   }
@@ -61,7 +61,7 @@ export class UsuariosService {
   updateSolicitud(query:any){
     return this._model.querys('solicitudes/'+query.id, query, 'put');
   }
-  
+
   deleteSolicitud(query:any){
     return this._model.querys('solicitudes/'+query.id, query, 'delete');
   }

@@ -195,14 +195,14 @@ export class ToolsService {
     return stringLimpio;
   }
 
-  buscarConPalabraClave(array, palabraClave) {
+  searchKeyword(array, palabraClave) {
     // Convertir la palabra clave a minúsculas para hacer la búsqueda insensible a mayúsculas
     const palabraClaveLowerCase = palabraClave.toLowerCase();
 
     // Filtrar el array para incluir solo los elementos que contienen la palabra clave
     const resultados = array.filter(elemento => {
       // Convertir cada elemento a minúsculas para hacer la comparación insensible a mayúsculas
-      const elementoLowerCase = elemento.ventas.slug.toLowerCase();
+      const elementoLowerCase = elemento.whatsappIdList.to.toLowerCase();
 
       // Verificar si el elemento contiene la palabra clave
       return elementoLowerCase.includes(palabraClaveLowerCase);

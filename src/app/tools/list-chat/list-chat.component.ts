@@ -10,7 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { WhatsappTxtUserService } from 'src/app/servicesComponent/whatsapp-txt-user.service';
 import { USER } from 'src/app/interfaces/user';
 import { Store } from '@ngrx/store';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ToolsService } from 'src/app/services/tools.service';
 @Component({
   selector: 'app-list-chat',
   templateUrl: './list-chat.component.html',
@@ -25,6 +26,7 @@ export class ListChatComponent implements OnInit {
   txtFilter:string;
 
   @ViewChild('sonChat') sonChat: ListChatDetailedComponent;
+  querys:any = {};
 
   constructor(
     private _config: ConfigKeysService,
@@ -33,6 +35,8 @@ export class ListChatComponent implements OnInit {
     public dialog: MatDialog,
     private _store: Store<USER>,
     private _router: Router,
+    private _toolsService: ToolsService,
+    private activate: ActivatedRoute,
   ) {
     this.dataConfig = _config._config.keys;
     this._store.subscribe((store: any) => {
@@ -50,19 +54,30 @@ export class ListChatComponent implements OnInit {
   }
 
   async ngOnInit() {
-    let result:any = await this.getListChat( {
+    this.querys = {
       where:{
         userId: this.dataUser.id,
-        assignedMe: 0
+        assignedMe: 0,
+        estado: 0
       },
-      limit: 10,
+      limit: 100,
       page: 0
-    });
+    };
+    let result:any = await this.getListChat( this.querys );
     this.listChat = result;
     this.chatService.receiveChatAssigned().subscribe(async (data: MSG) => {
-      console.log("****45", data, this.listChat)
+      //console.log("****45", data, this.listChat)
       this.nexProcessNewWhatsapp( data );
     });
+    this.processColorItem();
+  }
+
+  processColorItem(){
+    let urlPath = (this.activate.snapshot.paramMap.get('id'));
+    for( let row of this.listChat ) {
+      if( row.whatsappIdList.id === urlPath ) row.check = true;
+      else row.check = false;
+    }
   }
 
   nexProcessNewWhatsapp( data ){
@@ -75,6 +90,7 @@ export class ListChatComponent implements OnInit {
   }
 
   handleEventSon() {
+    this.processColorItem();
     this.sonChat.handleEventFater();
   }
 
@@ -99,6 +115,7 @@ export class ListChatComponent implements OnInit {
 
   handleSelectChat( item ){
     console.log("***", item)
+    item.check = true;
     this.dataSelect = item;
     this._router.navigate(['/liveChat', this.dataSelect.id ] );
     setTimeout(()=>this.handleEventSon(), 200)
@@ -107,25 +124,21 @@ export class ListChatComponent implements OnInit {
   async handleFilter(){
     this.loader = true;
     this.listChat = [];
-    let query:any = {};
     //console.log(this.datoBusqueda);
     this.txtFilter = this.txtFilter.trim();
-    query = {
-      where:{
-        cat_padre: null
-      },
-      limit: 100
-    };
-    if (this.txtFilter != '') {
-      query.where.or = [
-        {
-          to: {
-            contains: this.txtFilter|| ''
-          }
-        },
-      ];
-    }
-    let result:any = await this.getListChat( query );
+    this.querys.limit = 1000;
+    this.querys.page = 0;
+    let result:any = await this.getListChat( this.querys );
+    if(this.txtFilter != '') this.listChat = this._toolsService.searchKeyword( result, this.txtFilter );
+    else this.listChat = result;
+  }
+
+  async handleEventState(){
+    this.loader = true;
+    this.listChat = [];
+    this.querys.limit = 1000;
+    this.querys.page = 0;
+    let result:any = await this.getListChat( this.querys );
     this.listChat = result;
   }
 

@@ -99,7 +99,7 @@ export class ListChatDetailedComponent implements OnInit {
       this.invertMessagesOrder();
       //this.scrollToBottom();
     } catch (error) { }
-    console.log( this.listDetails )
+    //console.log( this.listDetails )
   }
 
   getWhatsappInit( id:string ){

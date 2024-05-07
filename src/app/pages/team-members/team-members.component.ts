@@ -38,18 +38,36 @@ export class TeamMembersComponent implements OnInit {
 
   getUser(){
     return new Promise( resolve =>{
-      this._userServices.get( { where: { cabeza: this.dataUser.cabeza } } ).subscribe( res => resolve( res.data ), error => resolve( error ) );
+      this._userServices.get( { where: { cabeza: this.dataUser.cabeza }, limit: 1000, page:0 } ).subscribe( res => resolve( res.data ), error => resolve( error ) );
     })
   }
 
   async handleSubmit(){
     let data = {... this.data };
-    if( data.id) await this.handleCreateUser( data );
-    else this.handleUpdateUser( data );
+    if( !data.id ) {
+      await this.handleCreateUser( data );
+      let resul:any = await this.getUser( );
+      this.listUser = resul;
+    }
+    else {
+      if( this.data.password ) this.handleUpdatePassword( data );
+      delete data.rol;
+      this.handleUpdateUser( data );
+    }
+    this._toolsService.presentToast(this.dataConfig.txtUpdate );
+  }
+
+  handleUpdatePassword( data ){
+    return new Promise( resolve =>{
+      this._userServices.keyChange( { id: data.id, password: data.password } ).subscribe( res => resolve( res ), error => resolve( error ) );
+    })
   }
 
   handleCreateUser( data ){
     return new Promise( resolve =>{
+      data.cabeza = this.dataUser.cabeza;
+      data.rol = "usuario";
+      data.empresa = this.dataUser.empresa;
       this._userServices.create( data ).subscribe( res => resolve( res ), error => resolve( error ) );
     })
   }
@@ -62,6 +80,10 @@ export class TeamMembersComponent implements OnInit {
 
   handleEventUser( item ){
     this.data = item;
+  }
+
+  handleClean(){
+    this.data = {};
   }
 
 

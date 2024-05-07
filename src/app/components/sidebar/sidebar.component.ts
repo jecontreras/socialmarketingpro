@@ -49,13 +49,13 @@ export class SidebarComponent implements OnInit {
       { path: '/dashboard', title: 'Inicio',  icon: 'ni-tv-2 text-primary', class: '' ,disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
       //{ path: '/icons', title: 'Icons',  icon:'ni-planet text-blue', class: '' },
       //{ path: '/maps', title: 'Maps',  icon:'ni-pin-3 text-orange', class: '' },
-      { path: '/audience', title: this.dataConfig.audience,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
+      { path: '/audience', title: this.dataConfig.audience,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'usuario' ) || ( this.viewProfile === 'admin' ) },
       { path: '/bell', title: this.dataConfig.bell,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
       { path: '/broadcast', title: this.dataConfig.broadcast,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
-      { path: '/liveChat', title: this.dataConfig.liveChat,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
+      { path: '/liveChat/aaaaaaaaa', title: this.dataConfig.liveChat,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'usuario' ) || ( this.viewProfile === 'admin' ) },
       { path: '/flows', title: this.dataConfig.flows,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
-      { path: '/config', title: this.dataConfig.config,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
-      { path: '/user-profile', title: 'Perfil',  icon:'ni-single-02 text-yellow', class: '' , disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' )},
+      { path: '/config', title: this.dataConfig.config,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'usuario' ) || ( this.viewProfile === 'admin' ) },
+      { path: '/user-profile', title: 'Perfil',  icon:'ni-single-02 text-yellow', class: '' , disabled: ( this.viewProfile === 'usuario' ) || ( this.viewProfile === 'admin' )},
       { path: '/perfil', title: 'Roles',  icon:'ni-vector text-pink', class: '' , disabled:  ( this.viewProfile === 'admin' )},
   ];
     this.menuItems = ROUTES.filter(menuItem => menuItem.disabled === true );

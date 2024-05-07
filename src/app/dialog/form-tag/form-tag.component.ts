@@ -28,6 +28,11 @@ export class FormTagComponent implements OnInit {
     private _tools: ToolsService,
     private _tagServices: TagService
   ) {
+    this._store.subscribe((store: any) => {
+      store = store.name;
+      if(!store) return false;
+      this.dataUser = store.user || {};
+    });
     this.dataConfig = _config._config.keys;
   }
 
@@ -48,7 +53,7 @@ export class FormTagComponent implements OnInit {
       else this._tools.basic( this.dataConfig.txtUpdate );
     }else {
       let data = this.data;
-      data.user = this.dataUser.id;
+      data.user = this.dataUser.cabeza;
       let result:any = await this.handleCreate( data );
       if( !result.id ) this._tools.basic( this.dataConfig.txtError );
       else this._tools.basic( this.dataConfig.txtCreate );

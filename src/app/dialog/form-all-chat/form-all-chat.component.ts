@@ -22,10 +22,11 @@ export class FormAllChatComponent implements OnInit {
   btnDisabled:boolean = false;
   dataUser:USERT = {};
   listChat:WHATSAPP[] = [];
-  querys = { where: {  user: "" }, companyId: "", userId: "", limit: 10, page: 0 };
+  querys:any = {};
   isLoadingResults = true;
   isRateLimitReached = false;
   resultsLength:number = 0;
+  txtFilter:string;
 
   constructor(
     private _config: ConfigKeysService,
@@ -58,14 +59,14 @@ export class FormAllChatComponent implements OnInit {
       this.nexProcessAssigned( data );
     });
 
-    this.querys = { where: {  user: this.dataUser.cabeza }, companyId: this.dataUser.cabeza, userId: this.dataUser.id, limit: 10, page: 0 }
+    this.querys = { where: {  user: this.dataUser.cabeza }, companyId: this.dataUser.cabeza, userId: this.dataUser.id, limit: 20, page: 0 }
 
     let result:any = await this.getListChat( this.querys );
     this.listChat = result;
   }
 
   nexProcessNewWhatsapp( data ){
-    console.log("****", data, this.listChat)
+    //console.log("****", data, this.listChat)
     if( data.msx.assignedMe === true ) return false;
     try {
       let index = _.findIndex( this.listChat, ['to', data.msx.to ] );
@@ -108,6 +109,7 @@ export class FormAllChatComponent implements OnInit {
   async handleSelectChat( item ){
     let contact = await this.getContactId( item.contactId.id || item.contactId );
     item.contactId = contact;
+    item.check = true;
     const dialogRef = this.dialog.open(DetailContactComponent, {
       data: item,
     });
@@ -115,6 +117,7 @@ export class FormAllChatComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
       if( result ) this.closeDialog();
+      else setTimeout(()=> item.check = false, 8000 );
     });
   }
 
@@ -134,6 +137,30 @@ export class FormAllChatComponent implements OnInit {
     let result:any = await this.getListChat( this.querys );
     this.listChat.push( ...result );
     this.listChat =_.unionBy(this.listChat || [], result, 'id');
+  }
+
+  async getFilter(){
+    this.listChat = [];
+    //console.log(this.datoBusqueda);
+    this.txtFilter = this.txtFilter.trim();
+    this.querys.limit = 1000;
+    this.querys.page = 0;
+    if ( this.txtFilter != '' ) {
+      this.querys.where.or = [
+        {
+          to: {
+            contains: this.txtFilter|| ''
+          }
+        },
+        {
+          from: {
+            contains: this.txtFilter|| ''
+          }
+        }
+      ];
+    }else delete this.querys.where.or;
+    let result:any = await this.getListChat( this.querys );
+    this.listChat = result;
   }
 
 

@@ -7,6 +7,12 @@
             <span> {{ dataConfig.mine }} </span>
           </div>
           <div class="p-2 bd-highlight">
+            <select  [(ngModel)]="querys.where.estado" (change)="handleEventState()">
+              <option value="0"> {{ dataConfig.opened }} </option>
+              <option value="1"> {{ dataConfig.closed }} </option>
+            </select>
+          </div>
+          <div class="p-2 bd-highlight">
             <button mat-mini-fab color="primary" aria-label="Example icon button with a home icon" (click)="handleOpenAllChat()">
               <mat-icon>find_in_page</mat-icon>
             </button>
@@ -20,7 +26,15 @@
       </div>
       <div class="col-12 list-container">
         <mat-list>
-          <mat-list-item *ngFor="let item of listChat" class="mat-elevation-z2 mouse" (click)="handleSelectChat( item.whatsappIdList )">
+          <mat-list-item
+            *ngFor="let item of listChat"
+            class="mat-elevation-z2 mouse"
+            (click)="handleSelectChat( item.whatsappIdList )"
+            [ngClass]="
+                  { 'checkSelect': item.check == true
+                  }
+                "
+          >
             <div mat-line>
               <div class="chat-room__content r9">
               <div class="chat-room__users-avatar-container">
@@ -31,7 +45,7 @@
               <div class="chat-room__info r3">
                 <div>
                   <div class="chat-room__user-name r8">
-                    <span class="full-name-text r1"> {{ item.whatsappIdList.to }} </span>
+                    <span class="full-name-text r1"> {{ item.whatsappIdList.to }} - {{ item.check }} </span>
                     <span class="r4"> {{ item.whatsappIdList.createdAt | date:'M/d/yy, h:mm a' }} </span>
                   </div>
                 </div>

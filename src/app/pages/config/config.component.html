@@ -10,16 +10,16 @@
         <mat-tab [label]="dataConfig.fastAnswer">
           <app-fast-answer></app-fast-answer>
         </mat-tab>
-        <mat-tab [label]="dataConfig.teamMembers">
+        <mat-tab [label]="dataConfig.teamMembers" *ngIf="viewProfile === 'admin'">
           <app-team-members></app-team-members>
         </mat-tab>
-        <mat-tab [label]="dataConfig.officeHours">
+        <mat-tab [label]="dataConfig.officeHours" *ngIf="viewProfile === 'admin'">
           <app-office-hours></app-office-hours>
         </mat-tab>
-        <mat-tab [label]="dataConfig.defaultFlows">
+        <mat-tab [label]="dataConfig.defaultFlows" *ngIf="viewProfile === 'admin'">
           <app-default-flows></app-default-flows>
         </mat-tab>
-        <mat-tab [label]="dataConfig.config">
+        <mat-tab [label]="dataConfig.config" *ngIf="viewProfile === 'admin'">
           <app-detail-config></app-detail-config>
         </mat-tab>
       </mat-tab-group>

@@ -42,7 +42,7 @@ export class FastAnswerComponent implements OnInit {
 
   async ngOnInit() {
     this.dataSource.data = [];
-    let list:any = await this.getList( { where:{ userCreationId: this.dataUser.id, check: true } } );
+    let list:any = await this.getList( { where:{ companyId: this.dataUser.cabeza, check: true }, limit: 1000 } );
     this.dataSource.data.push( ...list );
     this.table.renderRows();
   }

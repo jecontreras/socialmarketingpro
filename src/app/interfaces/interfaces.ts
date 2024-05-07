@@ -40,6 +40,7 @@ export interface Componente {
     lastname?: string;
     username?: string;
     password?: string;
+    rol?: any;
   }
   export interface WHATSAPP{
     id?: string;
@@ -50,6 +51,8 @@ export interface Componente {
     from?: string;
     updatedAt?: string;
     contactId?: any;
+    check?: boolean;
+    whatsappIdList?: any;
   }
   export interface WHATSAPPDETAILS{
     id?: string;
@@ -201,6 +204,7 @@ export interface WHATSAPPTXT{
   id?: string;
   createdAt?: string;
   updatedAt?: string;
+  check?: boolean;
 }
 
 export interface WHATSAPPTXTUSER{

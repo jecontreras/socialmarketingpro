@@ -314,6 +314,8 @@ export class TablaComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      this.querys.page = 0;
+      this.getList();
     });
   }
 

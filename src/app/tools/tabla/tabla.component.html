@@ -10,9 +10,11 @@
                 <h3 class="mb-0">{{ _dataConfig.titulo }} </h3>
               </div>
               <div></div>
-              <!--<div>
-                <a class="btn btn-success" href="javascript:void(0)" (click)="print()">Imprimir</a>
-              </div>-->
+              <div *ngIf="_dataConfig.returnHTML === 'formTag/'">
+                <button type="button" mat-raised-button color="primary"  (click)="handleOpenDialogTag( {} )">
+                  Crear
+                </button>
+              </div>
             </div>
           </div>
           <div class="table-responsive p-3">
