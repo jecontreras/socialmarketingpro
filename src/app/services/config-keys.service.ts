@@ -112,7 +112,8 @@ export class ConfigKeysService {
       cel: "Celular",
       password: "Contraseña",
       txtUpdateBtn: "Actualizar",
-      btnClean: "Limpiar"
+      btnClean: "Limpiar",
+      rangeDateTxt: "Rango de Fechas"
     }
   };
   constructor() { }

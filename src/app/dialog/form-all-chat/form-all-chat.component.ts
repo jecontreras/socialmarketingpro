@@ -10,7 +10,8 @@ import { MSG, USERT, WHATSAPP } from 'src/app/interfaces/interfaces';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
 import { DetailContactComponent } from '../detail-contact/detail-contact.component';
 import { ContactService } from 'src/app/servicesComponent/contact.service';
-
+import * as moment from 'moment';
+import { FormControl, FormGroup } from '@angular/forms';
 @Component({
   selector: 'app-form-all-chat',
   templateUrl: './form-all-chat.component.html',
@@ -27,6 +28,10 @@ export class FormAllChatComponent implements OnInit {
   isRateLimitReached = false;
   resultsLength:number = 0;
   txtFilter:string;
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl(),
+  });
 
   constructor(
     private _config: ConfigKeysService,
@@ -59,7 +64,7 @@ export class FormAllChatComponent implements OnInit {
       this.nexProcessAssigned( data );
     });
 
-    this.querys = { where: {  user: this.dataUser.cabeza }, companyId: this.dataUser.cabeza, userId: this.dataUser.id, limit: 20, page: 0 }
+    this.querys = { where: {  user: this.dataUser.cabeza, /*createdAt: { ">=": moment().format('YYYY-MM-DD'), "<=": moment().add("days", -1 ).format('YYYY-MM-DD') } */ }, companyId: this.dataUser.cabeza, userId: this.dataUser.id, limit: 20, page: 0 }
 
     let result:any = await this.getListChat( this.querys );
     this.listChat = result;
@@ -159,6 +164,19 @@ export class FormAllChatComponent implements OnInit {
         }
       ];
     }else delete this.querys.where.or;
+    let result:any = await this.getListChat( this.querys );
+    this.listChat = result;
+  }
+
+  async handleRangeDate(){
+    this.querys.where.createdAt = {
+      ">=": this.range.value.start,
+      "<=": this.range.value.end
+    };
+    this.listChat = [];
+    //console.log(this.datoBusqueda);
+    this.querys.limit = 1000;
+    this.querys.page = 0;
     let result:any = await this.getListChat( this.querys );
     this.listChat = result;
   }

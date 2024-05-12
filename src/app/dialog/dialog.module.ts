@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MyOwnCustomMaterialModule } from '../app.material.module';
 import { MovementItemComponent } from './movement-item/movement-item.component';
 import { DetailContactComponent } from './detail-contact/detail-contact.component';
@@ -54,8 +54,8 @@ import { FormAllChatComponent } from './form-all-chat/form-all-chat.component';
     CommonModule,
     FormsModule,
     ToolsModule,
-    MyOwnCustomMaterialModule
-
+    MyOwnCustomMaterialModule,
+    ReactiveFormsModule
   ]
 })
 export class DialogModule { }
