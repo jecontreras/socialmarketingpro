@@ -24,6 +24,7 @@ export class DetailConfigComponent implements OnInit {
       store = store.name;
       if(!store) return false;
       this.dataUser = store.user || {};
+      this.data.urlSocket = this.dataUser.urlSocket || this.data.urlSocket;
     });
   }
 
@@ -39,7 +40,7 @@ export class DetailConfigComponent implements OnInit {
 
   async processUserUpdate(){
     return new Promise( resolve =>{
-      this._user.update( { id: this.dataUser.id, urlSocket: this.dataUser.urlSocket } ).subscribe( res => resolve( res.data[0] ), error => resolve( error ) );
+      this._user.update( { id: this.dataUser.id, urlSocket: this.dataUser.urlSocket } ).subscribe( res => resolve( res ), error => resolve( error ) );
     })
   }
 

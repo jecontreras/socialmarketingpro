@@ -45,8 +45,8 @@
               <div class="chat-room__info r3">
                 <div>
                   <div class="chat-room__user-name r8">
-                    <span class="full-name-text r1"> {{ item.whatsappIdList.to }} - {{ item.check }} </span>
-                    <span class="r4"> {{ item.whatsappIdList.createdAt | date:'M/d/yy, h:mm a' }} </span>
+                    <span class="full-name-text r1"> {{ _toolsService.formatNumer( item.whatsappIdList.to ) }} </span>
+                    <span class="r4"> <span *ngIf="item.whatsappIdList.seen === 0" class="text-success">●</span>  {{ item.whatsappIdList.createdAt | date:'M/d/yy, h:mm a' }} </span>
                   </div>
                 </div>
                 <div class="chat-room__info-row r5">

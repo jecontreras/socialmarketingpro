@@ -35,8 +35,9 @@ export class ListChatComponent implements OnInit {
     public dialog: MatDialog,
     private _store: Store<USER>,
     private _router: Router,
-    private _toolsService: ToolsService,
+    public _toolsService: ToolsService,
     private activate: ActivatedRoute,
+    private _whatsappTxtService : WhatsappTxtService
   ) {
     this.dataConfig = _config._config.keys;
     this._store.subscribe((store: any) => {
@@ -83,6 +84,7 @@ export class ListChatComponent implements OnInit {
   nexProcessNewWhatsapp( data ){
     try {
       data = data.txt;
+      data.check = true;
       if( this.dataUser.id !== data.userId.id ) return false;
       if( data.assignedMe === 0 ) this.listChat.push( { ...data, whatsappIdList: data.whatsappId, userIdList: data.userId, whatsappId: data.whatsappId.id, userId: data.userId.id , contactIdList:{ foto: "./assets/brand/favicon.png" }} );
       else this.listChat = this.listChat.filter( item => item.id !== data.id );
@@ -110,6 +112,7 @@ export class ListChatComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
+      setTimeout( () => this.processColorItem(), 3000 )
     });
   }
 
@@ -118,7 +121,14 @@ export class ListChatComponent implements OnInit {
     item.check = true;
     this.dataSelect = item;
     this._router.navigate(['/liveChat', this.dataSelect.id ] );
+    if( this.dataSelect.seen === 0 ) { item.seen=1; this.handleUpdateState();}
     setTimeout(()=>this.handleEventSon(), 200)
+  }
+
+  handleUpdateState(){
+    return new Promise( resolve=>{
+      this._whatsappTxtService.update( { id: this.dataSelect.id, seen: 1}).subscribe( res => resolve( res ),error => resolve( error ) );
+    });
   }
 
   async handleFilter(){

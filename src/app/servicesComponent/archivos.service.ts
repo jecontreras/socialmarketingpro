@@ -20,7 +20,7 @@ export class ArchivosService {
 
   createFile(query:any){
     //this.FileFirebase( query );
-    return this.http.post<void>(environment.urlFile+'/archivos/fileTotalapiwhatsapp', query).toPromise();
+    return this.http.post<void>(environment.urlFile+'/archivos/fileTotal', query).toPromise();
   }
 
   createGif(query:any){

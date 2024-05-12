@@ -70,7 +70,7 @@ export class ArchivosComponent implements OnInit {
     let res:any = await this._archivos.createFile( {
       fileBase64: base
     } )
-    return { files: res.url, }
+    return { files: res.Location, }
   }
 
 }

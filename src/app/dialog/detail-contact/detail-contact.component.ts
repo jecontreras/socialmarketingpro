@@ -4,7 +4,7 @@ import { MovementItemComponent } from '../movement-item/movement-item.component'
 import { ToolsService } from 'src/app/services/tools.service';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ContactService } from 'src/app/servicesComponent/contact.service';
-import { CONTACTDIALOG, CONTACT, WHATSAPPINFOUSER, USERT, TAGUSER, SEQUENCES, CAMPAIGNS } from 'src/app/interfaces/interfaces';
+import { CONTACTDIALOG, CONTACT, WHATSAPPINFOUSER, USERT, TAGUSER, SEQUENCES, CAMPAIGNS, TAG } from 'src/app/interfaces/interfaces';
 import { WhatsappTxtUserService } from 'src/app/servicesComponent/whatsapp-txt-user.service';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
 import { Store } from '@ngrx/store';
@@ -14,6 +14,8 @@ import { TagUserService } from 'src/app/servicesComponent/tag-user.service';
 import { SequencesService } from 'src/app/servicesComponent/sequences.service';
 import { CampaignsService } from 'src/app/servicesComponent/campaigns.service';
 import { ChatService } from 'src/app/servicesComponent/chat.service';
+import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
+import { TagService } from 'src/app/servicesComponent/tag.service';
 
 declare interface BROADCAST{
   contact?:CONTACT;
@@ -37,7 +39,7 @@ export class DetailContactComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<MovementItemComponent>,
     @Inject(MAT_DIALOG_DATA) public datas: CONTACTDIALOG,
-    private _tools: ToolsService,
+    public _tools: ToolsService,
     private _config: ConfigKeysService,
     private _contac: ContactService,
     private _assignedWhatsappServices: WhatsappTxtUserService,
@@ -47,7 +49,9 @@ export class DetailContactComponent implements OnInit {
     private _tagUser: TagUserService,
     private _sequencesService: SequencesService,
     private _campaignsService: CampaignsService,
-    private _chatServices: ChatService
+    private _chatServices: ChatService,
+    private _bottomSheet: MatBottomSheet,
+    private _tagServices: TagService,
   ) {
 
     this._store.subscribe((store: any) => {
@@ -77,7 +81,7 @@ export class DetailContactComponent implements OnInit {
 
   getListTag():any{
     return new Promise( resolve =>{
-      this._tagUser.get( { where: { contact: this.data.contact.id } } ).subscribe( res=>{
+      this._tagUser.get( { where: { contact: this.data.contact.id, estado: 0 } } ).subscribe( res=>{
         resolve( res.data );
       });
     })
@@ -248,9 +252,94 @@ export class DetailContactComponent implements OnInit {
     }
   }
 
+  openBottomSheetTag(): void {
+
+    const bottomSheetRef = this._bottomSheet.open(BottomSheetSheetTag);
+
+    // Escucha el evento después de que se cierre el bottom sheet
+    bottomSheetRef.afterDismissed().subscribe(async (result) => {
+      // Maneja el valor devuelto aquí
+      console.log('Valor devuelto:', result);
+      let resultTagUser:any = await this.handleNexTagCreate( result );
+      if(resultTagUser.id) {
+        console.log("****", resultTagUser, this.listTag )
+        resultTagUser.listTag = resultTagUser.tag;
+        resultTagUser.Tag = resultTagUser.tag.id;
+        this.listTag.push( resultTagUser );
+        this._tools.basic( this.dataConfig.txtUpdate );
+      }
+    });
+  }
+
+  handleNexTagCreate( data ){
+    return new Promise( resolve =>{
+      this._tagUser.create({
+        tag: data.id,
+        user: this.dataUser.cabeza,
+        contact: this.data.contact.id
+      }).subscribe( res => resolve( res ), error=> resolve( error ) );
+    });
+  }
+
+  async handlePushSelectTag( item:any ){
+    if( this.btnDisabled === true ) return false;
+    let confirm = await this._tools.confirm( {title:this.dataConfig.btnDrop, text: this.dataConfig.txtDetailsDrop, confirmButtonText: this.dataConfig.yesDrop } );
+    if(!confirm.value) return false;
+    if( !item.id )  return false;
+    this.btnDisabled = true;
+    let result:any = await this.handleNextTagDelete( item.id );
+    if( result.id ) {
+      this._tools.basic( this.dataConfig.txtUpdate );
+      this.listTag = this.listTag.filter( row => row.id !== item.id );
+    }
+    this.btnDisabled = false;
+  }
+
+  handleNextTagDelete( id ){
+    return new Promise( resolve =>{
+      this._tagUser.update( { id: id, estado: 1 } ).subscribe( res => resolve( res ), error=> resolve( error ) );
+    });
+  }
+
 
   closeDialog( opt:string ){
     this.dialogRef.close( opt );
   }
 
+}
+
+@Component({
+  selector: 'bottom-sheet-tag',
+  templateUrl: 'bottom-sheet-tag.html',
+})
+export class BottomSheetSheetTag {
+
+  listTag:TAG[] = [];
+  dataUser: USERT;
+
+  constructor(
+    private _bottomSheetRef: MatBottomSheetRef<BottomSheetSheetTag>,
+    private _tagServices: TagService,
+    private _store: Store<USER>
+  ) {
+    this._store.subscribe((store: any) => {
+      store = store.name;
+      if(!store) return false;
+      this.dataUser = store.user || {};
+    });
+    (async ()=>{
+      let list:any = await this.getListInTag( { where:{  }, limit: 1000, page: 0 } );
+      this.listTag = list || [];
+    })();
+  }
+
+  getListInTag( querys ){
+    return new Promise( resolve =>{
+      this._tagServices.get( querys ).subscribe( res => resolve( res.data ) , error => resolve( error ) );
+    });
+  }
+  openLink(event: any): void {
+    this._bottomSheetRef.dismiss( event );
+    //event.preventDefault();
+  }
 }

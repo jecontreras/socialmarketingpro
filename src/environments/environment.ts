@@ -5,9 +5,9 @@
 export const environment = {
   production: false,
   url: "http://localhost:1339",
-  //urlFile: "http://localhost:1337"
+  urlFile: "http://localhost:1337"
   //url: "https://socialmarketingapi-baf712cf13d8.herokuapp.com",
-  urlFile: "https://apilokomproaqui1-9219656b6da1.herokuapp.com"
+  //urlFile: "https://apilokomproaqui1-9219656b6da1.herokuapp.com"
   //url: "https://1337-jecontreras-socialmarke-5zz4ycanzj9.ws-us110.gitpod.io"
 };
 

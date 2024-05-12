@@ -33,7 +33,7 @@ export class FormAllChatComponent implements OnInit {
     private _store: Store<STORAGES>,
     public dialogRef: MatDialogRef<FormAllChatComponent>,
     @Inject(MAT_DIALOG_DATA) public datas: any,
-    private _tools: ToolsService,
+    public _tools: ToolsService,
     private _whatsappTxt: WhatsappTxtService,
     public dialog: MatDialog,
     private _contactServices: ContactService,

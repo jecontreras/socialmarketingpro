@@ -30,7 +30,7 @@
               <span>{{ dataConfig.tag }} </span>
             </div>
             <div class="p-2 bd-highlight">
-              <button mat-icon-button class="example-icon" aria-label="Example icon-button with share icon">
+              <button mat-icon-button class="example-icon" (click)="openBottomSheetTag()">
                 <mat-icon>add</mat-icon>
               </button>
             </div>
@@ -38,7 +38,10 @@
           <div>
             <p>
               <mat-chip-list aria-label="Fish selection">
-                <mat-chip *ngFor="let item of listTag" (click)="handlePushSelectTag( item, 'tag')"> {{ item.tag }} </mat-chip>
+                <mat-chip *ngFor="let item of listTag" (click)="handlePushSelectTag( item )" >
+                  <span>{{ item.listTag.tag }} </span>
+                  <span class="btn-inner--icon"><i class="ni ni-fat-remove text-primary"></i></span>
+                </mat-chip>
               </mat-chip-list>
             </p>
           </div>
@@ -118,7 +121,7 @@
               <div class="d-flex justify-content-between displayWidth">
                 <div><i class="ni ni-mobile-button"></i> {{ dataConfig.phone }} </div>
                 <div></div>
-                <div><h4> {{ data.contact.whatsapp }} </h4></div>
+                <div><h4> {{ _tools.formatNumer( data.contact.whatsapp )  }} </h4></div>
               </div>
             </mat-list-item>
             <mat-list-item role="listitem">

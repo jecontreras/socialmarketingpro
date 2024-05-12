@@ -112,7 +112,9 @@ export class ConfigKeysService {
       cel: "Celular",
       password: "Contraseña",
       txtUpdateBtn: "Actualizar",
-      btnClean: "Limpiar"
+      btnClean: "Limpiar",
+      txtDetailsDrop: "Deseas Eliminar Dato",
+      yesDrop: "Si Eliminar"
     }
   };
   constructor() { }

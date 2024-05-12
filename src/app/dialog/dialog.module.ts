@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MyOwnCustomMaterialModule } from '../app.material.module';
 import { MovementItemComponent } from './movement-item/movement-item.component';
-import { DetailContactComponent } from './detail-contact/detail-contact.component';
+import { BottomSheetSheetTag, DetailContactComponent } from './detail-contact/detail-contact.component';
 import { OpenQrComponent } from './open-qr/open-qr.component';
 import { FormBellDialogComponent } from './for-bell-dialog/form-bell-dialog.component';
 import { FileDetailComponent } from './file-detail/file-detail.component';
@@ -36,7 +36,8 @@ import { FormAllChatComponent } from './form-all-chat/form-all-chat.component';
     FormFlowsComponent,
     FormTagComponent,
     FormBroadcastComponent,
-    FormAllChatComponent
+    FormAllChatComponent,
+    BottomSheetSheetTag
     ,
   ],
   exports:[
@@ -47,7 +48,7 @@ import { FormAllChatComponent } from './form-all-chat/form-all-chat.component';
     FileDetailComponent,
     FormFlowsComponent,
     FormTagComponent,
-    FormAllChatComponent
+    FormAllChatComponent,
 
   ],
   imports: [

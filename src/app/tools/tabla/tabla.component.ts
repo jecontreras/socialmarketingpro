@@ -239,7 +239,7 @@ export class TablaComponent implements OnInit {
 
   async deleteItem( item:any ){
     if( item.asentado == true ) return this._tools.basic("Problemas al Eliminar Item no se puede porque ya se encuentra asentado");
-    let confirm = await this._tools.confirm( {title:"Eliminar", detalle:"Deseas Eliminar Dato", confir:"Si Eliminar"} );
+    let confirm = await this._tools.confirm( {title:"Eliminar", text:"Deseas Eliminar Dato", confirmButtonText:"Si Eliminar"} );
     if(!confirm.value) return false;
     let data ={
       id: item.id,

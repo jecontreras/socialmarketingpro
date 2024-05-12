@@ -3,6 +3,7 @@ import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-shee
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
+import { DetailContactComponent } from 'src/app/dialog/detail-contact/detail-contact.component';
 import { FileDetailComponent } from 'src/app/dialog/file-detail/file-detail.component';
 import { FASTANSWER, INFOWHATSAPP, MSG, USERT, WHATSAPPDETAILS } from 'src/app/interfaces/interfaces';
 import { USER } from 'src/app/interfaces/user';
@@ -10,6 +11,7 @@ import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { AudioRecorderServiceService } from 'src/app/servicesComponent/audio-recorder-service.service';
 import { ChatService } from 'src/app/servicesComponent/chat.service';
+import { ContactService } from 'src/app/servicesComponent/contact.service';
 import { FastAnswerService } from 'src/app/servicesComponent/fast-answer.service';
 import { InfoWhatsappService } from 'src/app/servicesComponent/info-whatsapp.service';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
@@ -32,6 +34,7 @@ export class ListChatDetailedComponent implements OnInit {
   dataConfig:any = {};
   audioBlob;
   breakpoint: number;
+  id:string;
 
   constructor(
     private _whatsappDetails: WhatsappTxtService,
@@ -40,9 +43,10 @@ export class ListChatDetailedComponent implements OnInit {
     private _store: Store<USER>,
     private activate: ActivatedRoute,
     private _audioRecorderService: AudioRecorderServiceService,
-    private _toolsService: ToolsService,
+    public _toolsService: ToolsService,
     private _config: ConfigKeysService,
-    private _bottomSheet: MatBottomSheet
+    private _bottomSheet: MatBottomSheet,
+    private _contactServices: ContactService
   ) {
     this.dataConfig = _config._config.keys;
     this._store.subscribe((store: any) => {
@@ -54,11 +58,7 @@ export class ListChatDetailedComponent implements OnInit {
   }
 
   async ngOnInit() {
-    let id = (this.activate.snapshot.paramMap.get('id'));
-    if( id ) {
-      await this.getWhatsappInit( id );
-      this.handleEventFater();
-    }
+    this.processId( true );
     this.childEmitter.emit( this.data );
     this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
       //console.log("****31", data, this.listDetails)
@@ -70,6 +70,14 @@ export class ListChatDetailedComponent implements OnInit {
       this.processMessage( data );
     });
     this.breakpoint = (window.innerWidth <= 1050) ? 1 : 6;
+  }
+
+  async processId( opt:boolean ){
+    this.id = (this.activate.snapshot.paramMap.get('id'));
+    if( this.id ) {
+      await this.getWhatsappInit( this.id );
+      if( opt === true ) this.handleEventFater();
+    }
   }
 
   processIframeWeb( item ){
@@ -119,6 +127,7 @@ export class ListChatDetailedComponent implements OnInit {
     setTimeout(async()=>{
       if( this.data.id ) {
         console.log("**310",this.data)
+        this.processId( false );
         let result:any = await this.getWhatsappDetails();
         this.listDetails = result;
         this.invertMessagesOrder();
@@ -161,7 +170,10 @@ export class ListChatDetailedComponent implements OnInit {
         this.listDetails.push({
           id: result.Whatsapphistorial.id,
           txt: this.msg.txt,
-          quien: 1
+          quien: 1,
+          typeTxt: result.Whatsapphistorial.typeTxt,
+          urlMedios: result.Whatsapphistorial.urlMedios,
+          relationMessage: result.Whatsapphistorial.relationMessage,
         });
         this.scrollToBottom();
         this.msg.txt = "";
@@ -260,7 +272,7 @@ export class ListChatDetailedComponent implements OnInit {
       bottomSheetRef.afterDismissed().subscribe((result) => {
         // Maneja el valor devuelto aquí
         console.log('Valor devuelto:', result);
-        this.msg.txt = result.description;
+        if( result ) this.msg.txt = result.description;
       });
 
     }
@@ -275,6 +287,28 @@ export class ListChatDetailedComponent implements OnInit {
         console.log('Valor devuelto:', result);
         //this.msg.txt = result.description;
       });
+    }
+
+    async handleOpenContact(){
+      let item:any = this.data;
+      let contact = await this.getContactId( item.contactId.id || item.contactId );
+      item.contactId = contact;
+      item.check = true;
+      const dialogRef = this.dialog.open(DetailContactComponent, {
+        data: item,
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        console.log('The dialog was closed', result);
+      });
+    }
+
+    getContactId( id ){
+      return new Promise( resolve =>{
+        this._contactServices.get( { where:{
+          id: id
+        }, limit: 1} ).subscribe( res => resolve( res.data[0] ), error=> resolve( error ) );
+      })
     }
 
 }

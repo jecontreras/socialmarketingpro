@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import Swal from 'sweetalert2'
+import Swal, { SweetAlertOptions } from 'sweetalert2'
 import * as _ from 'lodash';
 import { CART } from '../interfaces/sotarage';
 import { Store } from '@ngrx/store';
@@ -69,30 +69,30 @@ export class ToolsService {
       timer: 3000
     });
   }
-  confirm(text: any) {
+  confirm(text: SweetAlertOptions) {
     return Swal.fire({
       title: text.title || '',
-      text: text.detalle || "",
+      text: text.text || "",
       icon: text.icon || 'warning',
-      showCancelButton: text.showCancel || true,
-      confirmButtonColor: text.confirColor || '#3085d6',
-      cancelButtonColor: text.cancelColor || '#d33',
-      confirmButtonText: text.confir || 'Aceptar!',
-      cancelButtonText: text.cancel || 'Cancelar!'
+      showCancelButton: text.showCancelButton || true,
+      confirmButtonColor: text.confirmButtonColor || '#3085d6',
+      cancelButtonColor: text.cancelButtonColor || '#d33',
+      confirmButtonText: text.confirmButtonText || 'Aceptar!',
+      cancelButtonText: text.cancelButtonText || 'Cancelar!'
     });
   }
 
-  alertInput( opciones ){
+  alertInput( opciones: SweetAlertOptions = {} ){
     return new Promise( resolve => {
       Swal.fire({
         title: opciones.title || 'Input',
         input: opciones.input || 'text',
-        inputValue: opciones.value || '',
+        inputValue: opciones.inputValue || '',
         inputAttributes: {
           autocapitalize: 'off'
         },
         showCancelButton: true,
-        confirmButtonText: opciones.confirme || 'Siguiente',
+        confirmButtonText: opciones.confirmButtonText || 'Siguiente',
         showLoaderOnConfirm: true,
         preConfirm: ( txt ) => {
           return txt;
@@ -504,6 +504,19 @@ export class ToolsService {
         </html>`);
       /* window.close(); */
       popupWin.document.close();
+    }
+
+
+    formatNumer( numero ){
+      try {
+        const texto = numero;
+        let numeroSinPrefijo = texto.replace(/^57/, '');
+
+        numeroSinPrefijo = ( numeroSinPrefijo.split("@") )[0];
+        return numeroSinPrefijo;
+      } catch (error) {
+        return numero;
+      }
     }
 
 

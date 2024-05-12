@@ -66,6 +66,8 @@ export interface Componente {
     updatedAt?: string;
     viewFile?: string;
     typeTxt?: string;
+    seen?: number;
+    relationMessage?: number;
   }
 
   export interface MSG{
