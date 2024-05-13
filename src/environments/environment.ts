@@ -4,13 +4,8 @@
 
 export const environment = {
   production: false,
-<<<<<<< HEAD
-  url: "http://localhost:1339",
-  urlFile: "http://localhost:1337"
-=======
   url: "https://1337-jecontreras-socialmarke-34mjiks1sqf.ws-us110.gitpod.io",
-  //urlFile: "http://localhost:1337"
->>>>>>> bfc81d853f8d3f02cfe45769ae9828fcfa07cef7
+  urlFile: "https://apilokomproaqui1-9219656b6da1.herokuapp.com"
   //url: "https://socialmarketingapi-baf712cf13d8.herokuapp.com",
   //urlFile: "https://apilokomproaqui1-9219656b6da1.herokuapp.com"
   //url: "https://1337-jecontreras-socialmarke-5zz4ycanzj9.ws-us110.gitpod.io"

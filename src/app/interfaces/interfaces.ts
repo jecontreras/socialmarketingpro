@@ -68,6 +68,7 @@ export interface Componente {
     typeTxt?: string;
     seen?: number;
     relationMessage?: number;
+    estado?: number;
   }
 
   export interface MSG{

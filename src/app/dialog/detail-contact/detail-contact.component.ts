@@ -168,8 +168,8 @@ export class DetailContactComponent implements OnInit {
     this._chatServices.sendContactAssigned( result );
     this._tools.basic(this.dataConfig.txtUpdate );
     this.btnDisabled = false;
-    this._router.navigate(['/liveChat', this.datas.id ] );
-    this.closeDialog( 'chat' );
+    //this._router.navigate(['/liveChat', this.datas.id ] );
+    this.closeDialog( result );
   }
 
   async  processAssignedCreate(){
