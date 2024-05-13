@@ -113,8 +113,12 @@ export class ConfigKeysService {
       password: "Contraseña",
       txtUpdateBtn: "Actualizar",
       btnClean: "Limpiar",
+<<<<<<< HEAD
       txtDetailsDrop: "Deseas Eliminar Dato",
       yesDrop: "Si Eliminar"
+=======
+      rangeDateTxt: "Rango de Fechas"
+>>>>>>> bfc81d853f8d3f02cfe45769ae9828fcfa07cef7
     }
   };
   constructor() { }
