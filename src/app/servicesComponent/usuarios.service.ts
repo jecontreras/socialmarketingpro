@@ -50,6 +50,10 @@ export class UsuariosService {
     return this._model.querys('user/'+query.id, query, 'put');
   }
 
+  updateUrlSocketTotal(query:any){
+    return this._model.querys('user/updateUrlSocket', query, 'post');
+  }
+
   delete(query:any){
     return this._model.querys('user/'+query.id, query, 'delete');
   }

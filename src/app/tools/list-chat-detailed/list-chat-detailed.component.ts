@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatBottomSheet, MatBottomSheetRef } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DetailContactComponent } from 'src/app/dialog/detail-contact/detail-contact.component';
 import { FileDetailComponent } from 'src/app/dialog/file-detail/file-detail.component';
@@ -14,6 +14,7 @@ import { ChatService } from 'src/app/servicesComponent/chat.service';
 import { ContactService } from 'src/app/servicesComponent/contact.service';
 import { FastAnswerService } from 'src/app/servicesComponent/fast-answer.service';
 import { InfoWhatsappService } from 'src/app/servicesComponent/info-whatsapp.service';
+import { WhatsappTxtUserService } from 'src/app/servicesComponent/whatsapp-txt-user.service';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
 
 @Component({
@@ -35,6 +36,7 @@ export class ListChatDetailedComponent implements OnInit {
   audioBlob;
   breakpoint: number;
   id:string;
+  btnDisabled: boolean;
 
   constructor(
     private _whatsappDetails: WhatsappTxtService,
@@ -46,7 +48,9 @@ export class ListChatDetailedComponent implements OnInit {
     public _toolsService: ToolsService,
     private _config: ConfigKeysService,
     private _bottomSheet: MatBottomSheet,
-    private _contactServices: ContactService
+    private _contactServices: ContactService,
+    private _whatsappTxtUser: WhatsappTxtUserService,
+    private Router: Router
   ) {
     this.dataConfig = _config._config.keys;
     this._store.subscribe((store: any) => {
@@ -126,7 +130,6 @@ export class ListChatDetailedComponent implements OnInit {
     this.processSpinnerValue('init');
     setTimeout(async()=>{
       if( this.data.id ) {
-        console.log("**310",this.data)
         this.processId( false );
         let result:any = await this.getWhatsappDetails();
         this.listDetails = result;
@@ -301,6 +304,44 @@ export class ListChatDetailedComponent implements OnInit {
       dialogRef.afterClosed().subscribe(result => {
         console.log('The dialog was closed', result);
       });
+    }
+
+    async handleClose(){
+      let confirm = await this._toolsService.confirm( {title: this.dataConfig.txtDetailsFinChat, text:"", confirmButtonText: this.dataConfig.closeChat } );
+      if(!confirm.value) return false;
+      if( this.btnDisabled ) return false;
+      this.btnDisabled = true;
+      let dataWhatsappUser:any = await this.getWhatsappUser( );
+      if( dataWhatsappUser ){
+        if( dataWhatsappUser.estado === 0 ) {
+          let result:any = await this.nextUpdateWhatsappTxtUser( dataWhatsappUser );
+          if( result ) this._toolsService.presentToast( this.dataConfig.closeChat );
+          this.Router.navigate(['/liveChat', 'aaaaaaaaa' ] );
+          this.data = {};
+          this.listDetails = [];
+          setTimeout(()=>location.reload(), 3000 );
+        }
+      }
+      this.btnDisabled = false;
+    }
+
+    nextUpdateWhatsappTxtUser( dataWhatsappUser ){
+      return new Promise( resolve =>{
+        this._whatsappTxtUser.update( { id: dataWhatsappUser.id, estado: 1 } ).subscribe( res =>{
+          resolve( res );
+        }, ( error )=> resolve( error ) );
+      });
+    }
+
+    getWhatsappUser(){
+      return new Promise( resolve =>{
+        this._whatsappTxtUser.get( {
+          whatsappId: this.data.id,
+          userId: this.dataUser.id
+         } ).subscribe( res =>{
+          resolve( res.data[0] );
+        }, error => resolve( error ) );
+      } );
     }
 
     getContactId( id ){

@@ -115,7 +115,9 @@ export class ConfigKeysService {
       btnClean: "Limpiar",
       txtDetailsDrop: "Deseas Eliminar Dato",
       yesDrop: "Si Eliminar",
-      rangeDateTxt: "Rango de Fechas"
+      rangeDateTxt: "Rango de Fechas",
+      closeChat: "Chat Cerrado",
+      txtDetailsFinChat: "Deseas Finalizar el chat"
     }
   };
   constructor() { }

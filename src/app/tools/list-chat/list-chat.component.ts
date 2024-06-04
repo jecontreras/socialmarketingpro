@@ -111,8 +111,8 @@ export class ListChatComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
-      setTimeout( () => this.processColorItem(), 3000 )
+      console.log('The dialog was closed', result );
+      if( result ) this.handleSelectChat( result.whatsappId )
     });
   }
 

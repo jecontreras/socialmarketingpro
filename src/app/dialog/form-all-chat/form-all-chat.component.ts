@@ -121,7 +121,7 @@ export class FormAllChatComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed', result);
-      if( result ) this.closeDialog();
+      if( result ) this.closeDialog( result );
       else setTimeout(()=> item.check = false, 8000 );
     });
   }
@@ -182,8 +182,8 @@ export class FormAllChatComponent implements OnInit {
   }
 
 
-  closeDialog(){
-    this.dialogRef.close();
+  closeDialog( data ){
+    this.dialogRef.close( data );
   }
 
 
