@@ -51,7 +51,7 @@ export class AudioRecorderServiceService {
 
   uploadAudio(audioBlob: Blob): Promise<void> {
     const formData = new FormData();
-    formData.append('audio', audioBlob, 'audio-recording.webm');
+    formData.append('audio', audioBlob, 'audio-recording.ogg');
     //console.log("***55", audioBlob)
     return this.http.post<void>(environment.urlFile+'/archivos/audioRecorder', formData).toPromise();
   }
