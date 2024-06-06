@@ -9,17 +9,17 @@ export class AudioRecorderServiceService {
   mediaRecorder: MediaRecorder | null = null;
   chunks: Blob[] = [];
 
-  constructor(
-    private http: HttpClient
-  ){
-
-  }
+  constructor(private http: HttpClient) {}
 
   startRecording(): Promise<void> {
     return new Promise<void>((resolve, reject) => {
       navigator.mediaDevices.getUserMedia({ audio: true })
         .then((stream) => {
-          this.mediaRecorder = new MediaRecorder(stream);
+          const options = {
+            mimeType: 'audio/webm; codecs=opus', // Cambiado a un tipo MIME compatible
+            audioBitsPerSecond: 192000 // Ajustar la tasa de bits a 192 kbps
+          };
+          this.mediaRecorder = new MediaRecorder(stream, options);
           this.mediaRecorder.start();
           this.mediaRecorder.ondataavailable = (e) => {
             this.chunks.push(e.data);
@@ -51,8 +51,7 @@ export class AudioRecorderServiceService {
 
   uploadAudio(audioBlob: Blob): Promise<void> {
     const formData = new FormData();
-    formData.append('audio', audioBlob, 'audio-recording.ogg');
-    //console.log("***55", audioBlob)
-    return this.http.post<void>(environment.urlFile+'/archivos/audioRecorder', formData).toPromise();
+    formData.append('audio', audioBlob, 'audio.webm');
+    return this.http.post<void>(`${environment.urlFile}/archivos/audioRecorder`, formData).toPromise();
   }
 }

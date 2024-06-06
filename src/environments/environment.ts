@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  url: "https://1337-jecontreras-socialmarke-34mjiks1sqf.ws-us110.gitpod.io",
+  url: "https://socialmarketingapi-baf712cf13d8.herokuapp.com",
   urlFile: "https://apilokomproaqui1-9219656b6da1.herokuapp.com"
   //url: "https://socialmarketingapi-baf712cf13d8.herokuapp.com",
   //urlFile: "https://apilokomproaqui1-9219656b6da1.herokuapp.com"
