@@ -65,12 +65,12 @@ export class ListChatDetailedComponent implements OnInit {
     this.processId( true );
     this.childEmitter.emit( this.data );
     this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
-      //console.log("****31", data, this.listDetails)
+      console.log("****31", data, this.listDetails)
       this.processMessage( data );
     });
 
     this.chatService.receiveMessageInit().subscribe(async (data: MSG) => {
-      //console.log("****31", data, this.listDetails)
+      console.log("****31", data, this.listDetails)
       this.processMessage( data );
     });
     this.breakpoint = (window.innerWidth <= 1050) ? 1 : 6;

@@ -8,6 +8,12 @@
           </div>
           <div class="p-2 bd-highlight">
             <select  [(ngModel)]="querys.where.estado" (change)="handleEventState()">
+              <option value="0"> {{ dataConfig.newMessage }} </option>
+              <option value="1"> {{ dataConfig.viewMessage }} </option>
+            </select>
+          </div>
+          <div class="p-2 bd-highlight">
+            <select  [(ngModel)]="querys.where.estado" (change)="handleEventState()">
               <option value="0"> {{ dataConfig.opened }} </option>
               <option value="1"> {{ dataConfig.closed }} </option>
             </select>

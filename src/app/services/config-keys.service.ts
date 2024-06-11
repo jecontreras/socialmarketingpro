@@ -117,7 +117,9 @@ export class ConfigKeysService {
       yesDrop: "Si Eliminar",
       rangeDateTxt: "Rango de Fechas",
       closeChat: "Chat Cerrado",
-      txtDetailsFinChat: "Deseas Finalizar el chat"
+      txtDetailsFinChat: "Deseas Finalizar el chat",
+      newMessage: "Mensajes Sin Contestar",
+      viewMessage: "Mensajes Contestados"
     }
   };
   constructor() { }
