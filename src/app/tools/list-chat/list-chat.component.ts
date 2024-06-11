@@ -86,7 +86,16 @@ export class ListChatComponent implements OnInit {
       data = data.txt;
       data.check = true;
       if( this.dataUser.id !== data.userId.id ) return false;
-      if( data.assignedMe === 0 ) this.listChat.push( { ...data, whatsappIdList: data.whatsappId, userIdList: data.userId, whatsappId: data.whatsappId.id, userId: data.userId.id , contactIdList:{ foto: "./assets/brand/favicon.png" }} );
+      if( data.assignedMe === 0 ) {
+        this.listChat.push(
+          { ...data,
+            whatsappIdList: data.whatsappId,
+            userIdList: data.userId,
+            whatsappId: data.whatsappId.id,
+            userId: data.userId.id ,
+            contactIdList:{ foto: "./assets/brand/favicon.png" }
+          } );
+      }
       else this.listChat = this.listChat.filter( item => item.id !== data.id );
     } catch (error) { }
   }

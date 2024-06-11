@@ -9,6 +9,7 @@
               <div class="d-flex bd-highlight">
                 <div class="p-2 flex-grow-1 bd-highlight">
                   {{  _toolsService.formatNumer( data.to )  }}
+                  <label *ngIf="data.tipeGuide">Transportadora: {{ data.tipeGuide }}</label>
                 </div>
                 <div class="p-2 bd-highlight">
                   <!--<button mat-mini-fab color="warn" (click)="drawer.toggle()">

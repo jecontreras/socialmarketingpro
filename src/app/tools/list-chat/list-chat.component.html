@@ -6,12 +6,12 @@
           <div class="p-2 flex-grow-1 bd-highlight">
             <span> {{ dataConfig.mine }} </span>
           </div>
-          <div class="p-2 bd-highlight">
+          <!--<div class="p-2 bd-highlight">
             <select  [(ngModel)]="querys.where.estado" (change)="handleEventState()">
               <option value="0"> {{ dataConfig.newMessage }} </option>
               <option value="1"> {{ dataConfig.viewMessage }} </option>
             </select>
-          </div>
+          </div>-->
           <div class="p-2 bd-highlight">
             <select  [(ngModel)]="querys.where.estado" (change)="handleEventState()">
               <option value="0"> {{ dataConfig.opened }} </option>
@@ -37,7 +37,8 @@
             class="mat-elevation-z2 mouse"
             (click)="handleSelectChat( item.whatsappIdList )"
             [ngClass]="
-                  { 'checkSelect': item.check == true
+                  { 'checkSelect': item.check == true,
+                    'checkShipment': item.whatsappIdList['tipeGuide']
                   }
                 "
           >

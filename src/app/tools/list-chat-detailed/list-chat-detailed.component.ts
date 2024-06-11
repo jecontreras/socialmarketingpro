@@ -157,7 +157,7 @@ export class ListChatDetailedComponent implements OnInit {
 
   getWhatsappDetails(){
     return new Promise( resolve =>{
-      this._whatsappDetails.getDetails( { where: { whatsappTxt: this.data.id } } ).subscribe( res =>{
+      this._whatsappDetails.getDetails( { where: { whatsappTxt: this.data.id }, limit: 1000000 } ).subscribe( res =>{
         resolve( res.data );
       })
     })
