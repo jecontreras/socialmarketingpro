@@ -13,6 +13,7 @@ import { FormTagComponent } from './form-tag/form-tag.component';
 import { FormBroadcastComponent } from './form-broadcast/form-broadcast.component';
 import { FormAllChatComponent } from './form-all-chat/form-all-chat.component';
 import { OpenGalleriaComponent } from './open-galleria/open-galleria.component';
+import { NgxDropzoneModule } from 'ngx-dropzone';
 
 
 
@@ -58,7 +59,9 @@ import { OpenGalleriaComponent } from './open-galleria/open-galleria.component';
     FormsModule,
     ToolsModule,
     MyOwnCustomMaterialModule,
-    ReactiveFormsModule
+    NgxDropzoneModule,
+    ReactiveFormsModule,
+
   ]
 })
 export class DialogModule { }

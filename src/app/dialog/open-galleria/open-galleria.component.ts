@@ -90,9 +90,11 @@ export class OpenGalleriaComponent implements OnInit {
   async submit(){
     if( this.btnDisabled ) return false;
     this.btnDisabled = true;
-    if( !this.id ) await this.crearGaleria();
-    else this.actualizarGaleria();
+    let r;
+    if( !this.id ) r = await this.crearGaleria();
+    else r = this.actualizarGaleria();
     this.btnDisabled = false;
+    this.dialogRef.close( r );
   }
 
   crearPadre(){
@@ -113,8 +115,8 @@ export class OpenGalleriaComponent implements OnInit {
       this.data.user = this.dataUser.id;
       this._galeria.saved( { data: this.data } ).subscribe( ( res:any ) =>{
         this._tools.presentToast("Agregado Galeria...");
-        this.Router.navigate( ['/dashboard/galeriaform', res.id ] );
-        resolve( true );
+        //this.Router.navigate( ['/dashboard/galeriaform', res.id ] );
+        resolve( res );
       },( ) => resolve( false ) );
     });
 
@@ -124,7 +126,7 @@ export class OpenGalleriaComponent implements OnInit {
     return new Promise( resolve =>{
       this._galeria.editar( this.data ).subscribe( ( res:any )=>{
         this._tools.presentToast("Actualizado Correcto...");
-        resolve( true );
+        resolve( res );
       },()=> { this._tools.presentToast("Problemas al Actualizado..."); resolve( false ); });
     });
   }
@@ -150,9 +152,9 @@ export class OpenGalleriaComponent implements OnInit {
         //this._tools.ProcessTime({});
         //console.log( form, this.files )
         if( !item.galeriaList ) item.galeriaList = [];
-        //let resultFile = await this.createFile( form );
-        /*if( !resultFile ) continue;
-        item.galeriaList.push( { id: this._tools.codigo(), foto: resultFile } );*/
+        let resultFile = await this.createFile( form );
+        if( !resultFile ) continue;
+        item.galeriaList.push( { id: this._tools.codigo(), foto: resultFile } );
       }
       item.files = [];
       if( this.id ) this.submit();
@@ -161,13 +163,11 @@ export class OpenGalleriaComponent implements OnInit {
   }
 
   createFile( form:any ){
-    /*return new Promise( resolve =>{
-      this._archivos.create( form ).subscribe((res: any) => {
-        //console.log(res);
-        this._tools.presentToast("Exitoso");
-        resolve( res.files );
-      }, (error) => { console.error(error); this._tools.presentToast("Error de servidor"); resolve( false ); });
-    });*/
+    return new Promise( async ( resolve ) =>{
+      let res:any = await this._archivos.create( form );
+      this._tools.presentToast("Exitoso");
+      resolve( res.files );
+    });
   }
 
   onRemoves( event:any, item:any ) {
