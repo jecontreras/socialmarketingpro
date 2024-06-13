@@ -10,6 +10,17 @@
                 <div class="p-2 flex-grow-1 bd-highlight">
                   {{  _toolsService.formatNumer( data.to )  }}
                   <label *ngIf="data.tipeGuide">Transportadora: {{ data.tipeGuide }}</label>
+                  <div class="col-12">
+                    <div class="form-group">
+                      <input
+                        class="form-control"
+                        type="text"
+                        [(ngModel)]="data.numberGuide"
+                        [placeholder]="dataConfig.numberGuider"
+                        (change)="handleUpdateNumber()"
+                      >
+                    </div>
+                  </div>
                 </div>
                 <div class="p-2 bd-highlight">
                   <!--<button mat-mini-fab color="warn" (click)="drawer.toggle()">

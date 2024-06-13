@@ -69,6 +69,7 @@ export interface Componente {
     seen?: number;
     relationMessage?: number;
     estado?: number;
+    numberGuide?: string;
   }
 
   export interface MSG{

@@ -119,7 +119,8 @@ export class ConfigKeysService {
       closeChat: "Chat Cerrado",
       txtDetailsFinChat: "Deseas Finalizar el chat",
       newMessage: "Mensajes Sin Contestar",
-      viewMessage: "Mensajes Contestados"
+      viewMessage: "Mensajes Contestados",
+      numberGuider: "Numero de Guia"
     }
   };
   constructor() { }

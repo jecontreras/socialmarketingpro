@@ -352,6 +352,12 @@ export class ListChatDetailedComponent implements OnInit {
       })
     }
 
+    handleUpdateNumber(){
+      this._whatsappDetails.update( { id: this.data.id, numberGuide: this.data.numberGuide } ).subscribe( res => {
+        this._toolsService.tooast("Actualizado");
+      });
+    }
+
 }
 
 

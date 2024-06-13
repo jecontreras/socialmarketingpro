@@ -35,6 +35,7 @@ export class DetailContactComponent implements OnInit {
   listTag:TAGUSER[];
   listSequences:SEQUENCES[];
   listCampaigns:CAMPAIGNS[];
+  rolName:string;
 
   constructor(
     public dialogRef: MatDialogRef<MovementItemComponent>,
@@ -58,6 +59,9 @@ export class DetailContactComponent implements OnInit {
       store = store.name;
       if(!store) return false;
       this.dataUser = store.user || {};
+      try {
+        if( this.dataUser.id ) this.rolName = this.dataUser.rol.nombre;
+      } catch (error) {  }
     });
 
     this.dataConfig = _config._config.keys;

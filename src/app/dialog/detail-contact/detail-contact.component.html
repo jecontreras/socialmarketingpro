@@ -165,7 +165,7 @@
                 <div class="col-12" style="text-align: center;">
                   <button type="button" class="btn btn-outline-primary" (click)="handleSubmitAssigned()">
                     <span *ngIf="data.assigned.assignedMe === 0"> {{ dataConfig.unassignMe }} </span>
-                    <span *ngIf="( data.assigned.assignedMe === 1 ) || ( !data.assigned.id ) "> {{ dataConfig.assignedMe  }} </span>
+                    <span *ngIf="( data.assigned.assignedMe === 1 ) || ( !data.assigned.id ) &&( rolName === 'admin') "> {{ dataConfig.assignedMe  }} </span>
                   </button>
                   <button type="button" class="btn btn-outline-primary">
                     {{ dataConfig.assignedTo }}
