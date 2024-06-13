@@ -12,6 +12,7 @@ import { ToolsModule } from '../tools/tools.module';
 import { FormTagComponent } from './form-tag/form-tag.component';
 import { FormBroadcastComponent } from './form-broadcast/form-broadcast.component';
 import { FormAllChatComponent } from './form-all-chat/form-all-chat.component';
+import { OpenGalleriaComponent } from './open-galleria/open-galleria.component';
 
 
 
@@ -37,7 +38,8 @@ import { FormAllChatComponent } from './form-all-chat/form-all-chat.component';
     FormTagComponent,
     FormBroadcastComponent,
     FormAllChatComponent,
-    BottomSheetSheetTag
+    BottomSheetSheetTag,
+    OpenGalleriaComponent
     ,
   ],
   exports:[

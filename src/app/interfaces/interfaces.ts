@@ -238,4 +238,9 @@ export interface FASTANSWER{
   userCreationId?: string;
   userCreationIdList?: USERT
 }
+export interface GALERIA{
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
 

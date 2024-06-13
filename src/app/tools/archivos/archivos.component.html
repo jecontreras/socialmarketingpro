@@ -1,18 +1,44 @@
 <div class="row">
   <div class="col-12">
-    <div class="d-flex bd-highlight">
-      <div class="p-2 flex-grow-1 bd-highlight"></div>
-      <div class="p-2 bd-highlight">
-        <button mat-flat-button color="primary" (click)="handleProcessFile()">{{ dataConfig.btnTxtFile }} </button>
-      </div>
-    </div>
+    <mat-tab-group mat-align-tabs="center">
+      <mat-tab [label]="dataConfig.submitFile">
+        <div class="row">
+          <div class="col-12">
+            <div class="d-flex bd-highlight">
+              <div class="p-2 flex-grow-1 bd-highlight"></div>
+              <div class="p-2 bd-highlight">
+                <button mat-flat-button color="primary" (click)="handleProcessFile()">{{ dataConfig.btnTxtFile }} </button>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <ngx-dropzone (change)="onSelect($event)" [multiple]="true" [accept]="acceptFile">
+              <ngx-dropzone-label> {{ dataConfig.txtFile}} </ngx-dropzone-label>
+              <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
+                <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
+              </ngx-dropzone-preview>
+            </ngx-dropzone>
+          </div>
+        </div>
+      </mat-tab>
+      <mat-tab [label]="dataConfig.listArchive">
+        <ul class="list-group" *ngFor="let item of listGalleria">
+          <li class="list-group-item">
+            <div class="d-flex justify-content-between">
+              <div>
+                <h4>Titulo: {{ item.titulo }}</h4>
+              </div>
+              <div></div>
+              <div>
+                Creado: {{ item.createdAt | date:'medium' }}
+                <button mat-flat-button (click)="handleOpenDialogV( item )" color="primary">Open</button>
+                <button mat-flat-button (click)="handleSelect( item )" color="warn">Select</button>
+              </div>
+            </div>
+          </li>
+        </ul>
+      </mat-tab>
+    </mat-tab-group>
   </div>
-  <div class="col-12">
-    <ngx-dropzone (change)="onSelect($event)" [multiple]="true" [accept]="acceptFile">
-      <ngx-dropzone-label> {{ dataConfig.txtFile}} </ngx-dropzone-label>
-      <ngx-dropzone-preview *ngFor="let f of files" [removable]="true" (removed)="onRemove(f)">
-        <ngx-dropzone-label>{{ f.name }} ({{ f.type }})</ngx-dropzone-label>
-      </ngx-dropzone-preview>
-    </ngx-dropzone>
-  </div>
+
 </div>

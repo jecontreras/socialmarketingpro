@@ -1,7 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { Store } from '@ngrx/store';
+import { MovementItemComponent } from 'src/app/dialog/movement-item/movement-item.component';
+import { OpenGalleriaComponent } from 'src/app/dialog/open-galleria/open-galleria.component';
+import { GALERIA, USERT } from 'src/app/interfaces/interfaces';
+import { USER } from 'src/app/interfaces/user';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { ArchivosService } from 'src/app/servicesComponent/archivos.service';
+import { GaleriaService } from 'src/app/servicesComponent/galeria.service';
 
 @Component({
   selector: 'app-archivos',
@@ -18,16 +25,34 @@ export class ArchivosComponent implements OnInit {
   @Output() actionEvent = new EventEmitter<void>();
   dataConfig:any = {};
   @Input() acceptFile: string;
+  dataUser: USERT;
+  listGalleria:GALERIA;
 
   constructor(
+    public dialogRef: MatDialogRef<MovementItemComponent>,
     private _archivos: ArchivosService,
     private _tools: ToolsService,
-    private _config: ConfigKeysService
+    private _config: ConfigKeysService,
+    private _galeria: GaleriaService,
+    private _store: Store<USER>,
+    public dialog: MatDialog
   ) {
     this.dataConfig = _config._config.keys;
+    this._store.subscribe((store: any) => {
+      store = store.name;
+      if(!store) return false;
+      this.dataUser = store.user || {};
+    });
   }
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    this.listGalleria = await this.getListGalleria();
+  }
+
+  getListGalleria(){
+    return new Promise( resolve =>{
+      this._galeria.get( { where: { user: this.dataUser.id  }, limit: 10000 } ).subscribe( res => resolve( res.data ), error => resolve( [] ) );
+    });
   }
 
   onSelect(event) {
@@ -71,6 +96,21 @@ export class ArchivosComponent implements OnInit {
       fileBase64: base
     } )
     return { files: res.Location, }
+  }
+
+  handleOpenDialogV( item ){
+    const dialogRef = this.dialog.open(OpenGalleriaComponent, {
+      width: '50%',
+      data: item || {},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  handleSelect( item ){
+    this.dialogRef.close( item );
   }
 
 }

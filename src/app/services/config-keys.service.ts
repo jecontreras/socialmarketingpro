@@ -120,7 +120,10 @@ export class ConfigKeysService {
       txtDetailsFinChat: "Deseas Finalizar el chat",
       newMessage: "Mensajes Sin Contestar",
       viewMessage: "Mensajes Contestados",
-      numberGuider: "Numero de Guia"
+      numberGuider: "Numero de Guia",
+      submitFile: "Subir Archivos",
+      listArchive: "Lista de Archivos",
+      galleryTxt: "Galeria Detalle"
     }
   };
   constructor() { }
