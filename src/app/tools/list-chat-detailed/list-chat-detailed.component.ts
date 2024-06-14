@@ -228,13 +228,14 @@ export class ListChatDetailedComponent implements OnInit {
 
       dialogRef.afterClosed().subscribe(async  ( result ) => {
         console.log('The dialog was closed', result );
-        if( result ) {
+        if( !result.id ) {
           for( let row of result ) {
             if( row.type === "application/pdf" ) await this.handleProcessWhatsapp( row.href, 'document');
             else if( row.type === "video/mp4" ) await this.handleProcessWhatsapp( row.href, 'video');
             else  await this.handleProcessWhatsapp( row.href, 'photo');
           }
         }
+        if( result.id ){}
 
       });
     }

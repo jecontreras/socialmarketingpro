@@ -207,6 +207,10 @@ export class OpenGalleriaComponent implements OnInit {
     },(error)=>{ this._tools.presentToast( 'Error al actualizar...' ); this.btnDisabled = false; });
   }
 
+  handleClose(){
+    this.dialogRef.close( this.data )
+  }
+
 
 }
 
