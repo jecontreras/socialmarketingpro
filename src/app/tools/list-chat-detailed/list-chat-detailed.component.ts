@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { DetailContactComponent } from 'src/app/dialog/detail-contact/detail-contact.component';
 import { FileDetailComponent } from 'src/app/dialog/file-detail/file-detail.component';
+import { OpenGalleriaComponent } from 'src/app/dialog/open-galleria/open-galleria.component';
 import { FASTANSWER, INFOWHATSAPP, MSG, USERT, WHATSAPPDETAILS } from 'src/app/interfaces/interfaces';
 import { USER } from 'src/app/interfaces/user';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
@@ -89,6 +90,16 @@ export class ListChatDetailedComponent implements OnInit {
     this.invertMessagesOrder();
     this.scrollToBottom();
   }
+  handleOpenFlows( item ){
+    const dialogRef = this.dialog.open(OpenGalleriaComponent, {
+      width: '50%',
+      data: { id: item.urlMedios },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
 
   processMessage( data ){
     try {
@@ -165,9 +176,12 @@ export class ListChatDetailedComponent implements OnInit {
 
     // Método para agregar un nuevo mensaje al chat
     async handleAddMessage() {
+      if( this.btnDisabled ) return false;
       if( this.audioBlob ) return this.handleSubmitRecording();
       if( !this.msg.txt ) return false;
+      this.btnDisabled = true;
       let result:any = await this.handleProcessWhatsapp(this.msg.txt, 'txt');
+      this.btnDisabled = false;
       if( result.data.whatsappTxt ){
         result = result.data;
         this.listDetails.push({
@@ -235,7 +249,9 @@ export class ListChatDetailedComponent implements OnInit {
             else  await this.handleProcessWhatsapp( row.href, 'photo');
           }
         }
-        if( result.id ){}
+        if( result.id ){
+          await this.handleProcessWhatsapp( result.id, 'flow');
+        }
 
       });
     }

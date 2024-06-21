@@ -23,6 +23,7 @@
       </mat-tab>
       <mat-tab [label]="dataConfig.listArchive">
         <button mat-flat-button (click)="handleOpenDialogV( null )" color="primary">Create Gallery</button>
+        <button mat-flat-button (click)="handleReload( )" color="warn">Actualizar</button>
         <ul class="list-group" *ngFor="let item of listGalleria">
           <li class="list-group-item">
             <div class="d-flex justify-content-between">

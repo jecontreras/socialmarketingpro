@@ -109,6 +109,10 @@ export class ArchivosComponent implements OnInit {
     });
   }
 
+  async handleReload(){
+    this.listGalleria = await this.getListGalleria();
+  }
+
   handleSelect( item ){
     this.dialogRef.close( item );
   }

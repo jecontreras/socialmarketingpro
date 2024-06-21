@@ -56,21 +56,24 @@
                 </div>
                 <span class="content" [innerHTML]="item.txt">
                 </span>
-                <a [href]="item.urlMedios" target="_blank" *ngIf="item.urlMedios">
-                  <img *ngIf="(  item.typeTxt === 'photo' )" [src]="item.urlMedios" alt="" srcset="" style="width: 30%;">
-                  <span *ngIf="( item.typeTxt === 'video' ) || ( item.typeTxt === 'document' ) ">
-                    <button mat-mini-fab color="primary" (click)="processIframeWeb( item );" *ngIf="!item.viewFile">
-                      <mat-icon>remove_red_eye</mat-icon>
-                    </button>
-                    <iframe *ngIf="item.viewFile" [src]="item.viewFile" frameborder="0"></iframe>
-                  </span>
-                  <span *ngIf="(  item.typeTxt === 'audio' )">
-                    <audio controls>
-                      <source [src]="item.urlMedios" type="audio/ogg">
-                      Tu navegador no soporta el elemento de audio.
-                    </audio>
-                  </span>
-                </a>
+                <img *ngIf="(  item.typeTxt === 'photo' )" [src]="item.urlMedios" alt="" srcset="" style="width: 30%;">
+                <span *ngIf="( item.typeTxt === 'video' ) || ( item.typeTxt === 'document' ) ">
+                  <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="processIframeWeb( item );" *ngIf="!item.viewFile">
+                    <mat-icon>remove_red_eye</mat-icon>
+                  </button>
+                  <iframe *ngIf="item.viewFile" [src]="item.viewFile" frameborder="0"></iframe>
+                </span>
+                <span *ngIf="(  item.typeTxt === 'audio' )">
+                  <audio controls>
+                    <source [src]="item.urlMedios" type="audio/ogg">
+                    Tu navegador no soporta el elemento de audio.
+                  </audio>
+                </span>
+                <span *ngIf="( item.typeTxt === 'flow' )">
+                  <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="handleOpenFlows( item );" >
+                    <mat-icon>remove_red_eye</mat-icon>
+                  </button>
+                </span>
                 <span class="right-bottom">
                   <span class="date date-from-another"> {{ item.date }} </span>
                 </span>
@@ -80,21 +83,24 @@
               <div class="chat-message__box my undefined-box">
                 <span class="content" [innerHTML]="item.txt">
                 </span>
-                <a [href]="item.urlMedios" target="_blank" *ngIf="item.urlMedios">
-                  <img *ngIf="(  item.typeTxt === 'photo' )" [src]="item.urlMedios" alt="" srcset="" style="width: 30%;">
-                  <span *ngIf="( item.typeTxt === 'video' ) || ( item.typeTxt === 'document' ) ">
-                    <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="processIframeWeb( item );" *ngIf="!item.viewFile">
-                      <mat-icon>remove_red_eye</mat-icon>
-                    </button>
-                    <iframe *ngIf="item.viewFile" [src]="item.viewFile" frameborder="0"></iframe>
-                  </span>
-                  <span *ngIf="(  item.typeTxt === 'audio' )">
-                    <audio controls>
-                      <source [src]="item.urlMedios" type="audio/ogg">
-                      Tu navegador no soporta el elemento de audio.
-                    </audio>
-                  </span>
-                </a>
+                <img *ngIf="(  item.typeTxt === 'photo' )" [src]="item.urlMedios" alt="" srcset="" style="width: 30%;">
+                <span *ngIf="( item.typeTxt === 'video' ) || ( item.typeTxt === 'document' ) ">
+                  <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="processIframeWeb( item );" *ngIf="!item.viewFile">
+                    <mat-icon>remove_red_eye</mat-icon>
+                  </button>
+                  <iframe *ngIf="item.viewFile" [src]="item.viewFile" frameborder="0"></iframe>
+                </span>
+                <span *ngIf="(  item.typeTxt === 'audio' )">
+                  <audio controls>
+                    <source [src]="item.urlMedios" type="audio/ogg">
+                    Tu navegador no soporta el elemento de audio.
+                  </audio>
+                </span>
+                <span *ngIf="( item.typeTxt === 'flow' )">
+                  <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="handleOpenFlows( item );" >
+                    <mat-icon>remove_red_eye</mat-icon>
+                  </button>
+                </span>
                 <span class="right-bottom">
                   <span class="date">{{ item.date }}</span>
                   <div class="status">
@@ -145,9 +151,9 @@
                 </button>
               </div>
               <div>
-                <button mat-mini-fab color="warn" aria-label="Add">
+                <!--<button mat-mini-fab color="warn" aria-label="Add">
                   <mat-icon>add</mat-icon>
-                </button>
+                </button>-->
               </div>
               <div>
                 <button mat-mini-fab color="warn" aria-label="User">
@@ -160,7 +166,14 @@
         <div class="row">
           <div class="col-12">
             <form>
-              <textarea class="form-control" rows="3" [(ngModel)]="msg.txt"></textarea>
+              <input
+                class="form-control"
+                type="text"
+                style="width: 100%;"
+                [(ngModel)]="msg.txt"
+                (change)="handleAddMessage()"
+              >
+              <!--<textarea class="form-control" rows="3" [(ngModel)]="msg.txt"></textarea>-->
             </form>
           </div>
         </div>
@@ -211,11 +224,11 @@
                       <i class="ni ni-satisfied"></i>
                     </button>
                   </div>
-                  <div class="bd-highlight">
+                  <!--<div class="bd-highlight">
                     <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFlows()">
                       <i class="ni ni-fat-add"></i>
                     </button>
-                  </div>
+                  </div>-->
                   <div class="bd-highlight">
                     <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFastAnswer()">
                       <i class="ni ni-user-run"></i>
@@ -225,7 +238,14 @@
               </div>
               <div class="p-2 flex-grow-1 bd-highlight">
                 <form>
-                  <textarea style="width: 100%;" class="opened-chat-bottom__textarea" [(ngModel)]="msg.txt"></textarea>
+                  <input
+                    class="form-control"
+                    type="text"
+                    style="width: 100%;"
+                    [(ngModel)]="msg.txt"
+                    (change)="handleAddMessage()"
+                  >
+                  <!--<textarea style="width: 100%;" class="opened-chat-bottom__textarea" [(ngModel)]="msg.txt"></textarea>-->
                 </form>
               </div>
               <div class="p-2 bd-highlight">
