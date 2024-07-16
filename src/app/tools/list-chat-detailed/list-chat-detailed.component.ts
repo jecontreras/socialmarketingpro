@@ -87,7 +87,7 @@ export class ListChatDetailedComponent implements OnInit {
 
   processIframeWeb( item ){
     item.viewFile = this._toolsService.seguridadIfrane( item.urlMedios || item.href );
-    this.invertMessagesOrder();
+    //this.invertMessagesOrder();
     this.scrollToBottom();
   }
   handleOpenFlows( item ){
@@ -119,8 +119,8 @@ export class ListChatDetailedComponent implements OnInit {
           });
         }
       }
-      this.invertMessagesOrder();
-      //this.scrollToBottom();
+      //this.invertMessagesOrder();
+      this.scrollToBottom();
     } catch (error) { }
     //console.log( this.listDetails )
   }
@@ -168,7 +168,7 @@ export class ListChatDetailedComponent implements OnInit {
 
   getWhatsappDetails(){
     return new Promise( resolve =>{
-      this._whatsappDetails.getDetails( { where: { whatsappTxt: this.data.id }, limit: 1000000 } ).subscribe( res =>{
+      this._whatsappDetails.getDetails( { where: { whatsappTxt: this.data.id }, limit: 1000000, sort: "updatedAt ASC" } ).subscribe( res =>{
         resolve( res.data );
       })
     })
