@@ -244,3 +244,16 @@ export interface GALERIA{
   updatedAt?: string;
 }
 
+export interface GALERIA{
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+
+}
+
+export interface Fruit {
+  id?: any;
+  nombre?: string;
+  usu_email: string;
+}
+

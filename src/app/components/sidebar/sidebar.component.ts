@@ -55,6 +55,7 @@ export class SidebarComponent implements OnInit {
       { path: '/liveChat/aaaaaaaaa', title: this.dataConfig.liveChat,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'usuario' ) || ( this.viewProfile === 'admin' ) },
       { path: '/flows', title: this.dataConfig.flows,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) },
       { path: '/config', title: this.dataConfig.config,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'admin' ) },
+      { path: '/whatsapp', title: this.dataConfig.whatsapp,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'admin' ) },
       { path: '/user-profile', title: 'Perfil',  icon:'ni-single-02 text-yellow', class: '' , disabled: ( this.viewProfile === 'usuario' ) || ( this.viewProfile === 'admin' )},
       { path: '/perfil', title: 'Roles',  icon:'ni-vector text-pink', class: '' , disabled:  ( this.viewProfile === 'admin' )},
   ];
