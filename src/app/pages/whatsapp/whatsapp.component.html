@@ -3,6 +3,16 @@
 <div class="content container">
   <div class="row">
     <div class="col-12">
+      <div class="d-flex justify-content-between">
+        <div></div>
+        <div></div>
+        <div>
+          <button mat-raised-button color="danger" (click)="resetGet( )">Actualizar</button>
+          <button mat-raised-button color="primary" (click)="handleOpenDialog( {} )">Crear</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
         <ng-container matColumnDef="Opcion">
@@ -27,6 +37,11 @@
         <ng-container matColumnDef="Creado">
           <th mat-header-cell *matHeaderCellDef> Creado </th>
           <td mat-cell *matCellDef="let element"> {{element.createdAt | date }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="UserC">
+          <th mat-header-cell *matHeaderCellDef> Usuario Creador </th>
+          <td mat-cell *matCellDef="let element"> {{element['creado']['email']  }} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

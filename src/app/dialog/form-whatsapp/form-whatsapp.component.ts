@@ -1,7 +1,7 @@
 
 import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { USERT, Fruit } from 'src/app/interfaces/interfaces';
@@ -15,6 +15,7 @@ import { ExcelService } from 'src/app/services/excel.service';
 import { CompanyServiceService } from 'src/app/servicesComponent/company-service.service';
 import { MessageService } from 'src/app/servicesComponent/message.service';
 import { MatChipInputEvent } from '@angular/material/chips';
+import { FileDetailComponent } from '../file-detail/file-detail.component';
 
 declare interface DataTable {
   headerRow: string[];
@@ -71,7 +72,7 @@ export class FormWhatsappComponent implements OnInit {
     },
     sort: "createdAt DESC",
     page: 0,
-    limit: 10
+    limit: 100
   };
   Header:any = [ 'Acciones','Mensaje de','Para de','Mandado','Mensaje','Oferta','Estado', 'Creado' ];
   dataConfig:any = {
@@ -89,10 +90,16 @@ export class FormWhatsappComponent implements OnInit {
     public dialog: MatDialog,
     private excelSrv: ExcelService,
     private _archivos: ArchivosService,
-    private _galeria: GaleriaService
+    private _galeria: GaleriaService,
+    public dialogRef: MatDialogRef<FormWhatsappComponent>
   ) {
     this.dataConfig = this._config._config.keys;
     this.id = this.datas.id || '';
+    this._store.subscribe((store: any) => {
+      store = store.name;
+      if(!store) return false;
+      this.dataUser = store.user || {};
+    });
   }
 
   async ngOnInit() {
@@ -103,9 +110,10 @@ export class FormWhatsappComponent implements OnInit {
     };
     this.getEmpresas();
     await this.cargarTodos();
-    this.id = (this.activate.snapshot.paramMap.get('id'));
+    this.id = this.datas.id;
     if( this.id ) {
-      this.getMensaje();
+      await this.getMensaje();
+      await this.getIdGaleria( );
       this.intervalo = setInterval(()=>{
         this.getFoto();
       }, 3000)
@@ -120,7 +128,14 @@ export class FormWhatsappComponent implements OnInit {
     clearInterval( this.intervalo );
   }
 
-
+  async getIdGaleria(){
+    return new Promise( resolve =>{
+      this._galeria.get( { where: { }, limit: 1 } ).subscribe(
+        (res: any) => {
+          resolve( res );
+      });
+    });
+  }
 
   getFoto(){
     this._mensajes.get( { where: { id: this.id }}).subscribe((res:any)=>{
@@ -130,28 +145,31 @@ export class FormWhatsappComponent implements OnInit {
     });
   }
 
-  getMensaje(){
-    this._mensajes.get( { where: { id: this.id }}).subscribe((res:any)=>{
-      res = res.data[0];
-      if( !res ) return false;
-      this.data = res;
-      if( this.data.empresa ) this.data.empresa = this.data.empresa.id;
-      this.data.listEmails = [];
-      this.onSelectPlt( );
-      let selecciono = this.dataTable.dataRows.find( ( item:any ) => item.id == this.data.listRotador2 );
-      this.dataConfig.id = this.data.listRotador2;
-      this.seleccion( selecciono );
-      try {
-        this.data.listRotador = _.map( this.data.listRotador, ( item:any )=>{
-          return {
-            files: [],
-            ...item
-          }
-        })
-      } catch (error) { }
-      this.ProsesoMensajes();
-      console.log( this.data)
-    });
+  async getMensaje(){
+    return new Promise( resolve =>{
+      this._mensajes.get( { where: { id: this.id }}).subscribe((res:any)=>{
+        res = res.data[0];
+        if( !res ) return resolve( false );
+        this.data = res;
+        if( this.data.empresa ) this.data.empresa = this.data.empresa.id;
+        this.data.listEmails = [];
+        this.onSelectPlt( );
+        let selecciono = this.dataTable.dataRows.find( ( item:any ) => item.id == this.data.listRotador2 );
+        this.dataConfig.id = this.data.listRotador2;
+        this.seleccion( selecciono );
+        try {
+          this.data.listRotador = _.map( this.data.listRotador, ( item:any )=>{
+            return {
+              files: [],
+              ...item
+            }
+          })
+        } catch (error) { }
+        this.ProsesoMensajes();
+        console.log( this.data)
+        resolve( true );
+      });
+    })
   }
 
   async onSelectPlt( ){
@@ -189,7 +207,7 @@ export class FormWhatsappComponent implements OnInit {
     return new Promise( resolve =>{
       this._empresas.get({ where: { estado: 0 }, limit: -1}).subscribe((res:any)=>{
         this.listPlataforma = res.data;
-        if( this.dataUser.rol !== '6520612bf48bb70d888bffe3' ) this.listPlataforma = this.listPlataforma.filter( row => row.id === '6456728a45ce5d0014db2870');
+        if( this.dataUser.rol.nombre !== 'admin' ) this.listPlataforma = this.listPlataforma.filter( row => row.id === '6456728a45ce5d0014db2870');
         resolve( true );
       });
     })
@@ -206,6 +224,7 @@ export class FormWhatsappComponent implements OnInit {
       else this._mensajes.getPlataformas( { url: res.data.empresa.urlRespuesta, id: this.id, cantidadLista: this.data.cantidadLista, plataforma: this.data.empresa, idLista: this.data.idLista } ).subscribe(( res:any )=>{ this.btnDisabled=false; }, error => this.btnDisabled=false );
       this.getMensaje();
       this.data = {};
+      this.closeDialog([]);
     },(error)=> { this._tools.presentToast("Error al envio de Whatsapp"); this.btnDisabled=false;})
   }
 
@@ -224,12 +243,13 @@ export class FormWhatsappComponent implements OnInit {
 
   actualizar(){
     this.btnDisabled=true;
-    let data = _.omit( this.data, ['empresa', 'creado', 'createdAt', 'updatedAt', 'listEmails']);
+    let data = _.omit( this.data, ['creado', 'createdAt', 'updatedAt', 'listEmails']);
     data = _.omitBy( data, _.isNull);
     this._mensajes.update( data ).subscribe((res:any)=>{
       this._tools.presentToast("Whatsapp Actualizado");
       this.procesoGuardarNumeros();
       this.btnDisabled=false;
+      this.closeDialog([]);
     },(error)=> { this._tools.presentToast("Error en el Actualizado"); this.btnDisabled=false;})
   }
 
@@ -433,7 +453,7 @@ export class FormWhatsappComponent implements OnInit {
 
    cargarTodos() {
     return new Promise( resolve =>{
-      this.query.where.user = this.dataUser.id;
+      if( this.dataUser.rol.nombre !== 'admin') this.query.where.user = this.dataUser.id;
       this._galeria.get(this.query)
       .subscribe(
         (response: any) => {
@@ -465,5 +485,23 @@ export class FormWhatsappComponent implements OnInit {
     item.check = !item.check;
     this.data.listRotador2 = item.id;
    }
+
+   handleOpenG(){
+    const dialogRef = this.dialog.open(FileDetailComponent, {
+      width: '50%',
+      height: "600px",
+      data: {
+        format: 'photo',
+        user: this.dataUser
+      },
+    });
+    dialogRef.afterClosed().subscribe(async  ( result ) => {
+      console.log('The dialog was closed', result );
+    });
+   }
+
+   closeDialog( list ){
+    this.dialogRef.close( list );
+  }
 
 }

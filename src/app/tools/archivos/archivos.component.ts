@@ -27,6 +27,7 @@ export class ArchivosComponent implements OnInit {
   @Input() acceptFile: string;
   dataUser: USERT;
   listGalleria:GALERIA;
+  querys:any = { where: {   }, limit: 10000 }
 
   constructor(
     public dialogRef: MatDialogRef<MovementItemComponent>,
@@ -51,7 +52,8 @@ export class ArchivosComponent implements OnInit {
 
   getListGalleria(){
     return new Promise( resolve =>{
-      this._galeria.get( { where: { user: this.dataUser.id  }, limit: 10000 } ).subscribe( res => resolve( res.data ), error => resolve( [] ) );
+      if( this.dataUser.rol.nombre !== 'admin') this.querys.where.user = this.dataUser.id;
+      this._galeria.get( this.querys ).subscribe( res => resolve( res.data ), error => resolve( [] ) );
     });
   }
 

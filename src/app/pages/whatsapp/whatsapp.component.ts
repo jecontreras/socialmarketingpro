@@ -13,7 +13,7 @@ import { FormWhatsappComponent } from 'src/app/dialog/form-whatsapp/form-whatsap
   styleUrls: ['./whatsapp.component.scss']
 })
 export class WhatsappComponent implements OnInit {
-  displayedColumns: string[] = ['Opcion','Titulo', 'Estado', 'Creado'];
+  displayedColumns: string[] = ['Opcion','Titulo', 'Estado', 'Creado', 'UserC'];
   dataSource:GALERIA[] = [];
   querys:any = {
     where:{
@@ -41,6 +41,11 @@ export class WhatsappComponent implements OnInit {
     this.getDataInit();
   }
 
+  resetGet(){
+    this.querys.page = 0;
+    this.getDataInit();
+  }
+
   async getDataInit(){
     if( this.dataUser.rol.nombre !== 'admin') this.querys.where.creado = this.dataUser.id;
     let list:any = await this.getList( this.querys );
@@ -65,7 +70,7 @@ export class WhatsappComponent implements OnInit {
 
   handleOpenDialog( obj ){
     const dialogRef = this.dialog.open(FormWhatsappComponent, {
-      width: '100%',
+      width: '100% !important',
       data: obj || {},
     });
 
