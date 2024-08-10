@@ -18,8 +18,11 @@
         <ng-container matColumnDef="Opcion">
           <th mat-header-cell *matHeaderCellDef> Opciones. </th>
           <td mat-cell *matCellDef="let element">
-            <button mat-mini-fab aria-label="Ver Mas" (click)="handleOpenDialog( element )">
+            <button mat-mini-fab aria-label="Ver Mas" color="primary" (click)="handleOpenDialog( element )">
               <mat-icon>remove_red_eye</mat-icon>
+            </button>
+            <button mat-mini-fab aria-label="Ver Mas"  (click)="handleDropItem( element )">
+              <mat-icon>restore_from_trash</mat-icon>
             </button>
           </td>
         </ng-container>

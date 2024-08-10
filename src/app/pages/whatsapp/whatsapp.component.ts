@@ -6,6 +6,7 @@ import { STORAGES } from 'src/app/interfaces/sotarage';
 import { Store } from '@ngrx/store';
 import { MatDialog } from '@angular/material/dialog';
 import { FormWhatsappComponent } from 'src/app/dialog/form-whatsapp/form-whatsapp.component';
+import { ToolsService } from 'src/app/services/tools.service';
 
 @Component({
   selector: 'app-whatsapp',
@@ -28,7 +29,8 @@ export class WhatsappComponent implements OnInit {
   constructor(
     private _message: MessageService,
     private _store: Store<STORAGES>,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _tools: ToolsService
   ) {
     this._store.subscribe((store: any) => {
       store = store.name;
@@ -44,6 +46,17 @@ export class WhatsappComponent implements OnInit {
   resetGet(){
     this.querys.page = 0;
     this.getDataInit();
+  }
+
+  async handleDropItem( item ){
+    let alert = await this._tools.confirm( { title: "Eliminar Item " } );
+    console.log("***", alert );
+    if( alert.value === true  ){
+      this._message.update( { id: item.id, estado: 1 } ).subscribe( res => {
+        this._tools.presentToast("Eliminado");
+        item.estado = res.estado;
+      });
+    }
   }
 
   async getDataInit(){
