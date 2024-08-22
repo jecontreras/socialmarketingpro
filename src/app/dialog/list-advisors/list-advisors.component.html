@@ -1,0 +1,41 @@
+<h2 mat-dialog-title>
+  {{ dataConfig.txtListAdviser }}
+</h2>
+<mat-dialog-content class="mat-typography" id="print">
+  <div class="row">
+    <div class="col-12">
+      <ul class="list-group list-group-flush list my--3">
+        <li class="list-group-item px-0" *ngFor="let item of listAdvisors" >
+          <div class="row align-items-center">
+            <div class="col-auto">
+              <!-- Avatar -->
+              <a class="avatar rounded-circle">
+                <img alt="Image placeholder" [src]="item.foto">
+              </a>
+            </div>
+            <div class="col ml--2">
+              <h4 class="mb-0">
+                <a href="#!">{{ item.name }} - {{ item.email }}</a>
+              </h4>
+              <span class="text-success">●</span>
+              <small>Rol: {{ item['rol']['nombre'] }}</small>
+            </div>
+            <div class="col-auto">
+              <mat-checkbox
+                required
+                [(ngModel)]="item.celular"
+              >
+              <span>{{ dataConfig.txtSelect }}</span>
+              <span>{{ dataConfig.txtDeSelect }}</span>
+            </mat-checkbox>
+            </div>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" mat-dialog-close><i class="ni ni-fat-remove"></i></button>
+</mat-dialog-actions>

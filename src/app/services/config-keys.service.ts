@@ -126,7 +126,11 @@ export class ConfigKeysService {
       numberGuider: "Numero de Guia",
       submitFile: "Subir Archivos",
       listArchive: "Lista de Archivos",
-      galleryTxt: "Galeria Detalle"
+      galleryTxt: "Galeria Detalle",
+      roleName: "Rol",
+      btnAdviser: "Agregarle asesores",
+      txtPercentage: "Porcentaje",
+      txtListAdviser: "Lista de Asesores"
     }
   };
   constructor() { }

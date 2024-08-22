@@ -41,7 +41,18 @@ export interface Componente {
     username?: string;
     password?: string;
     rol?: any;
+    percentage?: number;
   }
+
+  export interface ROL{
+    id?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    descripcion?: string;
+    estado?: string;
+    nombre?: string;
+  }
+
   export interface WHATSAPP{
     id?: string;
     to?: string;

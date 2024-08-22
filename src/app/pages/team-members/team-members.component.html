@@ -2,6 +2,7 @@
   <div class="col-12">
     <div class="d-flex justify-content-center">
       <div>
+        <br>
         <h1>Miembros del Equipos</h1>
       </div>
     </div>
@@ -10,42 +11,64 @@
     <div class="container">
       <div class="row">
         <div class="col-12 col-sm-6">
-          <div class="form-group">
-            <label for="exampleFormControlInput1"> {{ dataConfig.name }} </label>
-            <input type="text" class="form-control" [(ngModel)]="data.name">
-          </div>
+          <mat-form-field class="example-full-width">
+            <mat-label>{{ dataConfig.name }}</mat-label>
+            <input matInput [(ngModel)]="data.name" type="text">
+          </mat-form-field>
         </div>
         <div class="col-12 col-sm-6">
-          <div class="form-group">
-            <label for="exampleFormControlInput1"> {{ dataConfig.lastname }} </label>
-            <input type="text" class="form-control" [(ngModel)]="data.lastname">
-          </div>
+          <mat-form-field class="example-full-width">
+            <mat-label>{{ dataConfig.lastname }}</mat-label>
+            <input matInput [(ngModel)]="data.lastname" type="text">
+          </mat-form-field>
         </div>
         <div class="col-12 col-sm-6">
-          <div class="form-group">
-            <label for="exampleFormControlInput1"> {{ dataConfig.username }} </label>
-            <input type="text" class="form-control" [(ngModel)]="data.username">
-          </div>
+          <mat-form-field class="example-full-width">
+            <mat-label>{{ dataConfig.username }}</mat-label>
+            <input matInput [(ngModel)]="data.username" type="text">
+          </mat-form-field>
         </div>
         <div class="col-12 col-sm-6">
-          <div class="form-group">
-            <label for="exampleFormControlInput1"> {{ dataConfig.cel }} </label>
-            <input type="number" class="form-control" [(ngModel)]="data.celular">
-          </div>
+          <mat-form-field class="example-full-width">
+            <mat-label>{{ dataConfig.cel }}</mat-label>
+            <input matInput [(ngModel)]="data.celular" type="email">
+          </mat-form-field>
         </div>
         <div class="col-12 col-sm-6">
-          <div class="form-group">
-            <label for="exampleFormControlInput1"> {{ dataConfig.email }} </label>
-            <input type="email" class="form-control" [(ngModel)]="data.email">
-          </div>
+          <mat-form-field class="example-full-width">
+            <mat-label>{{ dataConfig.email }}</mat-label>
+            <input matInput [(ngModel)]="data.email" type="text">
+          </mat-form-field>
         </div>
         <div class="col-12 col-sm-6">
-          <div class="form-group">
-            <label for="exampleFormControlInput1"> {{ dataConfig.password }} </label>
-            <input type="text" class="form-control" [(ngModel)]="data.password">
-          </div>
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>{{ dataConfig.roleName }}</mat-label>
+            <mat-select [(ngModel)]="data.rol">
+              <mat-option *ngFor="let item of listRole" [value]="item.id">
+                {{ item.nombre }}
+              </mat-option>
+            </mat-select>
+          </mat-form-field>
         </div>
         <div class="col-12 col-sm-6">
+          <mat-form-field class="example-full-width">
+            <mat-label>{{ dataConfig.password }}</mat-label>
+            <input matInput [(ngModel)]="data.password" type="text">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-6">
+          <mat-form-field class="example-full-width">
+            <mat-label>{{ dataConfig.txtPercentage }}</mat-label>
+            <input matInput [(ngModel)]="data.percentage" type="number">
+          </mat-form-field>
+        </div>
+        <div class="col-12 col-sm-6">
+          <button mat-raised-button color="warn" (click)="handleOpenListAdvisors()" *ngIf="data.id">
+            {{ dataConfig.btnAdviser }}
+          </button>
+        </div>
+        <div class="col-12">
+          <br>
           <div class="d-flex bd-highlight">
             <div class="p-2 flex-grow-1 bd-highlight"></div>
             <div class="p-2 bd-highlight">
@@ -58,6 +81,7 @@
                </button>
             </div>
           </div>
+          <br>
         </div>
         <div class="col-12">
           <ul class="list-group list-group-flush list my--3">
@@ -65,19 +89,21 @@
               <div class="row align-items-center">
                 <div class="col-auto">
                   <!-- Avatar -->
-                  <a href="#" class="avatar rounded-circle">
+                  <a (click)="handleEventUser( item )" class="avatar rounded-circle">
                     <img alt="Image placeholder" [src]="item.foto">
                   </a>
                 </div>
                 <div class="col ml--2">
                   <h4 class="mb-0">
-                    <a href="#!">{{ item.name }} - {{ item.email }} </a>
+                    <a href="#!">{{ item.name }} - {{ item.email }}</a>
                   </h4>
                   <span class="text-success">●</span>
-                  <small>Online</small>
+                  <small>Rol: {{ item['rol']['nombre'] }}</small>
                 </div>
                 <div class="col-auto">
-                  <button type="button" class="btn btn-sm btn-primary" (click)="handleEventUser( item )" >Add</button>
+                  <button type="button" class="btn btn-sm btn-primary" (click)="handleEventUser( item )" >
+                    <mat-icon>remove_red_eye</mat-icon>
+                  </button>
                 </div>
               </div>
             </li>
