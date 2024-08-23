@@ -130,7 +130,7 @@ export class ConfigKeysService {
       roleName: "Rol",
       btnAdviser: "Agregarle asesores",
       txtPercentage: "Porcentaje",
-      txtListAdviser: "Lista de Asesores"
+      txtListAdviser: "Lista de Asesores",
     }
   };
   constructor() { }

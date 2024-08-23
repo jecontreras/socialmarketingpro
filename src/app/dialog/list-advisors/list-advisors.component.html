@@ -22,12 +22,19 @@
             </div>
             <div class="col-auto">
               <mat-checkbox
-                required
-                [(ngModel)]="item.celular"
-              >
-              <span>{{ dataConfig.txtSelect }}</span>
-              <span>{{ dataConfig.txtDeSelect }}</span>
-            </mat-checkbox>
+                  required
+                  [(ngModel)]="item.check"
+                >
+                <span *ngIf="!item.check">{{ dataConfig.txtSelect }}</span>
+                <span *ngIf="item.check">{{ dataConfig.txtDeSelect }}</span>
+              </mat-checkbox>
+
+              <mat-form-field class="example-full-width">
+                <mat-label>{{ dataConfig.txtPercentage }}</mat-label>
+                <input matInput placeholder="Ej: 10,20,30" [(ngModel)]="item.percentage">
+              </mat-form-field>
+
+
             </div>
           </div>
         </li>
@@ -38,4 +45,8 @@
 
 <mat-dialog-actions align="end">
   <button mat-raised-button color="warn" mat-dialog-close><i class="ni ni-fat-remove"></i></button>
+  <button type="button" class="btn btn-primary btn-lg btn-block" (click)="handleSubmit()" [disabled]="btnDisabled">
+    <span *ngIf="!id">{{ dataConfig.btnAddC }}</span>
+    <span *ngIf="id">{{ dataConfig.txtUpdate }}</span>
+  </button>
 </mat-dialog-actions>

@@ -14,6 +14,10 @@ export class UsuariosService {
     return this._model.querys('user/querys',query, 'post');
   }
 
+  querysAdviser(query:any){
+    return this._model.querys('user/querysAdviser',query, 'post');
+  }
+
   getOn(query:any){
     return this._model.querys('user/querysOn',query, 'post');
   }

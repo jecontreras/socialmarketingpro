@@ -5,6 +5,7 @@ import { USERT } from 'src/app/interfaces/interfaces';
 import { STORAGES } from 'src/app/interfaces/sotarage';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ToolsService } from 'src/app/services/tools.service';
+import { UserAdiviserService } from 'src/app/servicesComponent/user-adiviser.service';
 import { UsuariosService } from 'src/app/servicesComponent/usuarios.service';
 
 @Component({
@@ -27,6 +28,7 @@ export class ListAdvisorsComponent implements OnInit {
     public dialog: MatDialog,
     public dialogRef: MatDialogRef<ListAdvisorsComponent>,
     private _userServices: UsuariosService,
+    private _userAdiviser: UserAdiviserService
 
   ) {
     this.dataConfig = this._config._config.keys;
@@ -45,8 +47,41 @@ export class ListAdvisorsComponent implements OnInit {
 
   getUser(){
     return new Promise( resolve =>{
-      this._userServices.get( { where: { cabeza: this.dataUser.cabeza, rol: 'usuario' }, limit: 1000, page:0 } ).subscribe( res => resolve( res.data ), error => resolve( error ) );
+      this._userServices.querysAdviser( { where: { cabeza: this.dataUser.cabeza, rol: 'usuario' }, limit: 1000, page:0 } ).subscribe( res => resolve( res.data ), error => resolve( error ) );
     })
+  }
+
+  handleSubmit(){
+    for( let item of this.listAdvisors ){
+      if( item.check === true ){
+        let ds = {
+          userHead: this.dataUser.id,
+          user: item.id,
+          percentage: item.percentage
+        };
+        this.handleProcessCreate( ds );
+      }else{
+        if( item.idUserAdviser ) {
+          let ds = {
+            id: item.idUserAdviser,
+            state: "inactivo"
+          };
+          this.handleProcessUpdate( ds );
+        }
+      }
+    }
+  }
+
+  handleProcessCreate( data ){
+    return new Promise( resolve =>{
+      this._userAdiviser.create( data ).subscribe( res => resolve( res ) , ( error )=> resolve( error ) );
+    });
+  }
+
+  handleProcessUpdate( data ){
+    return new Promise( resolve =>{
+      this._userAdiviser.update( data ).subscribe( res => resolve( res ) , ( error )=> resolve( error ) );
+    });
   }
 
 }

@@ -42,6 +42,8 @@ export interface Componente {
     password?: string;
     rol?: any;
     percentage?: number;
+    check?: boolean;
+    idUserAdviser?: string;
   }
 
   export interface ROL{
