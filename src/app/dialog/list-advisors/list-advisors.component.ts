@@ -43,21 +43,24 @@ export class ListAdvisorsComponent implements OnInit {
   async ngOnInit() {
     let resUser:any = await this.getUser();
     this.listAdvisors =  resUser;
+    console.log("*****data", this.datas )
   }
 
   getUser(){
     return new Promise( resolve =>{
-      this._userServices.querysAdviser( { where: { cabeza: this.dataUser.cabeza, rol: 'usuario' }, limit: 1000, page:0 } ).subscribe( res => resolve( res.data ), error => resolve( error ) );
+      this._userServices.querysAdviser( { userId:this.datas.id, where: { cabeza: this.datas.cabeza, rol: 'usuario' }, limit: 1000, page:0 } ).subscribe( res => resolve( res.data ), error => resolve( error ) );
     })
   }
 
   handleSubmit(){
     for( let item of this.listAdvisors ){
       if( item.check === true ){
+        if( item.idUserAdviser ) continue;
         let ds = {
-          userHead: this.dataUser.id,
+          userHead: this.datas.id,
           user: item.id,
-          percentage: item.percentage
+          percentage: item.percentage,
+          company: this.datas.empresa
         };
         this.handleProcessCreate( ds );
       }else{
@@ -70,6 +73,12 @@ export class ListAdvisorsComponent implements OnInit {
         }
       }
     }
+    this._tools.presentToast( this.dataConfig.txtUpdate );
+    this.close();
+  }
+
+  close(){
+    this.dialogRef.close( );
   }
 
   handleProcessCreate( data ){
