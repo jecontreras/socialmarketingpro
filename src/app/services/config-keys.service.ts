@@ -131,6 +131,11 @@ export class ConfigKeysService {
       btnAdviser: "Agregarle asesores",
       txtPercentage: "Porcentaje",
       txtListAdviser: "Lista de Asesores",
+      txtTypeAction: "Tipo de Acción",
+      txtButtonShift: "nombre de los botones",
+      listButtonShift: "Lista de Botones",
+      txtNextSequence: "Secuencia siguiente",
+      listNextSequence: "Lista de Secuencia"
     }
   };
   constructor() { }

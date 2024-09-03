@@ -56,11 +56,12 @@
             </div>
             <div class="col-12 form-group">
               <label for="exampleFormControlInput1"> {{ dataConfig.indicatorNumber }} </label>
-              <input type="text" class="form-control"  [(ngModel)]="data.titulo">
+              <input type="text" class="form-control"  [(ngModel)]="item.indicador">
             </div>
             <!--<div class="col-12 form-group">
               <mat-form-field class="example-chip-list">
-                  <mat-chip-list #chipList [aria-label]="dataConfig.indicatorDeep">
+
+                <mat-chip-list #chipList [aria-label]="dataConfig.indicatorDeep">
                       <mat-chip *ngFor="let key of item.deepIndicator"
                           [selectable]="selectable" [removable]="removable"
                           (removed)="remove( key, item )">
@@ -75,6 +76,13 @@
                </mat-form-field>
             </div>-->
             <div class="col-12 form-group">
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtTypeAction }} </label>
+              <select class="form-control" [(ngModel)]="item.typeAction">
+                <option [value]="item" *ngFor="let item of listTypeAction">
+                    {{ item }}</option>
+              </select>
+            </div>
+            <div class="col-12 form-group" *ngIf="( item.typeAction != 'txt' || item.typeAction == 'button' )">
               <label for="exampleFormControlInput1"> {{ dataConfig.urlMedia }} </label>
               <select class="form-control" [(ngModel)]="item.urlMedios">
                 <option value="">
@@ -84,9 +92,44 @@
                     {{ item.titulo }}</option>
               </select>
             </div>
+            <div class="col-12 form-group" *ngIf="item.typeAction == 'button'">
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtButtonShift }} </label>
+              <mat-form-field class="example-chip-list">
+
+                <mat-chip-list #chipList [aria-label]="dataConfig.txtButtonShift">
+                      <mat-chip *ngFor="let key of item.listButtonShift"
+                          [selectable]="selectable" [removable]="removable"
+                          (removed)="removeListButtonShift( key, item )">
+                          {{ key.text }}
+                          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                      </mat-chip>
+                      <input [placeholder]="dataConfig.listButtonShift" [matChipInputFor]="chipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          [matChipInputAddOnBlur]="addOnBlur"
+                          (matChipInputTokenEnd)="addListButtonShift($event, item)">
+                  </mat-chip-list>
+               </mat-form-field>
+            </div>
             <div class="col-12 form-group">
               <label for="exampleFormControlInput1"> {{ dataConfig.answer }} </label>
               <textarea class="form-control" [(ngModel)]="item.respuesta" rows="6" ></textarea>
+            </div>
+            <div class="col-12 form-group" >
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtNextSequence }} </label>
+              <mat-form-field class="example-chip-list">
+                <mat-chip-list #chipList [aria-label]="dataConfig.txtNextSequence">
+                      <mat-chip *ngFor="let key of item.listFollowing"
+                          [selectable]="selectable" [removable]="removable"
+                          (removed)="removeNextSequence( key, item )">
+                          {{ key.idFollowing }}
+                          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                      </mat-chip>
+                      <input [placeholder]="dataConfig.listNextSequence" [matChipInputFor]="chipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          [matChipInputAddOnBlur]="addOnBlur"
+                          (matChipInputTokenEnd)="addNextSequence($event, item)">
+                  </mat-chip-list>
+               </mat-form-field>
             </div>
           </div>
         </li>

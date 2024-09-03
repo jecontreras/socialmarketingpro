@@ -29,6 +29,8 @@ export class FormFlowsHsComponent implements OnInit {
     {
       indicador: "He visto esto en Facebook",
       urlMedios: "",
+      listFollowing: [],
+      listButtonShift: [],
       respuesta: `¡Hola Buen Día! Bienvenidos a la Tienda Virtual @liam_stilos
         01. Ver catalogó!
         02. Hacer pedido!
@@ -39,6 +41,8 @@ export class FormFlowsHsComponent implements OnInit {
     {
       indicador: "hola",
       urlMedios: "",
+      listFollowing: [],
+      listButtonShift: [],
       respuesta: `¡Hola Buen Día! Bienvenidos a la Tienda Virtual @liam_stilos
         01. Ver catalogó!
         02. Hacer pedido!
@@ -49,6 +53,8 @@ export class FormFlowsHsComponent implements OnInit {
     {
       indicador: "1",
       urlMedios: "",
+      listFollowing: [],
+      listButtonShift: [],
       respuesta: `
         4 *Ver Catalogo de Hombre*
         5 *Ver Catalogo de Mujer*
@@ -60,6 +66,8 @@ export class FormFlowsHsComponent implements OnInit {
     {
       indicador: "2",
       urlMedios: "",
+      listFollowing: [],
+      listButtonShift: [],
       respuesta: `
       *Para el proceso de hacer pedido los requisitos son*
       *. Foto o modelo del producto interesado?
@@ -80,11 +88,15 @@ export class FormFlowsHsComponent implements OnInit {
     {
       indicador: "3",
       urlMedios: "",
+      listFollowing: [],
+      listButtonShift: [],
       respuesta: ` *En unos Momentos un Asesor se Comunicara contigo*! `
     },
     {
       indicador: "4",
       urlMedios: "64ae40b5802dc8001412ac05",
+      listFollowing: [],
+      listButtonShift: [],
       respuesta: `
       *Para el proceso de hacer pedido los requisitos son*
                     *. Foto o modelo del producto interesado?
@@ -102,6 +114,8 @@ export class FormFlowsHsComponent implements OnInit {
     {
       indicador: "5",
       urlMedios: "64af63db865a1300140ee306",
+      listFollowing: [],
+      listButtonShift: [],
       respuesta: `
       *Para el proceso de hacer pedido los requisitos son*
                     *. Foto o modelo del producto interesado?
@@ -119,6 +133,8 @@ export class FormFlowsHsComponent implements OnInit {
     {
       indicador: "6",
       urlMedios: "64af63db865a1300140ee306",
+      listFollowing: [],
+      listButtonShift: [],
       respuesta: `
       *Para el proceso de hacer pedido los requisitos son*
                     *. Foto o modelo del producto interesado?
@@ -136,6 +152,8 @@ export class FormFlowsHsComponent implements OnInit {
     {
       indicador: "7",
       urlMedios: "64af63db865a1300140ee306",
+      listFollowing: [],
+      listButtonShift: [],
       respuesta: `
       *Para el proceso de hacer pedido los requisitos son*
                     *. Foto o modelo del producto interesado?
@@ -153,6 +171,8 @@ export class FormFlowsHsComponent implements OnInit {
     {
       indicador: "0",
       urlMedios: "",
+      listFollowing: [],
+      listButtonShift: [],
       respuesta: `¡Hola Buen Día! Bienvenidos a la Tienda Virtual @liam_stilos
         01. Ver catalogó!
         02. Hacer pedido!
@@ -160,6 +180,14 @@ export class FormFlowsHsComponent implements OnInit {
         00. Volver al menú principal!
       `
     },
+  ];
+  listTypeAction:string[] = [
+    "img",
+    "video",
+    "pdf",
+    "audio",
+    "txt",
+    "button"
   ];
   disableBtn:boolean = false;
   id:string;
@@ -236,7 +264,10 @@ export class FormFlowsHsComponent implements OnInit {
   }
 
   handleDropList(){
-    this.listLogic = [{}];
+    this.listLogic = [{
+      listButtonShift:[],
+      listFollowing: []
+    }];
   }
 
 
@@ -326,12 +357,69 @@ export class FormFlowsHsComponent implements OnInit {
     }
   }
 
+  addListButtonShift(event: MatChipInputEvent, item ): void {
+    const input = event.input;
+    const value = event.value;
+    console.log( value )
+    if( !item.listButtonShift ) item.listButtonShift = []
+    // Add our fruit
+    if ((value || '').trim()) {
+      item.listButtonShift.push(
+        {
+          text: value,
+          id: _.camelCase( value )
+        });
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  addNextSequence(event: MatChipInputEvent, item ): void {
+    const input = event.input;
+    const value = event.value;
+    console.log( value )
+    if( !item.listFollowing ) item.listFollowing = []
+    // Add our fruit
+    if ((value || '').trim()) {
+      item.listFollowing.push(
+        {
+          idFollowing: value
+        });
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+
   async remove(fruit: INDICATOR, item) {
     const index = item.deepIndicator.indexOf(fruit);
 
     if (index >= 0) {
       console.log( item.deepIndicator[index] );
       item.deepIndicator.splice(index, 1);
+    }
+  }
+
+  async removeListButtonShift(txtButtonShift: string, item) {
+    const index = item.listButtonShift.indexOf(txtButtonShift);
+
+    if (index >= 0) {
+      console.log( item.listButtonShift[index] );
+      item.listButtonShift.splice(index, 1);
+    }
+  }
+
+  async removeNextSequence(txtButtonShift: string, item) {
+    const index = item.listFollowing.indexOf(txtButtonShift);
+
+    if (index >= 0) {
+      console.log( item.listFollowing[index] );
+      item.listFollowing.splice(index, 1);
     }
   }
 
