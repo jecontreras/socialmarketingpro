@@ -135,7 +135,8 @@ export class ConfigKeysService {
       txtButtonShift: "nombre de los botones",
       listButtonShift: "Lista de Botones",
       txtNextSequence: "Secuencia siguiente",
-      listNextSequence: "Lista de Secuencia"
+      listNextSequence: "Lista de Secuencia",
+      txtTimeMessage: "Tiempo entre mensaje next ejemplo  5 | 10 | 20 | 30 | 50"
     }
   };
   constructor() { }

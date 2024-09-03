@@ -30,7 +30,7 @@ export class FormFlowsHsComponent implements OnInit {
       indicador: "He visto esto en Facebook",
       urlMedios: "",
       listFollowing: [],
-      listButtonShift: [],
+      listButton: [],
       respuesta: `¡Hola Buen Día! Bienvenidos a la Tienda Virtual @liam_stilos
         01. Ver catalogó!
         02. Hacer pedido!
@@ -42,7 +42,7 @@ export class FormFlowsHsComponent implements OnInit {
       indicador: "hola",
       urlMedios: "",
       listFollowing: [],
-      listButtonShift: [],
+      listButton: [],
       respuesta: `¡Hola Buen Día! Bienvenidos a la Tienda Virtual @liam_stilos
         01. Ver catalogó!
         02. Hacer pedido!
@@ -54,7 +54,7 @@ export class FormFlowsHsComponent implements OnInit {
       indicador: "1",
       urlMedios: "",
       listFollowing: [],
-      listButtonShift: [],
+      listButton: [],
       respuesta: `
         4 *Ver Catalogo de Hombre*
         5 *Ver Catalogo de Mujer*
@@ -67,7 +67,7 @@ export class FormFlowsHsComponent implements OnInit {
       indicador: "2",
       urlMedios: "",
       listFollowing: [],
-      listButtonShift: [],
+      listButton: [],
       respuesta: `
       *Para el proceso de hacer pedido los requisitos son*
       *. Foto o modelo del producto interesado?
@@ -89,14 +89,14 @@ export class FormFlowsHsComponent implements OnInit {
       indicador: "3",
       urlMedios: "",
       listFollowing: [],
-      listButtonShift: [],
+      listButton: [],
       respuesta: ` *En unos Momentos un Asesor se Comunicara contigo*! `
     },
     {
       indicador: "4",
       urlMedios: "64ae40b5802dc8001412ac05",
       listFollowing: [],
-      listButtonShift: [],
+      listButton: [],
       respuesta: `
       *Para el proceso de hacer pedido los requisitos son*
                     *. Foto o modelo del producto interesado?
@@ -115,7 +115,7 @@ export class FormFlowsHsComponent implements OnInit {
       indicador: "5",
       urlMedios: "64af63db865a1300140ee306",
       listFollowing: [],
-      listButtonShift: [],
+      listButton: [],
       respuesta: `
       *Para el proceso de hacer pedido los requisitos son*
                     *. Foto o modelo del producto interesado?
@@ -134,7 +134,7 @@ export class FormFlowsHsComponent implements OnInit {
       indicador: "6",
       urlMedios: "64af63db865a1300140ee306",
       listFollowing: [],
-      listButtonShift: [],
+      listButton: [],
       respuesta: `
       *Para el proceso de hacer pedido los requisitos son*
                     *. Foto o modelo del producto interesado?
@@ -153,7 +153,7 @@ export class FormFlowsHsComponent implements OnInit {
       indicador: "7",
       urlMedios: "64af63db865a1300140ee306",
       listFollowing: [],
-      listButtonShift: [],
+      listButton: [],
       respuesta: `
       *Para el proceso de hacer pedido los requisitos son*
                     *. Foto o modelo del producto interesado?
@@ -172,7 +172,7 @@ export class FormFlowsHsComponent implements OnInit {
       indicador: "0",
       urlMedios: "",
       listFollowing: [],
-      listButtonShift: [],
+      listButton: [],
       respuesta: `¡Hola Buen Día! Bienvenidos a la Tienda Virtual @liam_stilos
         01. Ver catalogó!
         02. Hacer pedido!
@@ -265,7 +265,7 @@ export class FormFlowsHsComponent implements OnInit {
 
   handleDropList(){
     this.listLogic = [{
-      listButtonShift:[],
+      listButton:[],
       listFollowing: []
     }];
   }
@@ -361,10 +361,10 @@ export class FormFlowsHsComponent implements OnInit {
     const input = event.input;
     const value = event.value;
     console.log( value )
-    if( !item.listButtonShift ) item.listButtonShift = []
+    if( !item.listButton ) item.listButton = []
     // Add our fruit
     if ((value || '').trim()) {
-      item.listButtonShift.push(
+      item.listButton.push(
         {
           text: value,
           id: _.camelCase( value )
@@ -405,12 +405,12 @@ export class FormFlowsHsComponent implements OnInit {
     }
   }
 
-  async removeListButtonShift(txtButtonShift: string, item) {
-    const index = item.listButtonShift.indexOf(txtButtonShift);
+  async removelistButton(txtButtonShift: string, item) {
+    const index = item.listButton.indexOf(txtButtonShift);
 
     if (index >= 0) {
-      console.log( item.listButtonShift[index] );
-      item.listButtonShift.splice(index, 1);
+      console.log( item.listButton[index] );
+      item.listButton.splice(index, 1);
     }
   }
 

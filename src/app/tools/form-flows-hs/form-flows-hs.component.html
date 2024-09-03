@@ -97,7 +97,7 @@
               <mat-form-field class="example-chip-list">
 
                 <mat-chip-list #chipList [aria-label]="dataConfig.txtButtonShift">
-                      <mat-chip *ngFor="let key of item.listButtonShift"
+                      <mat-chip *ngFor="let key of item.listButton"
                           [selectable]="selectable" [removable]="removable"
                           (removed)="removeListButtonShift( key, item )">
                           {{ key.text }}
@@ -113,6 +113,10 @@
             <div class="col-12 form-group">
               <label for="exampleFormControlInput1"> {{ dataConfig.answer }} </label>
               <textarea class="form-control" [(ngModel)]="item.respuesta" rows="6" ></textarea>
+            </div>
+            <div class="col-12 form-group">
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtTimeMessage }} </label>
+              <input type="number" class="form-control"  [(ngModel)]="item.timeSend">
             </div>
             <div class="col-12 form-group" >
               <label for="exampleFormControlInput1"> {{ dataConfig.txtNextSequence }} </label>
