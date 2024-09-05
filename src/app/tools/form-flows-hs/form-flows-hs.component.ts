@@ -11,7 +11,7 @@ import * as _ from 'lodash';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { FLOWS, INDICATOR } from 'src/app/interfaces/interfaces';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormFlowsComponent } from 'src/app/dialog/form-flows/form-flows.component';
 
 @Component({
@@ -200,17 +200,17 @@ export class FormFlowsHsComponent implements OnInit {
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   dataConfig:any = {};
+  views:string = "one";
 
   constructor(
     private _logicWhatsapp: InfoWhatsappService,
     private _Tools: ToolsService,
-    private Router: Router,
-    private activate: ActivatedRoute,
     private _store: Store<USER>,
     private _galeria: GaleriaService,
     private _whatsappInfo: WhatsappInfoService,
     private _config: ConfigKeysService,
     public dialogRef: MatDialogRef<FormFlowsComponent>,
+    public dialog: MatDialog
   ) {
     this.dataConfig = this._config._config.keys;
     this._store.subscribe((store: any) => {
@@ -219,11 +219,11 @@ export class FormFlowsHsComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     /*this.id = (this.activate.snapshot.paramMap.get('id'));
     if( this.id ) this.getId();*/
-    if( this.dataId.id ) {
-      this.data = this.dataId;
+    if( this.dataId.id && !this.dataId.views ) {
+      this.data = await this.getFlowId( this.dataId.id ); this.dataId;
       this.id = this.data.id;
       this.listLogic = this.data.listLogic;
       try {
@@ -231,10 +231,23 @@ export class FormFlowsHsComponent implements OnInit {
       } catch (error) {
 
       }
+    }else{
+      this.id = this.dataId.idInfoWhatsapp;
+      this.views = this.dataId.views;
+      console.log("ELSE")
     }
     console.log("***", this.data)
     this.getGaleria();
     this.getWhatsappInfo();
+  }
+
+  getFlowId( id ){
+    return new Promise( resolve =>{
+      this._logicWhatsapp.get( { where: { id: id }, limit: 1 } ).subscribe( res =>{
+        res = res.data[0];
+        resolve( res );
+      }, ( )=> resolve( {} ) );
+    });
   }
 
   getId(){
@@ -430,7 +443,21 @@ export class FormFlowsHsComponent implements OnInit {
   }
 
   closeDialog(){
+
     this.dialogRef.close();
+  }
+
+  handleOpenFlow( item ){
+    item.idInfoWhatsapp = this.data.id;
+    item.views = 'button';
+    const dialogRef = this.dialog.open(FormFlowsComponent, {
+      width: '100%',
+      data: item || {},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
   }
 
 }

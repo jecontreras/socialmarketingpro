@@ -1,26 +1,28 @@
 <div class="container">
   <div class="row">
-    <div class="col-12">
-      <h3> {{ dataConfig.initialDetails }} </h3>
-    </div>
-    <div class="col-12 col-sm-6 form-group">
-      <label for="exampleFormControlInput1"> {{ dataConfig.txtFormName }} </label>
-      <input type="text" class="form-control" [(ngModel)]="data.titulo">
-    </div>
-    <div class="col-12 col-sm-6 form-group">
-      <label for="exampleFormControlSelect1"> {{ dataConfig.txtFormNumber }} </label>
-      <select class="form-control" [(ngModel)]="data.numero">
-        <option [value]="item.id" *ngFor="let item of listWhatsappInfo" >
-          {{ item.titulo }} - {{ item.numero }}
-        </option>
-      </select>
-    </div>
-    <div class="col-12 form-group">
-      <label for="exampleFormControlInput1"> {{ dataConfig.description }} </label>
-      <textarea class="form-control" [(ngModel)]="data.descripcion" rows="3"></textarea>
-    </div>
-    <div class="col-12">
-      <button class="btn btn-primary" (click)="handleSubmit()" type="button"> {{ dataConfig.btnSaved }} </button>
+    <div class="col-12 row" *ngIf="views==='one'">
+      <div class="col-12">
+        <h3> {{ dataConfig.initialDetails }} </h3>
+      </div>
+      <div class="col-12 col-sm-6 form-group">
+        <label for="exampleFormControlInput1"> {{ dataConfig.txtFormName }} </label>
+        <input type="text" class="form-control" [(ngModel)]="data.titulo">
+      </div>
+      <div class="col-12 col-sm-6 form-group">
+        <label for="exampleFormControlSelect1"> {{ dataConfig.txtFormNumber }} </label>
+        <select class="form-control" [(ngModel)]="data.numero">
+          <option [value]="item.id" *ngFor="let item of listWhatsappInfo" >
+            {{ item.titulo }} - {{ item.numero }}
+          </option>
+        </select>
+      </div>
+      <div class="col-12 form-group">
+        <label for="exampleFormControlInput1"> {{ dataConfig.description }} </label>
+        <textarea class="form-control" [(ngModel)]="data.descripcion" rows="3"></textarea>
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" (click)="handleSubmit()" type="button"> {{ dataConfig.btnSaved }} </button>
+      </div>
     </div>
     <div class="col-12">
       <div class="d-flex bd-highlight">
@@ -82,7 +84,7 @@
                     {{ item }}</option>
               </select>
             </div>
-            <div class="col-12 form-group" *ngIf="( item.typeAction != 'txt' || item.typeAction == 'button' )">
+            <div class="col-12 form-group" *ngIf="( item.typeAction != 'txt' ) || ( item.typeAction != 'button' )">
               <label for="exampleFormControlInput1"> {{ dataConfig.urlMedia }} </label>
               <select class="form-control" [(ngModel)]="item.urlMedios">
                 <option value="">
@@ -109,6 +111,18 @@
                           (matChipInputTokenEnd)="addListButtonShift($event, item)">
                   </mat-chip-list>
                </mat-form-field>
+            </div>
+            <div class="col-12 form-group" *ngIf="item.typeAction == 'button'">
+              <mat-list dense>
+                <mat-list-item
+                  *ngFor="let button of item.listButton"
+                >
+                  {{ button.text }}
+                  <button mat-button color="primary" (click)="handleOpenFlow( button )">
+                    {{ dataConfig.txtButtonCrearFlows }}
+                  </button>
+                </mat-list-item>
+               </mat-list>
             </div>
             <div class="col-12 form-group">
               <label for="exampleFormControlInput1"> {{ dataConfig.answer }} </label>

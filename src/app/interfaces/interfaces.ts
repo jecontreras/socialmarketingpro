@@ -112,6 +112,8 @@ export interface Componente {
     id?: string;
     createdAt?: string;
     updatedAt?: string;
+    idInfoWhatsapp?: string;
+    views?:string;
   }
   export interface TAG {
     id?: string;
