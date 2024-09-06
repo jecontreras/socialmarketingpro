@@ -91,7 +91,7 @@ export class FormFlowsHsComponent implements OnInit {
         this.disabledFunctionApi = false;
         try {
           if( this.dataId.listLogic.listLogic.length ){
-            this.listLogic = this.dataId.listLogic.listLogic;
+            this.listLogic = this.dataId.listLogic.listLogic.filter( row => row.indicadorButton === this.dataId.id );
             this.id = this.dataId.listLogic.id;
           }else{
             this.listLogic= [
@@ -269,7 +269,7 @@ export class FormFlowsHsComponent implements OnInit {
       item.listButton.push(
         {
           text: value,
-          id: _.camelCase( value )
+          id: this._Tools.codigo()
         });
     }
 
@@ -355,12 +355,14 @@ export class FormFlowsHsComponent implements OnInit {
       if( this.views === 'one'){
         if( !row.listButtonLogic ) row.listButtonLogic = [];
         for( let itemD of result.listDetails ){
+          itemD.indicadorButton = button.id;
           row.listButtonLogic.push( itemD );
         }
       }
       if( this.views === 'button'){
         if( !row.listButtonLogic ) row.listButtonLogic = [];
         for( let itemD of result.listDetails ){
+          itemD.indicadorButton = button.id;
           row.listButtonLogic.push( itemD );
         }
       }
