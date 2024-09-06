@@ -60,6 +60,10 @@
               <label for="exampleFormControlInput1"> {{ dataConfig.indicatorNumber }} </label>
               <input type="text" class="form-control"  [(ngModel)]="item.indicador">
             </div>
+            <div class="col-12 form-group" *ngIf="item.indicadorButton">
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtIndicatorButton }} </label>
+              <input type="text" class="form-control"  [(ngModel)]="item.indicadorButton" disabled>
+            </div>
             <!--<div class="col-12 form-group">
               <mat-form-field class="example-chip-list">
 
@@ -84,7 +88,7 @@
                     {{ item }}</option>
               </select>
             </div>
-            <div class="col-12 form-group" *ngIf="( item.typeAction != 'txt' ) || ( item.typeAction != 'button' )">
+            <div class="col-12 form-group" *ngIf="( item.typeAction !== 'txt' ) || ( item.typeAction !== 'button' )">
               <label for="exampleFormControlInput1"> {{ dataConfig.urlMedia }} </label>
               <select class="form-control" [(ngModel)]="item.urlMedios">
                 <option value="">
@@ -118,7 +122,7 @@
                   *ngFor="let button of item.listButton"
                 >
                   {{ button.text }}
-                  <button mat-button color="primary" (click)="handleOpenFlow( button )">
+                  <button mat-button color="primary" (click)="handleOpenFlow( button, item )">
                     {{ dataConfig.txtButtonCrearFlows }}
                   </button>
                 </mat-list-item>

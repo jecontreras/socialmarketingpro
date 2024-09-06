@@ -27,158 +27,11 @@ export class FormFlowsHsComponent implements OnInit {
   titulo:string="Crear"
   listLogic:any = [
     {
-      indicador: "He visto esto en Facebook",
+      indicador: "",
       urlMedios: "",
       listFollowing: [],
       listButton: [],
-      respuesta: `¡Hola Buen Día! Bienvenidos a la Tienda Virtual @liam_stilos
-        01. Ver catalogó!
-        02. Hacer pedido!
-        03. ¡Chatear con un asesor!
-        00. Volver al menú principal!
-      `
-    },
-    {
-      indicador: "hola",
-      urlMedios: "",
-      listFollowing: [],
-      listButton: [],
-      respuesta: `¡Hola Buen Día! Bienvenidos a la Tienda Virtual @liam_stilos
-        01. Ver catalogó!
-        02. Hacer pedido!
-        03. ¡Chatear con un asesor!
-        00. Volver al menú principal!
-      `
-    },
-    {
-      indicador: "1",
-      urlMedios: "",
-      listFollowing: [],
-      listButton: [],
-      respuesta: `
-        4 *Ver Catalogo de Hombre*
-        5 *Ver Catalogo de Mujer*
-        6 *Ver Catalogo de Jean Hombre*
-        7 *Ver Catalogo de Jean Mujer*
-        0. *Volver al menú principal*
-      `
-    },
-    {
-      indicador: "2",
-      urlMedios: "",
-      listFollowing: [],
-      listButton: [],
-      respuesta: `
-      *Para el proceso de hacer pedido los requisitos son*
-      *. Foto o modelo del producto interesado?
-      *. Ciudad de Destino?
-      *. Nombre de la persona a recibir?
-      *. Talla interesado?
-      *. ¿Direccion a recibir?
-      *. ¿Telefono de quien lo recibe?
-
-      ¡Nota! Una vez nos manda toda la información nosotros nos encargamos del proceso de validación de tu pedido y en breve te mandaremos el número de guía.
-
- Recuerda que todos nuestros envíos son dé forma *Gratuita*
-
- ¡Gracias por tu compra y por preferirnos Feliz día!
-
-      `
-    },
-    {
-      indicador: "3",
-      urlMedios: "",
-      listFollowing: [],
-      listButton: [],
-      respuesta: ` *En unos Momentos un Asesor se Comunicara contigo*! `
-    },
-    {
-      indicador: "4",
-      urlMedios: "64ae40b5802dc8001412ac05",
-      listFollowing: [],
-      listButton: [],
-      respuesta: `
-      *Para el proceso de hacer pedido los requisitos son*
-                    *. Foto o modelo del producto interesado?
-                    *. Ciudad de Destino?
-                    *. Nombre de la persona a recibir?
-                    *. Talla interesado?
-                    *. ¿Direccion a recibir?
-                    *. ¿Telefono de quien lo recibe?
-
-                    ¡Nota! Una vez nos manda toda la información nosotros nos encargamos del proceso de validación de tu pedido y en breve te mandaremos el número de guía.
-                    Recuerda que todos nuestros envíos son dé forma *Gratuita*
-                    ¡Gracias por tu compra y por preferirnos Feliz día!
-      `
-    },
-    {
-      indicador: "5",
-      urlMedios: "64af63db865a1300140ee306",
-      listFollowing: [],
-      listButton: [],
-      respuesta: `
-      *Para el proceso de hacer pedido los requisitos son*
-                    *. Foto o modelo del producto interesado?
-                    *. Ciudad de Destino?
-                    *. Nombre de la persona a recibir?
-                    *. Talla interesado?
-                    *. ¿Direccion a recibir?
-                    *. ¿Telefono de quien lo recibe?
-
-                    ¡Nota! Una vez nos manda toda la información nosotros nos encargamos del proceso de validación de tu pedido y en breve te mandaremos el número de guía.
-                    Recuerda que todos nuestros envíos son dé forma *Gratuita*
-                    ¡Gracias por tu compra y por preferirnos Feliz día!
-      `
-    },
-    {
-      indicador: "6",
-      urlMedios: "64af63db865a1300140ee306",
-      listFollowing: [],
-      listButton: [],
-      respuesta: `
-      *Para el proceso de hacer pedido los requisitos son*
-                    *. Foto o modelo del producto interesado?
-                    *. Ciudad de Destino?
-                    *. Nombre de la persona a recibir?
-                    *. Talla interesado?
-                    *. ¿Direccion a recibir?
-                    *. ¿Telefono de quien lo recibe?
-
-                    ¡Nota! Una vez nos manda toda la información nosotros nos encargamos del proceso de validación de tu pedido y en breve te mandaremos el número de guía.
-                    Recuerda que todos nuestros envíos son dé forma *Gratuita*
-                    ¡Gracias por tu compra y por preferirnos Feliz día!
-      `
-    },
-    {
-      indicador: "7",
-      urlMedios: "64af63db865a1300140ee306",
-      listFollowing: [],
-      listButton: [],
-      respuesta: `
-      *Para el proceso de hacer pedido los requisitos son*
-                    *. Foto o modelo del producto interesado?
-                    *. Ciudad de Destino?
-                    *. Nombre de la persona a recibir?
-                    *. Talla interesado?
-                    *. ¿Direccion a recibir?
-                    *. ¿Telefono de quien lo recibe?
-
-                    ¡Nota! Una vez nos manda toda la información nosotros nos encargamos del proceso de validación de tu pedido y en breve te mandaremos el número de guía.
-                    Recuerda que todos nuestros envíos son dé forma *Gratuita*
-                    ¡Gracias por tu compra y por preferirnos Feliz día!
-      `
-    },
-    {
-      indicador: "0",
-      urlMedios: "",
-      listFollowing: [],
-      listButton: [],
-      respuesta: `¡Hola Buen Día! Bienvenidos a la Tienda Virtual @liam_stilos
-        01. Ver catalogó!
-        02. Hacer pedido!
-        03. ¡Chatear con un asesor!
-        00. Volver al menú principal!
-      `
+      respuesta: ``
     },
   ];
   listTypeAction:string[] = [
@@ -201,6 +54,7 @@ export class FormFlowsHsComponent implements OnInit {
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   dataConfig:any = {};
   views:string = "one";
+  disabledFunctionApi:boolean = true;
 
   constructor(
     private _logicWhatsapp: InfoWhatsappService,
@@ -232,9 +86,39 @@ export class FormFlowsHsComponent implements OnInit {
 
       }
     }else{
-      this.id = this.dataId.idInfoWhatsapp;
-      this.views = this.dataId.views;
-      console.log("ELSE")
+      this.views = this.dataId.views || 'one';
+      if( this.views === 'button' ){
+        this.disabledFunctionApi = false;
+        try {
+          if( this.dataId.listLogic.listLogic.length ){
+            this.listLogic = this.dataId.listLogic.listLogic;
+            this.id = this.dataId.listLogic.id;
+          }else{
+            this.listLogic= [
+              {
+                indicador: this.dataId.indicador,
+                indicadorButton: this.dataId.id,
+                urlMedios: "",
+                listFollowing: [],
+                listButton: [],
+                respuesta: ""
+              }
+            ]
+          }
+        } catch (error) {
+          this.listLogic= [
+            {
+              indicador: this.dataId.indicador,
+              indicadorButton: this.dataId.id,
+              urlMedios: "",
+              listFollowing: [],
+              listButton: [],
+              respuesta: ""
+            }
+          ]
+        }
+      }
+      console.log("ELSE", this.dataId)
     }
     console.log("***", this.data)
     this.getGaleria();
@@ -298,11 +182,15 @@ export class FormFlowsHsComponent implements OnInit {
   }
 
   async handleSubmit(){
+    if( this.disabledFunctionApi === false ) {
+      this.closeDialog( { detalle: this.data, listDetails: this.listLogic } );
+      return false;
+    }
     if( this.disableBtn ) return false;
     this.disableBtn = true;
     if( this.id ) await this.handleUpdate();
     else await this.handleCreate();
-    this.closeDialog();
+    this.closeDialog({});
     this.disableBtn = false;
   }
 
@@ -338,7 +226,8 @@ export class FormFlowsHsComponent implements OnInit {
 
   handleUpdateDetails( item:any ){
     return new Promise( resolve =>{
-      if( !item.id ) resolve( true );
+      if( !item.id ) return resolve( true );
+      if( this.disabledFunctionApi === false ) return resolve( true );
       this._logicWhatsapp.updateWhatsappDetalle( {
         detalle: {
           estado: 1
@@ -442,21 +331,40 @@ export class FormFlowsHsComponent implements OnInit {
       this.listLogic.push( { ...data } );
   }
 
-  closeDialog(){
+  closeDialog( obj:any ){
 
-    this.dialogRef.close();
+    this.dialogRef.close( obj || null );
   }
 
-  handleOpenFlow( item ){
-    item.idInfoWhatsapp = this.data.id;
-    item.views = 'button';
+  handleOpenFlow( button, row ){
+    button.idInfoWhatsapp = this.data.id;
+    button.views = 'button';
+    button.indicador = row.indicador;
+    button = {
+      ...button,
+      listLogic: row
+    }
     const dialogRef = this.dialog.open(FormFlowsComponent, {
       width: '100%',
-      data: item || {},
+      data: button || {},
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed');
+      console.log('The dialog was closed', result);
+      if( !result ) return false;
+      if( this.views === 'one'){
+        if( !row.listButtonLogic ) row.listButtonLogic = [];
+        for( let itemD of result.listDetails ){
+          row.listButtonLogic.push( itemD );
+        }
+      }
+      if( this.views === 'button'){
+        if( !row.listButtonLogic ) row.listButtonLogic = [];
+        for( let itemD of result.listDetails ){
+          row.listButtonLogic.push( itemD );
+        }
+      }
+      console.log("******344", this.listLogic, this.data )
     });
   }
 

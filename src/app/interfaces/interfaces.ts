@@ -114,6 +114,9 @@ export interface Componente {
     updatedAt?: string;
     idInfoWhatsapp?: string;
     views?:string;
+    text?: string;
+    indicador?: string;
+    listLogic?: any;
   }
   export interface TAG {
     id?: string;
