@@ -227,7 +227,7 @@ export class FormFlowsHsComponent implements OnInit {
   handleUpdateDetails( item:any ){
     return new Promise( resolve =>{
       if( !item.id ) return resolve( true );
-      if( this.disabledFunctionApi === false ) return resolve( true );
+      //if( this.disabledFunctionApi === false ) return resolve( true );
       this._logicWhatsapp.updateWhatsappDetalle( {
         detalle: {
           estado: 1

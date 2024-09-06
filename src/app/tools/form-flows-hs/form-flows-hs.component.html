@@ -88,7 +88,7 @@
                     {{ item }}</option>
               </select>
             </div>
-            <div class="col-12 form-group" *ngIf="( item.typeAction !== 'txt' ) || ( item.typeAction !== 'button' )">
+            <div class="col-12 form-group" *ngIf="( item.typeAction !== 'txt' && item.typeAction !== 'button' )">
               <label for="exampleFormControlInput1"> {{ dataConfig.urlMedia }} </label>
               <select class="form-control" [(ngModel)]="item.urlMedios">
                 <option value="">
