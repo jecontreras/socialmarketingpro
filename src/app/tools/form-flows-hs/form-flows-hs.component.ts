@@ -13,6 +13,7 @@ import { FLOWS, INDICATOR } from 'src/app/interfaces/interfaces';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormFlowsComponent } from 'src/app/dialog/form-flows/form-flows.component';
+import { FileDetailComponent } from 'src/app/dialog/file-detail/file-detail.component';
 
 @Component({
   selector: 'app-form-flows-hs',
@@ -367,6 +368,25 @@ export class FormFlowsHsComponent implements OnInit {
         }
       }
       console.log("******344", this.listLogic, this.data )
+    });
+  }
+
+  handleFile( txtFormat:string ){
+    const dialogRef = this.dialog.open(FileDetailComponent, {
+      width: '50%',
+      height: "600px",
+      data: {
+        format: txtFormat,
+        user: this.dataUser.id
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(async  ( result ) => {
+      console.log('The dialog was closed', result );
+      if( result.id ){
+        this.data.urlMedios = result.id;
+      }
+
     });
   }
 

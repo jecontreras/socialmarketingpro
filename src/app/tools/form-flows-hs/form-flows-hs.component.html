@@ -97,6 +97,8 @@
                 <option [value]="item.id" *ngFor="let item of listGaleria">
                     {{ item.titulo }}</option>
               </select>
+              <button class="btn btn-primary" type="button" (click)="getGaleria()"> {{ dataConfig.txtReload }} </button>
+              <button class="btn btn-primary" type="button" (click)="handleFile()"> {{ dataConfig.txtCrearFile }} </button>
             </div>
             <div class="col-12 form-group" *ngIf="item.typeAction == 'button'">
               <label for="exampleFormControlInput1"> {{ dataConfig.txtButtonShift }} </label>
