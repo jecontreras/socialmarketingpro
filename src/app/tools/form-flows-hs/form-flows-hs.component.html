@@ -135,6 +135,12 @@
               <textarea class="form-control" [(ngModel)]="item.respuesta" rows="6" ></textarea>
             </div>
             <div class="col-12 form-group">
+              <section class="example-section">
+                <mat-checkbox class="example-margin" [(ngModel)]="item.respUser">Espera una Respues!</mat-checkbox>
+              </section>
+
+            </div>
+            <div class="col-12 form-group">
               <label for="exampleFormControlInput1"> {{ dataConfig.txtTimeMessage }} </label>
               <input type="number" class="form-control"  [(ngModel)]="item.timeSend">
             </div>

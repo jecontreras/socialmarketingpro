@@ -16,6 +16,7 @@ import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { CanvasBlocksComponent } from './canvas-blocks/canvas-blocks.component';
 import { FormFlowsHsComponent } from './form-flows-hs/form-flows-hs.component';
 import { MatListModule } from '@angular/material/list';
+import { ChatNewDetailedComponent } from './chat-new-detailed/chat-new-detailed.component';
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { MatListModule } from '@angular/material/list';
     CanvasBlocksComponent,
     FormFlowsHsComponent,
     BottomSheetSheetFastAnswer,
-    BottomSheetSheetFlows
+    BottomSheetSheetFlows,
+    ChatNewDetailedComponent
   ],
   exports:[
     TablaComponent,
@@ -38,7 +40,8 @@ import { MatListModule } from '@angular/material/list';
     CanvasBlocksComponent,
     FormFlowsHsComponent,
     BottomSheetSheetFastAnswer,
-    BottomSheetSheetFlows
+    BottomSheetSheetFlows,
+    ChatNewDetailedComponent
   ],
   imports: [
     CommonModule,

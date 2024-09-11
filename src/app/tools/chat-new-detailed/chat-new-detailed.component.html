@@ -1,0 +1,70 @@
+<div class="chat-container">
+  <!-- Header del chat -->
+  <div class="chat-header">
+    <img src="assets/user-avatar.png" alt="User Avatar" class="user-avatar" />
+    <div class="chat-header-details">
+      <h3 class="user-name">Nombre del Contacto</h3>
+      <p class="user-status">En línea</p>
+    </div>
+  </div>
+
+  <!-- Contenedor de mensajes -->
+  <div class="chat-messages" #chatMessages>
+    <div *ngFor="let message of messages">
+      <div class="message-container" [ngClass]="{'user-message': message.sentByUser, 'received-message': !message.sentByUser}">
+
+        <!-- Mostrar respuesta relacionada si existe -->
+        <div *ngIf="message.relatedTo" class="reply-message">
+          <p>Respondiendo a: {{ message.relatedTo.content }}</p>
+        </div>
+
+        <!-- Mostrar contenido del mensaje -->
+        <div class="message-content">
+          <p>{{ message.content }}</p>
+        </div>
+
+        <!-- Botón de reenviar -->
+        <button class="forward-btn" (click)="forwardMessage(message)">🔄 Reenviar</button>
+
+        <!-- Mostrar archivos si existen -->
+        <div *ngIf="message.file" class="message-file">
+          <a [href]="message.file" target="_blank">📎 {{ message.content }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Footer del chat con el input de mensaje -->
+  <div class="chat-footer">
+    <!-- Mostrar respuesta actual si existe -->
+    <div *ngIf="replyMessage" class="current-reply">
+      Respondiendo a: {{ replyMessage.content }}
+      <button (click)="replyMessage = null" class="cancel-reply-btn">Cancelar</button>
+    </div>
+
+    <!-- Picker de emojis -->
+    <div *ngIf="showEmojiPicker" #emojiPicker>
+      <emoji-mart set="twitter" (emojiSelect)="addEmoji($event)"></emoji-mart>
+    </div>
+
+    <div class="input-container">
+      <button (click)="toggleEmojiPicker()">😊</button>
+
+      <!-- Campo de texto para el mensaje -->
+      <!--<input
+        type="text"
+        formControlName="message"
+        (keydown.enter)="handleEnter($event)"
+        placeholder="Escribe un mensaje..."
+        class="chat-input"
+      />-->
+
+      <!-- Botón para adjuntar archivo -->
+      <input type="file" id="fileInput" hidden (change)="handleFileInput($event.target.files)" />
+      <label for="fileInput" class="attach-file-btn">📎</label>
+
+      <!-- Botón para enviar -->
+      <button (click)="sendMessage()">➤</button>
+    </div>
+  </div>
+</div>

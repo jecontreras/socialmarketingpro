@@ -115,7 +115,9 @@ export class ListChatDetailedComponent implements OnInit {
             urlMedios: data.msx.urlMedios,
             user: data.msx.user,
             txt: data.msx.body,
-            typeTxt: data.msx.typeTxt
+            typeTxt: data.msx.typeTxt,
+            relationMessage: data.msx.relationMessage,
+            dataRelationMessage: this.listDetails.find( item => item.idWhatsapp === data.msx.relationMessage )
           });
         }
       }

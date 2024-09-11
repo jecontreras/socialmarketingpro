@@ -80,9 +80,11 @@ export interface Componente {
     viewFile?: string;
     typeTxt?: string;
     seen?: number;
-    relationMessage?: number;
+    relationMessage?: string;
     estado?: number;
     numberGuide?: string;
+    idWhatsapp?: string;
+    dataRelationMessage?: any;
   }
 
   export interface MSG{

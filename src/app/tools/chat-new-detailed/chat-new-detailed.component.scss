@@ -1,0 +1,157 @@
+/* Contenedor principal del chat */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;  /* Ajusta al 100% de la altura de la ventana */
+  width: 100vw;   /* Ajusta al 100% del ancho de la ventana */
+  background-color: #e5ddd5;
+}
+
+/* Header del chat donde aparece el nombre y la foto */
+.chat-header {
+  background-color: #128c7e;
+  color: white;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid #ccc;
+  height: 10vh; /* 10% de la altura de la ventana */
+}
+
+.user-photo {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.user-name {
+  font-size: 18px;
+  font-weight: bold;
+}
+
+/* Contenedor de mensajes */
+.chat-messages {
+  flex-grow: 1;
+  overflow-y: auto;  /* Para hacer scroll si hay muchos mensajes */
+  padding: 10px;
+}
+
+/* Estilos para los mensajes enviados por el usuario */
+.message-sent {
+  background-color: #dcf8c6;
+  align-self: flex-end;
+  padding: 10px;
+  border-radius: 10px 10px 0 10px;
+  margin: 5px 0;
+  max-width: 60%;
+}
+
+/* Estilos para los mensajes recibidos */
+.message-received {
+  background-color: white;
+  align-self: flex-start;
+  padding: 10px;
+  border-radius: 10px 10px 10px 0;
+  margin: 5px 0;
+  max-width: 60%;
+}
+
+/* Animación para los mensajes nuevos */
+@keyframes slideIn {
+  from {
+    transform: translateY(50%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.message-sent, .message-received {
+  animation: slideIn 0.3s ease-out;
+}
+
+/* Contenido del mensaje */
+.message-content {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Imagen dentro de un mensaje */
+.image-message {
+  max-width: 100%;
+  border-radius: 10px;
+  margin-top: 5px;
+}
+
+/* Audio dentro de un mensaje */
+audio {
+  margin-top: 5px;
+  width: 100%;
+}
+
+/* Video dentro de un mensaje */
+video {
+  margin-top: 5px;
+  width: 100%;
+  border-radius: 10px;
+}
+
+/* Contenedor de la respuesta (reply) */
+.related-message {
+  background-color: #f0f0f0;
+  padding: 5px;
+  border-left: 3px solid #128c7e;
+  margin-bottom: 5px;
+  font-size: 12px;
+  color: #555;
+}
+
+/* Contenedor de entrada de texto y botones */
+.input-container {
+  background-color: #f1f1f1;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 10vh; /* 10% de la altura de la ventana */
+}
+
+/* Input de mensaje */
+input[type="text"] {
+  flex-grow: 1;
+  padding: 10px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+  outline: none;
+  font-size: 16px;
+}
+
+/* Botones de archivos, emojis y enviar */
+button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  margin-left: 10px;
+  font-size: 18px;
+}
+
+button:focus {
+  outline: none;
+}
+
+/* Icono de archivo */
+button:before {
+  content: '📎'; /* Cambia este contenido por el emoji o ícono que desees */
+}
+
+/* Estilo para el picker de emojis */
+ngx-emoji-mart {
+  position: absolute;
+  bottom: 60px;
+  right: 10px;
+}
+
