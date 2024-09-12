@@ -2,8 +2,8 @@
 .chat-container {
   display: flex;
   flex-direction: column;
-  height: 100vh;  /* Ajusta al 100% de la altura de la ventana */
-  width: 100vw;   /* Ajusta al 100% del ancho de la ventana */
+  height: 81vh;  /* Ajusta al 100% de la altura de la ventana */
+  width: 50vw;   /* Ajusta al 100% del ancho de la ventana */
   background-color: #e5ddd5;
 }
 
@@ -112,12 +112,10 @@ video {
 
 /* Contenedor de entrada de texto y botones */
 .input-container {
-  background-color: #f1f1f1;
-  padding: 10px;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 10vh; /* 10% de la altura de la ventana */
+  height: 5vh; /* 10% de la altura de la ventana */
 }
 
 /* Input de mensaje */
@@ -143,10 +141,6 @@ button:focus {
   outline: none;
 }
 
-/* Icono de archivo */
-button:before {
-  content: '📎'; /* Cambia este contenido por el emoji o ícono que desees */
-}
 
 /* Estilo para el picker de emojis */
 ngx-emoji-mart {
