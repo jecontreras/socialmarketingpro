@@ -2,8 +2,41 @@
   <!-- Header del chat -->
   <div class="chat-header">
     <div class="chat-user-info">
-      <img [src]="chatUser.photo" alt="Foto de perfil" class="user-photo">
-      <span class="user-name">{{ chatUser.name }}</span>
+      <img [src]="data['contactIdList']?.foto || './assets/imagenes/perfil.png'" alt="Foto de perfil" class="user-photo">
+      <span class="user-name">
+        {{  _toolsService.formatNumer( data.to )  }}
+      </span>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex bd-highlight">
+          <div class="p-2 flex-grow-1 bd-highlight">
+            <label *ngIf="data.tipeGuide">Transportadora: {{ data.tipeGuide }}</label>
+              <div class="col-12">
+                <div class="form-group">
+                  <input
+                    class="form-control"
+                    type="text"
+                    [(ngModel)]="data.numberGuide"
+                    [placeholder]="dataConfig.numberGuider"
+                    (change)="handleUpdateNumber()"
+                  >
+                </div>
+              </div>
+          </div>
+          <div class="p-2 bd-highlight">
+            <!--<button mat-mini-fab color="warn" (click)="drawer.toggle()">
+              <mat-icon>perm_identity</mat-icon>
+            </button>-->
+            <button mat-mini-fab color="warn" (click)="handleOpenContact()">
+              <mat-icon>perm_identity</mat-icon>
+            </button>
+            <button mat-mini-fab color="primary" (click)="handleClose()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -16,15 +49,23 @@
         <span *ngIf="!message.urlMedios">{{ message.txt }}</span>
         <img *ngIf="( message.typeTxt === 'image' ) || ( message.typeTxt === 'photo' ) " [src]="message.urlMedios" alt="imagen" class="image-message">
         <audio *ngIf="message.typeTxt === 'audio'" controls>
-          <source [src]="message.typeTxt" type="audio/mp3">
+          <source [src]="message.urlMedios" type="audio/mp3">
         </audio>
         <video *ngIf="message.typeTxt === 'video'" controls>
-          <source [src]="message.typeTxt" type="video/mp4">
+          <source [src]="message.urlMedios" type="video/mp4">
         </video>
-        <a *ngIf="message.typeTxt === 'application'" [href]="message.typeTxt" download="{{ message.txt }}">{{ message.fileName }}</a>
+        <a *ngIf="message.typeTxt === 'document'" [href]="message.urlMedios" download="{{ message.urlMedios }}" target="_blank">{{ message.urlMedios }}</a>
+        <span *ngIf="( message.typeTxt === 'flow' )">
+          <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="handleOpenFlows( message );" >
+            <mat-icon>remove_red_eye</mat-icon>
+          </button>Flujo
+        </span>
+        <span style="text-align: end;">
+          {{ message.createdAt | date:'M/d/yy, h:mm a' }}
+        </span>
 
         <!-- Botón de reenviar -->
-        <button (click)="forwardMessage(message)">Reenviar</button>
+        <button (click)="forwardMessage(message)" *ngIf="!message.urlMedios">Reenviar</button>
       </div>
     </div>
   </div>
@@ -64,6 +105,7 @@
             <mat-icon> insert_photo</mat-icon>
           </button>
         </mat-menu>
+
         <!--<input type="file" (change)="handleFileInput($event)" multiple hidden #fileInput>
         <button (click)="fileInput.click()">📎</button>-->
 

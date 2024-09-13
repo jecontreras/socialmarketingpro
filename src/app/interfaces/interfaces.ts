@@ -85,6 +85,7 @@ export interface Componente {
     numberGuide?: string;
     idWhatsapp?: string;
     dataRelationMessage?: any;
+    tipeGuide?:string;
   }
 
   export interface MSG{

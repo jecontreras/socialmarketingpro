@@ -140,7 +140,10 @@ export class ConfigKeysService {
       txtButtonCrearFlows: "Crear Flujo",
       txtIndicatorButton: "Indicador del boton",
       txtReload: "Refrescar",
-      txtCrearFile: "Crear archivo"
+      txtCrearFile: "Crear archivo",
+      txtChatNew: "Chat Nuevos",
+      txtChatAnswered: "Chat Contestado",
+      txtChatFinalized: "Chat Finalizado"
     }
   };
   constructor() { }

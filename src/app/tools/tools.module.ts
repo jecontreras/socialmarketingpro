@@ -10,13 +10,14 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgbAlertModule, NgbDatepickerModule, NgbPaginationModule } from '@ng-bootstrap/ng-bootstrap';
 import { TableStatisticsComponent } from './table-statistics/table-statistics.component';
 import { ListChatComponent } from './list-chat/list-chat.component';
-import { BottomSheetSheetFastAnswer, BottomSheetSheetFlows, ListChatDetailedComponent } from './list-chat-detailed/list-chat-detailed.component';
+//import { BottomSheetSheetFastAnswer, BottomSheetSheetFlows, ListChatDetailedComponent } from './list-chat-detailed/list-chat-detailed.component';
 import { FullConnectionService } from '../servicesComponent/full-connection.service';
 import { PickerModule } from '@ctrl/ngx-emoji-mart';
 import { CanvasBlocksComponent } from './canvas-blocks/canvas-blocks.component';
 import { FormFlowsHsComponent } from './form-flows-hs/form-flows-hs.component';
 import { MatListModule } from '@angular/material/list';
 import { ChatNewDetailedComponent } from './chat-new-detailed/chat-new-detailed.component';
+import { ListChatOptionComponent } from './list-chat-option/list-chat-option.component';
 
 @NgModule({
   declarations: [
@@ -24,23 +25,20 @@ import { ChatNewDetailedComponent } from './chat-new-detailed/chat-new-detailed.
     ArchivosComponent,
     TableStatisticsComponent,
     ListChatComponent,
-    ListChatDetailedComponent,
+    //ListChatDetailedComponent,
     CanvasBlocksComponent,
     FormFlowsHsComponent,
-    BottomSheetSheetFastAnswer,
-    BottomSheetSheetFlows,
-    ChatNewDetailedComponent
+    ChatNewDetailedComponent,
+    ListChatOptionComponent
   ],
   exports:[
     TablaComponent,
     TableStatisticsComponent,
     ArchivosComponent,
     ListChatComponent,
-    ListChatDetailedComponent,
+    //ListChatDetailedComponent,
     CanvasBlocksComponent,
     FormFlowsHsComponent,
-    BottomSheetSheetFastAnswer,
-    BottomSheetSheetFlows,
     ChatNewDetailedComponent
   ],
   imports: [

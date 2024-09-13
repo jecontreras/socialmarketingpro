@@ -1,0 +1,47 @@
+<div class="col-12">
+  <div class="form-group">
+    <input class="form-control" type="search" [(ngModel)]="txtFilter" [placeholder]="dataConfig.search" id="example-search-input" (change)="handleFilter()">
+  </div>
+</div>
+<div class="col-12">
+  <button mat-raised-button color="primary" (click)="reloadCharge()">{{ dataConfig.txtUpdateWhatsapp }}</button>
+</div>
+<div class="col-12 list-container">
+  <mat-list>
+    <mat-list-item
+      *ngFor="let item of listChat"
+      class="mat-elevation-z2 mouse"
+      (click)="handleSelectChat( item.whatsappIdList )"
+      [ngClass]="
+            { 'checkSelect': item.check == true,
+              'checkShipment': item.whatsappIdList['tipeGuide']
+            }
+          "
+    >
+      <div mat-line>
+        <div class="chat-room__content r9">
+        <div class="chat-room__users-avatar-container">
+          <img alt="Default Avatar" class="chat-room__users-avatar r2"
+            src="{{ item.whatsappIdList['contactIdList']?.foto || './assets/img/theme/team-4-800x800.jpg' }}?stp=dst-jpg_s96x96&amp;ccb=11-4&amp;oh=01_ASBO06DXF88XYlaIfx-YqvV1eJejfPAe8FjEoSPkUYzd8w&amp;oe=66268F45&amp;_nc_sid=e6ed6c&amp;_nc_cat=111"
+          />
+        </div>
+        <div class="chat-room__info r3">
+          <div>
+            <div class="chat-room__user-name r8">
+              <span class="full-name-text r1"> {{ _toolsService.formatNumer( item.whatsappIdList.to ) }} </span>
+              <span class="r4"> <span *ngIf="item.whatsappIdList.seen === 0" class="text-success">●</span>  {{ item.whatsappIdList.createdAt | date:'M/d/yy, h:mm a' }} </span>
+            </div>
+          </div>
+          <div class="chat-room__info-row r5">
+            <div class="chat-room__last-message r6">
+              <div class="chat-room-last-message__container">
+                <span class="last-message last-message-pre">{{ item.whatsappIdList.txt }} </span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>

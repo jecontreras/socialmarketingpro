@@ -2,16 +2,20 @@ import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, Input, OnInit, Output, ViewChild,EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
 import { Store } from '@ngrx/store';
+import { DetailContactComponent } from 'src/app/dialog/detail-contact/detail-contact.component';
 import { FileDetailComponent } from 'src/app/dialog/file-detail/file-detail.component';
+import { OpenGalleriaComponent } from 'src/app/dialog/open-galleria/open-galleria.component';
 import { MSG, USERT, WHATSAPPDETAILS } from 'src/app/interfaces/interfaces';
 import { USER } from 'src/app/interfaces/user';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ToolsService } from 'src/app/services/tools.service';
 import { AudioRecorderServiceService } from 'src/app/servicesComponent/audio-recorder-service.service';
 import { ChatService } from 'src/app/servicesComponent/chat.service';
+import { ContactService } from 'src/app/servicesComponent/contact.service';
+import { WhatsappTxtUserService } from 'src/app/servicesComponent/whatsapp-txt-user.service';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
 
 @Component({
@@ -64,6 +68,9 @@ export class ChatNewDetailedComponent implements OnInit{
     public _toolsService: ToolsService,
     public dialog: MatDialog,
     private chatService: ChatService,
+    private _contactServices: ContactService,
+    private Router: Router,
+    private _whatsappTxtUser: WhatsappTxtUserService
   ) {
     this.dataConfig = _config._config.keys;
     this._store.subscribe((store: any) => {
@@ -116,7 +123,7 @@ export class ChatNewDetailedComponent implements OnInit{
         }
       }
       //this.invertMessagesOrder();
-      this.scrollToBottom();
+      setTimeout(()=> this.scrollToBottom(), 100 );
     } catch (error) { }
     //console.log( this.messages )
   }
@@ -264,7 +271,7 @@ export class ChatNewDetailedComponent implements OnInit{
     }
 
   }*/
-  handleProcessWhatsapp( txt:string, type: string ){
+  handleProcessWhatsapp( txt:string, type: string, optR:any = {} ){
     return new Promise( resolve =>{
       let urlHalf = type === 'txt'? '' : txt;
       let Txt = type === 'txt'? txt : '';
@@ -277,7 +284,9 @@ export class ChatNewDetailedComponent implements OnInit{
               "typeTxt": type,
               "quien": 1,
               "id": 1,
-              "userCreate": this.dataUser.id
+              "userCreate": this.dataUser.id,
+              "relationMessage": optR.relationMessage
+
           },
           "user": { "id": this.dataUser.cabeza }
       };
@@ -297,15 +306,15 @@ export class ChatNewDetailedComponent implements OnInit{
     this.audioBlob = null;
   }
 
-  async sendMessage() {
+  async sendMessage( opt = {} ) {
     // Lógica para enviar el mensaje
     if (this.chatForm.valid) {
       const message = this.chatForm.get('message').value;
-      //console.log('Mensaje enviado:', message);
+      console.log('Mensaje enviado:', message);
       if( this.audioBlob ) return this.handleSubmitRecording();
       if( !message ) return false;
       this.btnDisabled = true;
-      let result:any = await this.handleProcessWhatsapp(message, 'txt');
+      let result:any = await this.handleProcessWhatsapp(message, 'txt', opt );
       this.btnDisabled = false;
       if( result.data.whatsappTxt ){
         result = result.data;
@@ -343,12 +352,17 @@ export class ChatNewDetailedComponent implements OnInit{
     if (textToAdd !== null) {
       let forwardedMessage = {
         sender: 'me',
-        text: `${textToAdd} (Reenviado: ${message.text})`,
+        text: `${textToAdd} (Reenviado: ${message.txt})`,
         createdAt: new Date(),
-        replyTo: message
-      };
+        dataRelationMessage: message,
+        relationMessage: message.id
 
-      this.messages.push(forwardedMessage);
+      };
+      this.chatForm.patchValue({
+        message: forwardedMessage.text
+      });
+      this.sendMessage( forwardedMessage )
+      //this.messages.push(forwardedMessage);
     }
   }
 
@@ -362,4 +376,84 @@ export class ChatNewDetailedComponent implements OnInit{
       }
     }
   }
+
+  async handleOpenContact(){
+    let item:any = this.data;
+    let contact = await this.getContactId( item.contactId.id || item.contactId );
+    item.contactId = contact;
+    item.check = true;
+    const dialogRef = this.dialog.open(DetailContactComponent, {
+      data: item,
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+    });
+  }
+
+  getContactId( id ){
+    return new Promise( resolve =>{
+      this._contactServices.get( { where:{
+        id: id
+      }, limit: 1} ).subscribe( res => resolve( res.data[0] ), error=> resolve( error ) );
+    })
+  }
+
+  async handleClose(){
+    let confirm = await this._toolsService.confirm( {title: this.dataConfig.txtDetailsFinChat, text:"", confirmButtonText: this.dataConfig.closeChat } );
+    if(!confirm.value) return false;
+    if( this.btnDisabled ) return false;
+    this.btnDisabled = true;
+    let dataWhatsappUser:any = await this.getWhatsappUser( );
+    if( dataWhatsappUser ){
+      if( dataWhatsappUser.estado === 0 ) {
+        let result:any = await this.nextUpdateWhatsappTxtUser( dataWhatsappUser );
+        if( result ) this._toolsService.presentToast( this.dataConfig.closeChat );
+        this.Router.navigate(['/liveChat', 'aaaaaaaaa' ] );
+        this.data = {};
+        this.messages = [];
+        //setTimeout(()=>location.reload(), 3000 );
+      }
+    }
+    this.btnDisabled = false;
+  }
+
+  getWhatsappUser(){
+    return new Promise( resolve =>{
+      this._whatsappTxtUser.get( {
+        where:{
+          whatsappId: this.data.id,
+          userId: this.dataUser.id
+        }
+       } ).subscribe( res =>{
+        resolve( res.data[0] );
+      }, error => resolve( error ) );
+    } );
+  }
+
+  nextUpdateWhatsappTxtUser( dataWhatsappUser ){
+    return new Promise( resolve =>{
+      this._whatsappTxtUser.update( { id: dataWhatsappUser.id, estado: 1, sendAnswered: 2 } ).subscribe( res =>{
+        resolve( res );
+      }, ( error )=> resolve( error ) );
+    });
+  }
+
+  handleUpdateNumber(){
+    this._whatsappDetails.update( { id: this.data.id, numberGuide: this.data.numberGuide } ).subscribe( res => {
+      this._toolsService.tooast("Actualizado");
+    });
+  }
+
+  handleOpenFlows( item ){
+    const dialogRef = this.dialog.open(OpenGalleriaComponent, {
+      width: '50%',
+      data: { id: item.urlMedios },
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
 }
