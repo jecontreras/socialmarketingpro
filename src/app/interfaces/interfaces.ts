@@ -86,6 +86,7 @@ export interface Componente {
     idWhatsapp?: string;
     dataRelationMessage?: any;
     tipeGuide?:string;
+    contactIdList?: any;
   }
 
   export interface MSG{

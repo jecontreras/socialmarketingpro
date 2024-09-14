@@ -6,6 +6,9 @@
       <span class="user-name">
         {{  _toolsService.formatNumer( data.to )  }}
       </span>
+      <span class="user-name" *ngIf="data.contactIdList" style="font-size: 8px;">
+        {{ data.contactIdList.name  }}
+      </span>
     </div>
     <div class="row">
       <div class="col-12">
@@ -113,6 +116,9 @@
         <div *ngIf="emojiPickerVisible" #emojiPicker>
           <emoji-mart set="twitter" (emojiSelect)="addEmoji($event)" [style]="{ position: 'absolute', bottom: '73px', right: '20px' }"></emoji-mart>
         </div>
+        <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFastAnswer()">
+          <i class="ni ni-user-run"></i>
+        </button>
       </div>
     </div>
   </div>

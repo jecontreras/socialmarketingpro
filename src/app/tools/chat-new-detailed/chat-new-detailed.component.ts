@@ -1,6 +1,7 @@
 import { animate, style, transition, trigger } from '@angular/animations';
 import { Component, ElementRef, Input, OnInit, Output, ViewChild,EventEmitter } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { EmojiEvent } from '@ctrl/ngx-emoji-mart/ngx-emoji';
@@ -17,6 +18,7 @@ import { ChatService } from 'src/app/servicesComponent/chat.service';
 import { ContactService } from 'src/app/servicesComponent/contact.service';
 import { WhatsappTxtUserService } from 'src/app/servicesComponent/whatsapp-txt-user.service';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
+import { BottomSheetSheetFastAnswer, BottomSheetSheetFlows } from '../list-chat-detailed/list-chat-detailed.component';
 
 @Component({
   selector: 'app-chat-new-detailed',
@@ -70,7 +72,8 @@ export class ChatNewDetailedComponent implements OnInit{
     private chatService: ChatService,
     private _contactServices: ContactService,
     private Router: Router,
-    private _whatsappTxtUser: WhatsappTxtUserService
+    private _whatsappTxtUser: WhatsappTxtUserService,
+    private _bottomSheet: MatBottomSheet,
   ) {
     this.dataConfig = _config._config.keys;
     this._store.subscribe((store: any) => {
@@ -454,6 +457,36 @@ export class ChatNewDetailedComponent implements OnInit{
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
+  }
+
+  openBottomSheetFastAnswer(): void {
+
+    const bottomSheetRef = this._bottomSheet.open(BottomSheetSheetFastAnswer);
+
+    // Escucha el evento después de que se cierre el bottom sheet
+    bottomSheetRef.afterDismissed().subscribe((result) => {
+      // Maneja el valor devuelto aquí
+      console.log('Valor devuelto:', result);
+      if( result ) {
+        this.chatForm.patchValue({
+          message: result.description
+        });
+      }
+    });
+
+  }
+
+  openBottomSheetFlows(): void {
+
+    const bottomSheetRef = this._bottomSheet.open(BottomSheetSheetFlows);
+
+    // Escucha el evento después de que se cierre el bottom sheet
+    bottomSheetRef.afterDismissed().subscribe((result) => {
+      // Maneja el valor devuelto aquí
+      console.log('Valor devuelto:', result);
+      //this.msg.txt = result.description;
+    });
+
   }
 
 }
