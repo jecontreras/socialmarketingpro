@@ -44,12 +44,12 @@
   </div>
 
   <div class="chat-messages" #chatContainer>
-    <div *ngFor="let message of messages" [@messageAnimation] [ngClass]="{'message-sent': message.quien === 0, 'message-received': message.quie !== 0}">
+    <div *ngFor="let message of messages" [@messageAnimation] [ngClass]="{'message-sent': message.quien === 0, 'message-received': message.quien !== 0}">
       <div *ngIf="message.dataRelationMessage" class="related-message">
         <span>Respuesta a: {{ message['dataRelationMessage'].txt }}</span>
       </div>
       <div class="message-content">
-        <span *ngIf="!message.urlMedios">{{ message.txt }}</span>
+        <span *ngIf="!message.urlMedios">{{ message.txt }} {{ message.quien }} </span>
         <img *ngIf="( message.typeTxt === 'image' ) || ( message.typeTxt === 'photo' ) " [src]="message.urlMedios" alt="imagen" class="image-message">
         <audio *ngIf="message.typeTxt === 'audio'" controls>
           <source [src]="message.urlMedios" type="audio/mp3">

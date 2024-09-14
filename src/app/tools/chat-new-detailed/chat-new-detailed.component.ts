@@ -121,7 +121,7 @@ export class ChatNewDetailedComponent implements OnInit{
             txt: data.msx.body,
             typeTxt: data.msx.typeTxt,
             relationMessage: data.msx.relationMessage,
-            dataRelationMessage: this.messages.find( item => item.idWhatsapp === data.msx.relationMessage )
+            dataRelationMessage: data.msx.relationMessage ? this.messages.find( item => item.idWhatsapp === data.msx.relationMessage ) : null
           });
         }
       }
