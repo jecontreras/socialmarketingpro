@@ -159,7 +159,7 @@ export class ChatNewDetailedComponent implements OnInit{
         let result:any = await this.getWhatsappDetails();
         this.messages = result;
         //this.invertMessagesOrder();
-        setTimeout(()=> this.scrollToBottom(), 1000 );
+        setTimeout(()=> this.scrollToBottom(), 200 );
         this.processSpinnerValue('end');
       }else this.messages = [];
     }, 200)
@@ -449,9 +449,11 @@ export class ChatNewDetailedComponent implements OnInit{
   }
 
   handleOpenFlows( item ){
+    let dataR = item.urlMedios;
+    if( !item.urlMedios ) dataR = '6674836073fab5001539ab25';
     const dialogRef = this.dialog.open(OpenGalleriaComponent, {
       width: '50%',
-      data: { id: item.urlMedios },
+      data: { id: dataR },
     });
 
     dialogRef.afterClosed().subscribe(result => {

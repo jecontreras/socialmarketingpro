@@ -36,26 +36,30 @@
   flex-grow: 1;
   overflow-y: auto;  /* Para hacer scroll si hay muchos mensajes */
   padding: 10px;
+  display: flex;
+  flex-direction: column;
 }
 
 /* Estilos para los mensajes enviados por el usuario */
 .message-sent {
   background-color: #dcf8c6;
-  align-self: flex-end;
+  align-self: flex-end !important;
   padding: 10px;
   border-radius: 10px 10px 0 10px;
   margin: 5px 0;
   max-width: 60%;
+  word-wrap: break-word;
 }
 
 /* Estilos para los mensajes recibidos */
 .message-received {
   background-color: white;
-  align-self: flex-start;
+  align-self: flex-start !important;
   padding: 10px;
   border-radius: 10px 10px 10px 0;
   margin: 5px 0;
   max-width: 60%;
+  word-wrap: break-word;
 }
 
 /* Animación para los mensajes nuevos */

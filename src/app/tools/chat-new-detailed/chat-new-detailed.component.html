@@ -44,12 +44,19 @@
   </div>
 
   <div class="chat-messages" #chatContainer>
-    <div *ngFor="let message of messages" [@messageAnimation] [ngClass]="{'message-sent': message.quien === 0, 'message-received': message.quien !== 0}">
+    <div *ngFor="let message of messages" [@messageAnimation] [ngClass]="{'message-sent': message.quien !== 0, 'message-received': message.quien === 0}">
       <div *ngIf="message.dataRelationMessage" class="related-message">
         <span>Respuesta a: {{ message['dataRelationMessage'].txt }}</span>
       </div>
       <div class="message-content">
-        <span *ngIf="!message.urlMedios">{{ message.txt }} {{ message.quien }} </span>
+        <span *ngIf="!message.urlMedios">
+          <h4 *ngIf="message.txt !== 'Mas Informacion'">{{ message.txt }}</h4>
+          <h4 *ngIf="message.txt === 'Mas Informacion'">
+            <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="handleOpenFlows( message );" >
+              <mat-icon>remove_red_eye</mat-icon>
+            </button>Flujo
+          </h4>
+        </span>
         <img *ngIf="( message.typeTxt === 'image' ) || ( message.typeTxt === 'photo' ) " [src]="message.urlMedios" alt="imagen" class="image-message">
         <audio *ngIf="message.typeTxt === 'audio'" controls>
           <source [src]="message.urlMedios" type="audio/mp3">
