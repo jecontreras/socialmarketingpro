@@ -66,6 +66,9 @@ export interface Componente {
     contactId?: any;
     check?: boolean;
     whatsappIdList?: any;
+    sendAnswered?: number;
+    seen?:number;
+    To?:string;
   }
   export interface WHATSAPPDETAILS{
     id?: string;

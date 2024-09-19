@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core';
 import { MSG, USERT, WHATSAPP, WHATSAPPDETAILS } from 'src/app/interfaces/interfaces';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
@@ -25,6 +25,10 @@ export class ListChatComponent implements OnInit {
   dataUser: USERT;
   @ViewChild(ListChatOptionComponent) listChatOption: ListChatOptionComponent;  // Accedemos al hijo 2
   @ViewChild('sonChat') sonChat: ChatNewDetailedComponent;
+  @ViewChild('dataSentDestroy1') dataSentDestroy1: ListChatOptionComponent;
+  @ViewChild('dataSentDestroy2') dataSentDestroy2: ListChatOptionComponent;
+  @ViewChild('dataSentDestroy3') dataSentDestroy3: ListChatOptionComponent;
+
   querys1:any = { where:{ } };
   querys2:any = { where:{ } };
   querys3:any = { where:{ } };
@@ -93,6 +97,20 @@ export class ListChatComponent implements OnInit {
       console.log('The dialog was closed', result );
     });
   }
+
+  receiveChatDestroy( item ){
+    //console.log("******item", item )
+    this.dataSentDestroy1.handleDataSentDestroy( item );
+    this.dataSentDestroy2.handleDataSentDestroy( item );
+    this.dataSentDestroy3.handleDataSentDestroy( item );
+
+  }
+
+
+  receiveDataDestroyChat( item ){
+    //console.log( "*****item", item )
+  }
+
 
   receiveDataFrom(data: WHATSAPPDETAILS) {
     //console.log('Padre recibió los datos del Hijo 1:', data);

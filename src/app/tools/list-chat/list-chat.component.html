@@ -21,6 +21,7 @@
             <app-list-chat-option
               (dataSent)="receiveDataFrom($event)"
               [querys]="querys1"
+              #dataSentDestroy1
               >
 
             </app-list-chat-option>
@@ -29,6 +30,7 @@
             <app-list-chat-option
               (dataSent)="receiveDataFrom($event)"
               [querys]="querys2"
+              #dataSentDestroy2
             >
 
            </app-list-chat-option>
@@ -37,6 +39,7 @@
             <app-list-chat-option
               (dataSent)="receiveDataFrom($event)"
               [querys]="querys3"
+              #dataSentDestroy3
             >
 
            </app-list-chat-option>
@@ -48,7 +51,7 @@
   </div>
   <div class="col-12 col-sm-8">
     <section>
-      <app-chat-new-detailed [data]="dataSelect" #sonChat></app-chat-new-detailed>
+      <app-chat-new-detailed [data]="dataSelect" (dataSent)="receiveChatDestroy($event)" #sonChat></app-chat-new-detailed>
       <!--<app-list-chat-detailed [data]="dataSelect" #sonChat></app-list-chat-detailed>-->
     </section>
   </div>

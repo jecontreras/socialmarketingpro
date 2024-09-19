@@ -92,6 +92,7 @@
             (keydown.enter)="handleEnter($event)"
             placeholder="Escribe un mensaje..."
             class="chat-input"
+            [disabled]="!btnDisabled"
           />
 
           <!-- Botón para enviar -->

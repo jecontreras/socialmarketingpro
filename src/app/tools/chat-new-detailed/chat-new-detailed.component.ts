@@ -40,6 +40,7 @@ export class ChatNewDetailedComponent implements OnInit{
   @ViewChild('chatContainer') chatContainer: ElementRef;
   @ViewChild('emojiPicker') emojiPickerRef!: ElementRef;
   @Output() childEmitter = new EventEmitter<object>();
+  @Output() dataSent = new EventEmitter<object>();
 
   @Input() data:WHATSAPPDETAILS = {};
 
@@ -308,15 +309,15 @@ export class ChatNewDetailedComponent implements OnInit{
     this.handleProcessWhatsapp( result.audioFileUrl, 'audio');
     this.audioBlob = null;
   }
-
   async sendMessage( opt = {} ) {
+    if( this.btnDisabled ) return false;
+    this.btnDisabled = true;
     // Lógica para enviar el mensaje
     if (this.chatForm.valid) {
       const message = this.chatForm.get('message').value;
       console.log('Mensaje enviado:', message);
-      if( this.audioBlob ) return this.handleSubmitRecording();
-      if( !message ) return false;
-      this.btnDisabled = true;
+      if( this.audioBlob ) { this.btnDisabled = false; return this.handleSubmitRecording();}
+      if( !message ) { this.btnDisabled = false; return false;}
       let result:any = await this.handleProcessWhatsapp(message, 'txt', opt );
       this.btnDisabled = false;
       if( result.data.whatsappTxt ){
@@ -330,8 +331,8 @@ export class ChatNewDetailedComponent implements OnInit{
           relationMessage: result.Whatsapphistorial.relationMessage,
         };
         this.messages.push( newMessage );
+        this.dataSent.emit( result );
         this.newMessage = '';
-
 
         this.checkVisibilityAndNotify(newMessage);
         // Restablece el campo después de enviar

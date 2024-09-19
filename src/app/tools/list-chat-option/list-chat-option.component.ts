@@ -11,6 +11,8 @@ import { ChatService } from 'src/app/servicesComponent/chat.service';
 import { WhatsappTxtUserService } from 'src/app/servicesComponent/whatsapp-txt-user.service';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
 import { ChatNewDetailedComponent } from '../chat-new-detailed/chat-new-detailed.component';
+import * as _ from 'lodash';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-list-chat-option',
@@ -27,6 +29,7 @@ export class ListChatOptionComponent implements OnInit {
 
   @ViewChild('sonChat') sonChat: ChatNewDetailedComponent;
   @Output() dataSent = new EventEmitter<string>();
+
   @Input() querys:any = {};
 
   constructor(
@@ -59,12 +62,24 @@ export class ListChatOptionComponent implements OnInit {
     this.reloadCharge();
   }
 
+  handleDataSentDestroy( item ){
+    console.log( "*****item", item , this.listChat, this.querys)
+    if( this.querys.where.sendAnswered === 0){
+      this.listChat = this.listChat.filter( row => row.To !== item.whatsappTxt.to );
+    }
+  }
+
   async reloadCharge(){
     let result:any = await this.getListChat( this.querys );
     this.listChat = result;
+    this.handleOrderChat();
     this.chatService.receiveChatAssigned().subscribe(async (data: MSG) => {
-      //console.log("****45", data, this.listChat)
+      console.log("****45", data, this.listChat)
        this.nexProcessNewWhatsapp( data );
+    });
+    this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
+      console.log("****31", data, this.listChat)
+      this.processMessageUpdate( data );
     });
     this.processColorItem();
   }
@@ -94,6 +109,26 @@ export class ListChatOptionComponent implements OnInit {
       }
       else this.listChat = this.listChat.filter( item => item.id !== data.id );
     } catch (error) { }
+  }
+
+  processMessageUpdate( data ){
+    let filterNumber = _.findIndex(this.listChat, ['To', data.msx.to]);
+    console.log("********105", filterNumber );
+    if( filterNumber >= 0 ){
+      this.listChat[ filterNumber ].seen  = 0;
+      this.listChat[ filterNumber ].createdAt = moment( ).format();
+      if( data.msx.typeTxt === "text" ) this.listChat[ filterNumber ].whatsappIdList.txt = data.msx.body;
+      else this.listChat[ filterNumber ].whatsappIdList.txt = 'documento';
+      this.handleOrderChat();
+    }
+  }
+
+  handleOrderChat(){
+    this.listChat = _.orderBy(this.listChat, ['date'], ['desc']);
+  }
+
+  async handleEventFater( item ) {
+    console.log("******item", item )
   }
 
   handleEventSon( item ) {

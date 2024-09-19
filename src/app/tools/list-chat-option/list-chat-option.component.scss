@@ -66,3 +66,32 @@
 .checkShipment{
   background: rgb(107, 244, 107);
 }
+.checkNewMessage{
+  background: #ffb0b0;
+}
+
+
+.wave-text {
+  display: inline-block;
+  font-size: 1.2em;
+  animation: wave 2s infinite ease-in-out;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(0); /* Punto inicial y final: sin desplazamiento vertical */
+  }
+  20% {
+    transform: translateY(-5px); /* Movimiento hacia arriba */
+  }
+  40% {
+    transform: translateY(5px);  /* Movimiento hacia abajo */
+  }
+  60% {
+    transform: translateY(-5px); /* Movimiento hacia arriba */
+  }
+  80% {
+    transform: translateY(5px);  /* Movimiento hacia abajo */
+  }
+}
