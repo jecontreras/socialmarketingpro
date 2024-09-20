@@ -19,6 +19,8 @@ import { ContactService } from 'src/app/servicesComponent/contact.service';
 import { WhatsappTxtUserService } from 'src/app/servicesComponent/whatsapp-txt-user.service';
 import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.service';
 import { BottomSheetSheetFastAnswer, BottomSheetSheetFlows } from '../list-chat-detailed/list-chat-detailed.component';
+import * as _ from 'lodash';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-chat-new-detailed',
@@ -95,15 +97,31 @@ export class ChatNewDetailedComponent implements OnInit{
     this.processId( true );
     this.childEmitter.emit( this.data );
     this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
-      console.log("****31", data, this.messages)
+      //console.log("****31", data, this.messages)
       this.processMessage( data );
     });
 
     this.chatService.receiveMessageInit().subscribe(async (data: MSG) => {
-      console.log("****31", data, this.messages)
+      //console.log("****31", data, this.messages)
       this.processMessage( data );
     });
 
+    this.chatService.receiveMessageUpdateId().subscribe(async (data: MSG) => {
+      //console.log("****108", data, this.messages)
+      setTimeout(()=> this.ProcessIdChat( data ), 200 );
+    });
+
+  }
+
+  ProcessIdChat( data ){
+    let dataDbs:any = data.dataDbs;
+    let dataChat:any = data.dataFront;
+    let filterId = _.findIndex( this.messages, ['id', dataChat.msx.id ] );
+    //console.log("******119", filterId )
+    if( filterId >= 0 ){
+      this.messages[filterId] = dataDbs;
+      this.dataSent.emit( this.messages[filterId] );
+    }
   }
 
   processMessage( data ){
@@ -122,6 +140,7 @@ export class ChatNewDetailedComponent implements OnInit{
             txt: data.msx.body,
             typeTxt: data.msx.typeTxt,
             relationMessage: data.msx.relationMessage,
+            idWhatsapp: data.msx.idWhatsapp,
             dataRelationMessage: data.msx.relationMessage ? this.messages.find( item => item.idWhatsapp === data.msx.relationMessage ) : null
           });
         }
@@ -129,7 +148,12 @@ export class ChatNewDetailedComponent implements OnInit{
       //this.invertMessagesOrder();
       setTimeout(()=> this.scrollToBottom(), 100 );
     } catch (error) { }
+    this.processIdUni();
     //console.log( this.messages )
+  }
+
+  processIdUni( ){
+    this.messages =_.unionBy(this.messages || [], this.messages, 'id');
   }
 
   async processId( opt:boolean ){
@@ -289,7 +313,7 @@ export class ChatNewDetailedComponent implements OnInit{
               "quien": 1,
               "id": 1,
               "userCreate": this.dataUser.id,
-              "relationMessage": optR.relationMessage
+              "relationMessage": optR.relationMessage,
 
           },
           "user": { "id": this.dataUser.cabeza }
@@ -309,6 +333,7 @@ export class ChatNewDetailedComponent implements OnInit{
     this.handleProcessWhatsapp( result.audioFileUrl, 'audio');
     this.audioBlob = null;
   }
+  /*
   async sendMessage( opt = {} ) {
     if( this.btnDisabled ) return false;
     this.btnDisabled = true;
@@ -339,6 +364,54 @@ export class ChatNewDetailedComponent implements OnInit{
         this.chatForm.reset();
         setTimeout(()=> this.scrollToBottom(), 100 );
       }
+    }
+
+  }*/
+
+  async sendMessage( opt:any = {} ) {
+    if( this.btnDisabled ) return false;
+    this.btnDisabled = true;
+    // Lógica para enviar el mensaje
+    if (this.chatForm.valid) {
+      const message = this.chatForm.get('message').value;
+      console.log('Mensaje enviado:', message);
+      if( !message ) { this.btnDisabled = false; return false;}
+
+      this.btnDisabled = false;
+      let newMessage = {
+        "msx": {
+          "from": this.data.from,
+          "to": this.data.to,
+          "body": `*${ this.dataUser.name }*: \n ${ message }`,
+          "urlMedios": "",
+          "typeTxt": "txt",
+          "quien": 1,
+          "id": this._toolsService.codigo(),
+          "userCreate": this.dataUser.id,
+          "relationMessage": opt.relationMessage || '',
+          "sendWhatsapp": 0,
+        },
+        "user": { "id": this.dataUser.cabeza }
+      };
+      this.messages.push(
+        {
+          id: newMessage.msx.id,
+          txt: message,
+          quien: 1,
+          typeTxt: newMessage.msx.typeTxt,
+          urlMedios: newMessage.msx.urlMedios,
+          relationMessage: newMessage.msx.relationMessage,
+          sendWhatsapp: 0,
+          createdAt: moment().format()
+        }
+       );
+       this.chatService.enviarMensaje( newMessage );
+      this.newMessage = '';
+
+      this.checkVisibilityAndNotify(newMessage);
+      // Restablece el campo después de enviar
+      this.chatForm.reset();
+      setTimeout(()=> this.scrollToBottom(), 100 );
     }
 
   }

@@ -59,13 +59,25 @@ export class ListChatOptionComponent implements OnInit {
   }
 
   async ngOnInit() {
+    this.chatService.receiveChatAssigned().subscribe(async (data: MSG) => {
+      console.log("****77", data, this.listChat)
+       this.nexProcessNewWhatsapp( data );
+    });
+    this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
+      console.log("****81", data, this.listChat)
+      this.processMessageUpdate( { ...data.msx, whatsappTxt: data.msx.ids, } );
+    });
+    this.chatService.receiveMessageUpdateId().subscribe(async (data: MSG) => {
+      console.log("*******85", data )
+      this.processMessageUpdate( data.dataDbs );
+    });
     this.reloadCharge();
   }
 
   handleDataSentDestroy( item ){
-    console.log( "*****item", item , this.listChat, this.querys)
+    //console.log( "*****item", item , this.listChat, this.querys)
     if( this.querys.where.sendAnswered === 0){
-      this.listChat = this.listChat.filter( row => row.To !== item.whatsappTxt.to );
+      this.listChat = this.listChat.filter( row => row.To !== item.Sinto );
     }
   }
 
@@ -73,14 +85,6 @@ export class ListChatOptionComponent implements OnInit {
     let result:any = await this.getListChat( this.querys );
     this.listChat = result;
     this.handleOrderChat();
-    this.chatService.receiveChatAssigned().subscribe(async (data: MSG) => {
-      console.log("****45", data, this.listChat)
-       this.nexProcessNewWhatsapp( data );
-    });
-    this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
-      console.log("****31", data, this.listChat)
-      this.processMessageUpdate( data );
-    });
     this.processColorItem();
   }
 
@@ -112,19 +116,25 @@ export class ListChatOptionComponent implements OnInit {
   }
 
   processMessageUpdate( data ){
-    let filterNumber = _.findIndex(this.listChat, ['To', data.msx.to]);
-    console.log("********105", filterNumber );
+    let filterNumber = _.findIndex(this.listChat, ['whatsappId', data.whatsappTxt]);
+    console.log("*******120", filterNumber )
     if( filterNumber >= 0 ){
       this.listChat[ filterNumber ].seen  = 0;
-      this.listChat[ filterNumber ].createdAt = moment( ).format();
-      if( data.msx.typeTxt === "text" ) this.listChat[ filterNumber ].whatsappIdList.txt = data.msx.body;
+      if( data.typeTxt === "txt" ) this.listChat[ filterNumber ].whatsappIdList.txt = data.txt;
       else this.listChat[ filterNumber ].whatsappIdList.txt = 'documento';
       this.handleOrderChat();
     }
   }
 
   handleOrderChat(){
+    this.listChat = _.map( this.listChat, ( item )=> {
+      return {
+        ...item,
+        date: (moment( item.date || new Date() )).valueOf()
+      }
+    });
     this.listChat = _.orderBy(this.listChat, ['date'], ['desc']);
+    console.log("********105", this.listChat );
   }
 
   async handleEventFater( item ) {
@@ -158,7 +168,7 @@ export class ListChatOptionComponent implements OnInit {
   }
 
   handleSelectChat( item ){
-    //console.log("***", item)
+    console.log("***", item)
     item.check = true;
     this.dataSelect = item;
     this._router.navigate(['/liveChat', this.dataSelect.id ] );

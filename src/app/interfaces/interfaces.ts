@@ -98,6 +98,9 @@ export interface Componente {
     user?:string;
     msx?:any;
     contactId?:any;
+    dataFront?:any;
+    dataDbs?:any;
+    ids?:string;
   }
 
   export interface BLOCK {

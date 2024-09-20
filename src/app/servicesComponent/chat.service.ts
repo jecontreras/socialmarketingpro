@@ -60,6 +60,11 @@ export class ChatService {
       this.socket.on('sendMessage', (data: any) => observer.next(data) );
     });
   }
+  receiveMessageUpdateId( ): Observable<any> {
+    return new Observable<any>(observer => {
+      this.socket.on('sendMessageUpdate', (data: any) => observer.next(data) );
+    });
+  }
   receiveChatAssigned( ): Observable<any> {
     return new Observable<any>(observer => {
       this.socket.on('contactAssigned', (data: any) => observer.next(data) );

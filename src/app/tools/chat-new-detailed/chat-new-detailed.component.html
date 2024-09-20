@@ -73,9 +73,13 @@
         <span style="text-align: end;">
           {{ message.createdAt | date:'M/d/yy, h:mm a' }}
         </span>
+        <span style="text-align: end;">
+          <mat-icon style="font-size: 10px;" *ngIf="( message.sendWhatsapp === 0 ) || ( message.sendWhatsapp === 1 )">check_circle_outline</mat-icon>
+          <mat-icon style="font-size: 10px;" *ngIf="( message.sendWhatsapp === 1 )">check_circle_outline</mat-icon>
+        </span>
 
         <!-- Botón de reenviar -->
-        <button (click)="forwardMessage(message)" *ngIf="!message.urlMedios">Reenviar</button>
+        <!--<button (click)="forwardMessage(message)" *ngIf="!message.urlMedios">Reenviar</button>-->
       </div>
     </div>
   </div>
