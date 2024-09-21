@@ -71,13 +71,13 @@ export class ListChatOptionComponent implements OnInit {
       console.log("*******85", data )
       this.processMessageUpdate( data.dataDbs );
     });
-    this.reloadCharge();
+    //this.reloadCharge();
   }
 
   handleDataSentDestroy( item ){
-    //console.log( "*****item", item , this.listChat, this.querys)
+    console.log( "*****item", item , this.listChat, this.querys)
     if( this.querys.where.sendAnswered === 0){
-      this.listChat = this.listChat.filter( row => row.To !== item.Sinto );
+      this.listChat = this.listChat.filter( row => row.To !== item.to );
     }
   }
 

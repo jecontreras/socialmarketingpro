@@ -120,7 +120,7 @@ export class ChatNewDetailedComponent implements OnInit{
     //console.log("******119", filterId )
     if( filterId >= 0 ){
       this.messages[filterId] = dataDbs;
-      this.dataSent.emit( this.messages[filterId] );
+      this.dataSent.emit( this.messages[filterId] ); //el que elimina de la lista cuando se ha respondido
     }
   }
 
@@ -563,6 +563,22 @@ export class ChatNewDetailedComponent implements OnInit{
       //this.msg.txt = result.description;
     });
 
+  }
+
+  scrollToMessage(messageId: string) {
+    const element = document.getElementById(messageId);
+    if (element) {
+      // Hacer scroll hacia el mensaje
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+      // Añadir la clase de resaltado temporalmente
+      element.classList.add('highlight');
+
+      // Quitar la clase de resaltado después de 2 segundos
+      setTimeout(() => {
+        element.classList.remove('highlight');
+      }, 2000);
+    }
   }
 
 }

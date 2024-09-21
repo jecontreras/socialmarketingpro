@@ -16,7 +16,7 @@
         </div>
       </div>
       <div class="col-12">
-        <mat-tab-group mat-align-tabs="center">
+        <mat-tab-group mat-align-tabs="center" [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="onTabClick($event)">
           <mat-tab [label]="dataConfig.txtChatNew">
             <app-list-chat-option
               (dataSent)="receiveDataFrom($event)"

@@ -14,6 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToolsService } from 'src/app/services/tools.service';
 import { ListChatOptionComponent } from '../list-chat-option/list-chat-option.component';
 import { ChatNewDetailedComponent } from '../chat-new-detailed/chat-new-detailed.component';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 @Component({
   selector: 'app-list-chat',
   templateUrl: './list-chat.component.html',
@@ -32,6 +33,8 @@ export class ListChatComponent implements OnInit {
   querys1:any = { where:{ } };
   querys2:any = { where:{ } };
   querys3:any = { where:{ } };
+  selectedTabIndex: number = 0;
+
   constructor(
     private _config: ConfigKeysService,
     public dialog: MatDialog,
@@ -81,10 +84,16 @@ export class ListChatComponent implements OnInit {
         limit: 100,
         page: 0
       };
-  }
+  };
+
+  btnDataDs = {
+    tab1: true,
+    tab2: true,
+    tab3: true
+  };
 
   async ngOnInit() {
-
+    setTimeout( ()=> this.handleProcessTab( 0 ), 200 )
   }
 
   handleOpenAllChat(){
@@ -98,8 +107,24 @@ export class ListChatComponent implements OnInit {
     });
   }
 
+  goToTab(index: number) {
+    this.selectedTabIndex = index;
+  }
+
+  onTabClick( event: MatTabChangeEvent ){
+    let numberTab = event.index;
+    this.handleProcessTab( numberTab );
+  }
+
+  handleProcessTab( tabIndex: number ){
+    if( tabIndex === 0  && ( this.btnDataDs.tab1 === true ) ) { this.btnDataDs.tab1= false; this.dataSentDestroy1.reloadCharge( ); }
+    if( tabIndex === 1  && ( this.btnDataDs.tab2 === true ) ) { this.btnDataDs.tab2= false; this.dataSentDestroy2.reloadCharge( ); }
+    if( tabIndex === 2  && ( this.btnDataDs.tab3 === true ) ) { this.btnDataDs.tab3= false; this.dataSentDestroy3.reloadCharge( ); }
+  }
+
   receiveChatDestroy( item ){
     //console.log("******item", item )
+    //if( this.selectedTabIndex === 0 ) this.goToTab( 1 );
     this.dataSentDestroy1.handleDataSentDestroy( item );
     this.dataSentDestroy2.handleDataSentDestroy( item );
     this.dataSentDestroy3.handleDataSentDestroy( item );

@@ -44,45 +44,80 @@
   </div>
 
   <div class="chat-messages" #chatContainer>
-    <div *ngFor="let message of messages" [@messageAnimation] [ngClass]="{'message-sent': message.quien !== 0, 'message-received': message.quien === 0}">
+    <div
+      *ngFor="let message of messages"
+      [@messageAnimation]
+      [ngClass]="{
+        'message-sent': message.quien !== 0,
+        'message-received': message.quien === 0
+      }"
+      [attr.id]="message.id"
+    >
+      <!-- Mensaje relacionado -->
       <div *ngIf="message.dataRelationMessage" class="related-message">
-        <span>Respuesta a: {{ message['dataRelationMessage'].txt }}</span>
+        <span (click)="scrollToMessage(message.dataRelationMessage.id)" class="related-link">
+          Respuesta a: {{ message.dataRelationMessage.txt }}
+        </span>
       </div>
+
+      <!-- Contenido del mensaje -->
       <div class="message-content">
-        <span *ngIf="!message.urlMedios">
-          <h4 *ngIf="message.txt !== 'Mas Informacion'">{{ message.txt }}</h4>
-          <h4 *ngIf="message.txt === 'Mas Informacion'">
-            <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="handleOpenFlows( message );" >
-              <mat-icon>remove_red_eye</mat-icon>
-            </button>Flujo
-          </h4>
-        </span>
-        <img *ngIf="( message.typeTxt === 'image' ) || ( message.typeTxt === 'photo' ) " [src]="message.urlMedios" alt="imagen" class="image-message">
+        <!-- Imágenes -->
+        <img
+          *ngIf="message.typeTxt === 'image' || message.typeTxt === 'photo'"
+          [src]="message.urlMedios"
+          alt="imagen"
+          class="image-message"
+        />
+
+        <!-- Audio -->
         <audio *ngIf="message.typeTxt === 'audio'" controls>
-          <source [src]="message.urlMedios" type="audio/mp3">
+          <source [src]="message.urlMedios" type="audio/mp3" />
         </audio>
+
+        <!-- Video -->
         <video *ngIf="message.typeTxt === 'video'" controls>
-          <source [src]="message.urlMedios" type="video/mp4">
+          <source [src]="message.urlMedios" type="video/mp4" />
         </video>
-        <a *ngIf="message.typeTxt === 'document'" [href]="message.urlMedios" download="{{ message.urlMedios }}" target="_blank">{{ message.urlMedios }}</a>
-        <span *ngIf="( message.typeTxt === 'flow' )">
-          <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon" (click)="handleOpenFlows( message );" >
+
+        <!-- Documentos -->
+        <a
+          *ngIf="message.typeTxt === 'document'"
+          [href]="message.urlMedios"
+          download="{{ message.urlMedios }}"
+          target="_blank"
+          class="document-link"
+          >{{ message.urlMedios }}</a
+        >
+
+        <!-- Flujos -->
+        <span *ngIf="message.typeTxt === 'flow'">
+          <button
+            mat-mini-fab
+            color="primary"
+            aria-label="Example icon button with a menu icon"
+            (click)="handleOpenFlows(message)"
+          >
             <mat-icon>remove_red_eye</mat-icon>
-          </button>Flujo
-        </span>
-        <span style="text-align: end;">
-          {{ message.createdAt | date:'M/d/yy, h:mm a' }}
-        </span>
-        <span style="text-align: end;">
-          <mat-icon style="font-size: 10px;" *ngIf="( message.sendWhatsapp === 0 ) || ( message.sendWhatsapp === 1 )">check_circle_outline</mat-icon>
-          <mat-icon style="font-size: 10px;" *ngIf="( message.sendWhatsapp === 1 )">check_circle_outline</mat-icon>
+          </button>
+          Flujo
         </span>
 
-        <!-- Botón de reenviar -->
-        <!--<button (click)="forwardMessage(message)" *ngIf="!message.urlMedios">Reenviar</button>-->
+        <!-- Texto -->
+        <span *ngIf="message.txt">
+          {{ message.txt }}
+        </span>
+
+           <!-- Fecha y estado del mensaje juntos -->
+            <div class="message-info">
+              <span class="message-date">{{ message.createdAt | date:'h:mm a' }}</span>
+              <mat-icon class="message-status" *ngIf="message.sendWhatsapp === 0">done</mat-icon>
+              <mat-icon class="message-status double-check" *ngIf="message.sendWhatsapp === 1">done_all</mat-icon>
+            </div>
       </div>
     </div>
   </div>
+
 
   <div class="d-flex bd-highlight" style="background-color: #f1f1f1;">
     <div class="p-2 flex-grow-1 bd-highlight">

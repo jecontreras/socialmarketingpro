@@ -34,32 +34,70 @@
 /* Contenedor de mensajes */
 .chat-messages {
   flex-grow: 1;
+  max-height: 80vh;  /* Ajusta al 80% de la altura de la ventana */ //////////
   overflow-y: auto;  /* Para hacer scroll si hay muchos mensajes */
   padding: 10px;
   display: flex;
   flex-direction: column;
+  background-color: #f5f5f5;  /* Fondo claro */
 }
 
 /* Estilos para los mensajes enviados por el usuario */
 .message-sent {
   background-color: #dcf8c6;
-  align-self: flex-end !important;
+  align-self: flex-end;
   padding: 10px;
   border-radius: 10px 10px 0 10px;
   margin: 5px 0;
   max-width: 60%;
   word-wrap: break-word;
+  position: relative;
 }
 
 /* Estilos para los mensajes recibidos */
 .message-received {
-  background-color: white;
-  align-self: flex-start !important;
+  background-color: #ffffff;
+  align-self: flex-start;
   padding: 10px;
   border-radius: 10px 10px 10px 0;
   margin: 5px 0;
   max-width: 60%;
   word-wrap: break-word;
+  position: relative;
+}
+
+/* Contenedor de la fecha y el estado */
+.message-info {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  font-size: 12px;
+  color: #999;
+  margin-top: 5px;
+}
+
+/* Fecha */
+.message-date {
+  margin-right: 5px;
+}
+
+/* Estado del mensaje (los checks) */
+.message-status {
+  font-size: 12px;
+  color: #34b7f1; /* Color de los checks */
+}
+/*
+.message-status {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  margin-top: 5px;
+  font-size: 12px;
+  color: gray;
+}*/
+
+.double-check {
+  color: #4fc3f7; /* Azul claro, simulando WhatsApp cuando llega el mensaje */
 }
 
 /* Animación para los mensajes nuevos */
@@ -94,7 +132,6 @@
 /* Audio dentro de un mensaje */
 audio {
   margin-top: 5px;
-  width: 100%;
 }
 
 /* Video dentro de un mensaje */
@@ -102,6 +139,15 @@ video {
   margin-top: 5px;
   width: 100%;
   border-radius: 10px;
+}
+
+.document-link {
+  color: #007bff;
+  text-decoration: none;
+}
+
+.document-link:hover {
+  text-decoration: underline;
 }
 
 /* Contenedor de la respuesta (reply) */
@@ -112,6 +158,12 @@ video {
   margin-bottom: 5px;
   font-size: 12px;
   color: #555;
+}
+
+/* Efecto de sombra o resalte cuando se selecciona un mensaje */
+.highlight {
+  box-shadow: 0px 0px 10px rgba(0, 128, 0, 0.7); /* Sombra verde estilo WhatsApp */
+  transition: box-shadow 0.5s ease; /* Transición suave para que el efecto de resalte desaparezca */
 }
 
 /* Contenedor de entrada de texto y botones */
