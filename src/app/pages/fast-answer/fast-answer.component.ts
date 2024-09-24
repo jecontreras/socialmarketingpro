@@ -79,7 +79,7 @@ export class FastAnswerComponent implements OnInit {
     }
 
     handleCreateNewResponse(){
-      this.dataSource.data.push( {  } );
+      this.dataSource.data.unshift( {  } );
       this.table.renderRows();
     }
 
@@ -95,7 +95,19 @@ export class FastAnswerComponent implements OnInit {
         } );
         row.id = result.id;
       }
+      let filter = this.selection.selected;
+      for( let row of filter ){
+        if( !row.id ) continue;
+        if( !row.check ) continue;
+        await this.proccessSubmitUpdateFastAnswer( {
+          check: true,
+          id: row.id,
+          title: row.title,
+          description: row.description
+        } );
+      }
       this.dataSource.data = list;
+      this.selection.clear();
       this.table.renderRows();
     }
 
@@ -106,14 +118,15 @@ export class FastAnswerComponent implements OnInit {
     }
 
     async handleDrop(){
-      let list = this.dataSource.data;
-      for( let row of this.dataSource.data.filter( item => item.check === true ) ){
+      let list = this.selection.selected;
+      for( let row of list.filter( item => ( item.check === true ) && ( item.id ) ) ){
         await this.proccessSubmitUpdateFastAnswer( {
           check: false,
           id: row.id
         } );
+        this.dataSource.data = this.dataSource.data.filter( item => item.id === row.id );
+        this.selection.clear();
       }
-      this.dataSource.data = list;
       this._toolsService.presentToast( this.dataConfig.txtUpdate );
       this.table.renderRows();
     }

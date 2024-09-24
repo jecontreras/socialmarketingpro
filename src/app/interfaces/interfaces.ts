@@ -265,7 +265,8 @@ export interface FASTANSWER{
   companyId?: string;
   companyIdList?: USERT;
   userCreationId?: string;
-  userCreationIdList?: USERT
+  userCreationIdList?: USERT;
+  descripcion?: string;
 }
 export interface GALERIA{
   id?: string;

@@ -189,17 +189,18 @@ export class ListChatOptionComponent implements OnInit {
   }
 
   handleSelectChat( item ){
-    console.log("***", item)
     item.check = true;
     this.dataSelect = item;
     this._router.navigate(['/liveChat', this.dataSelect.id ] );
-    if( this.dataSelect.seen === 0 ) { item.seen=1; this.handleUpdateState();}
-    setTimeout(()=>this.handleEventSon( item ), 200)
+    item.seen=1;
+    this.handleUpdateState();
+    setTimeout(()=>this.handleEventSon( item ), 100)
+    console.log("***", item, this.listChat)
   }
 
   handleUpdateState(){
     return new Promise( resolve=>{
-      this._whatsappTxtService.update( { id: this.dataSelect.id, seen: 1}).subscribe( res => resolve( res ),error => resolve( error ) );
+      this._whatsappTxtService.update( { id: this.dataSelect.id, seen: 1 }).subscribe( res => resolve( res ),error => resolve( error ) );
     });
   }
   async handleFilter(){
