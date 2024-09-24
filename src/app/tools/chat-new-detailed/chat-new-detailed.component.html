@@ -19,7 +19,7 @@
                 <div class="form-group">
                   <input
                     class="form-control"
-                    type="text"
+                    type="number"
                     [(ngModel)]="data.numberGuide"
                     [placeholder]="dataConfig.numberGuider"
                     (change)="handleUpdateNumber()"
@@ -110,7 +110,7 @@
 
            <!-- Fecha y estado del mensaje juntos -->
             <div class="message-info">
-              <span class="message-date">{{ message.createdAt | date:'h:mm a' }}</span>
+              <span class="message-date">{{ message.createdAt }}</span>
               <mat-icon class="message-status" *ngIf="message.sendWhatsapp === 0">done</mat-icon>
               <mat-icon class="message-status double-check" *ngIf="message.sendWhatsapp === 1">done_all</mat-icon>
             </div>

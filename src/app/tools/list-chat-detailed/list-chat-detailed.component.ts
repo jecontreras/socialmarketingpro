@@ -288,7 +288,7 @@ export class ListChatDetailedComponent implements OnInit {
     }
 
     openBottomSheetFastAnswer(): void {
-      
+
       const bottomSheetRef = this._bottomSheet.open(BottomSheetSheetFastAnswer);
 
       // Escucha el evento después de que se cierre el bottom sheet
@@ -297,11 +297,11 @@ export class ListChatDetailedComponent implements OnInit {
         console.log('Valor devuelto:', result);
         if( result ) this.msg.txt = result.description;
       });
-      
+
     }
 
     openBottomSheetFlows(): void {
-      
+
       const bottomSheetRef = this._bottomSheet.open(BottomSheetSheetFlows);
 
       // Escucha el evento después de que se cierre el bottom sheet
@@ -310,7 +310,7 @@ export class ListChatDetailedComponent implements OnInit {
         console.log('Valor devuelto:', result);
         //this.msg.txt = result.description;
       });
-      
+
     }
 
     async handleOpenContact(){
@@ -396,7 +396,7 @@ export class BottomSheetSheetFastAnswer {
       this.dataUser = store.user || {};
     });
     (async ()=>{
-      let list:any = await this.getListFastAnswer( { where:{ userCreationId: this.dataUser.id, check: true }, limit: 1000, page: 0 } );
+      let list:any = await this.getListFastAnswer( { where:{ companyId: this.dataUser.empresa, check: true }, limit: 1000, page: 0 } );
       this.listFastAnswer = list;
     })();
   }

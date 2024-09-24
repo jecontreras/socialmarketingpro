@@ -23,6 +23,7 @@ export class ListChatOptionComponent implements OnInit {
   dataConfig:any = {};
   dataSelect:WHATSAPPDETAILS = {};
   listChat:WHATSAPP[] = [];
+  dataChatClone:WHATSAPP[] = [];
   dataUser: USERT;
   loader:boolean = true;
   txtFilter:string;
@@ -74,16 +75,34 @@ export class ListChatOptionComponent implements OnInit {
     //this.reloadCharge();
   }
 
-  handleDataSentDestroy( item ){
+  async handleDataSentDestroy( item ){
     console.log( "*****item", item , this.listChat, this.querys)
-    if( this.querys.where.sendAnswered === 0){
+    if( this.querys.where.sendAnswered === 0 ){
       this.listChat = this.listChat.filter( row => row.To !== item.to );
     }
+    if( this.querys.where.sendAnswered === 1 ){
+      let filterR = this.listChat.find( row => row.To === item.to );
+      if( !filterR ){
+        let dataChat = await this.getIdChat( item.whatsappTxt, item.userCreate )
+        console.log("*******87", dataChat )
+        this.listChat.push( dataChat );
+      }
+    }
+  }
+
+  getIdChat( id:string, user:string ){
+    return new Promise( resolve =>{
+      this._whatsappTxtUserService.getChatUser( { where: { userId: user, whatsappId: id, estado:0 }, limit: 1 } ).subscribe( res =>{
+        res = res.data[0];
+        resolve( res );
+      },()=> resolve( false ) );
+    });
   }
 
   async reloadCharge(){
     let result:any = await this.getListChat( this.querys );
     this.listChat = result;
+    this.dataChatClone = _.clone( result );
     this.handleOrderChat();
     this.processColorItem();
   }
@@ -119,10 +138,12 @@ export class ListChatOptionComponent implements OnInit {
     let filterNumber = _.findIndex(this.listChat, ['whatsappId', data.whatsappTxt]);
     console.log("*******120", filterNumber )
     if( filterNumber >= 0 ){
-      this.listChat[ filterNumber ].seen  = 0;
-      if( data.typeTxt === "txt" ) this.listChat[ filterNumber ].whatsappIdList.txt = data.txt;
+      if( data.quien === 0 ) this.listChat[ filterNumber ].seen = 0;
+      this.listChat[ filterNumber ].date = (moment( new Date(), 'DD-MM-YYYY, H:mm:ss' )).unix();
+      if( data.typeTxt === "txt" ) this.listChat[ filterNumber ].whatsappIdList.txt = data.txt || data.body;
       else this.listChat[ filterNumber ].whatsappIdList.txt = 'documento';
       this.handleOrderChat();
+      console.log("*********", this.listChat)
     }
   }
 
@@ -130,7 +151,7 @@ export class ListChatOptionComponent implements OnInit {
     this.listChat = _.map( this.listChat, ( item )=> {
       return {
         ...item,
-        date: (moment( item.date || new Date() )).valueOf()
+        date1: moment.unix( item.date ).format("YYYY-MM-DD HH:mm")
       }
     });
     this.listChat = _.orderBy(this.listChat, ['date'], ['desc']);
@@ -181,7 +202,6 @@ export class ListChatOptionComponent implements OnInit {
       this._whatsappTxtService.update( { id: this.dataSelect.id, seen: 1}).subscribe( res => resolve( res ),error => resolve( error ) );
     });
   }
-
   async handleFilter(){
     this.loader = true;
     this.listChat = [];
@@ -189,7 +209,8 @@ export class ListChatOptionComponent implements OnInit {
     this.txtFilter = this.txtFilter.trim();
     this.querys.limit = 1000;
     this.querys.page = 0;
-    let result:any = await this.getListChat( this.querys );
+    //let result:any = await this.getListChat( this.querys );
+    let result = this.dataChatClone;
     if(this.txtFilter != '') this.listChat = this._toolsService.searchKeyword( result, this.txtFilter );
     else this.listChat = result;
   }

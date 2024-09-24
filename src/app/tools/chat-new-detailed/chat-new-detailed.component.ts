@@ -97,18 +97,26 @@ export class ChatNewDetailedComponent implements OnInit{
     this.processId( true );
     this.childEmitter.emit( this.data );
     this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
-      //console.log("****31", data, this.messages)
+      console.log("****31", data, this.messages)
       this.processMessage( data );
     });
 
     this.chatService.receiveMessageInit().subscribe(async (data: MSG) => {
-      //console.log("****31", data, this.messages)
-      this.processMessage( data );
+      console.log("****31", data, this.messages)
+      try {
+        this.processMessage( data );
+      } catch (error) {
+
+      }
     });
 
     this.chatService.receiveMessageUpdateId().subscribe(async (data: MSG) => {
       //console.log("****108", data, this.messages)
-      setTimeout(()=> this.ProcessIdChat( data ), 200 );
+      try {
+        setTimeout(()=> this.ProcessIdChat( data ), 200 );
+      } catch (error) {
+
+      }
     });
 
   }
@@ -117,10 +125,11 @@ export class ChatNewDetailedComponent implements OnInit{
     let dataDbs:any = data.dataDbs;
     let dataChat:any = data.dataFront;
     let filterId = _.findIndex( this.messages, ['id', dataChat.msx.id ] );
-    //console.log("******119", filterId )
+    console.log("******119", filterId )
     if( filterId >= 0 ){
       this.messages[filterId] = dataDbs;
       this.dataSent.emit( this.messages[filterId] ); //el que elimina de la lista cuando se ha respondido
+      console.log("********124", this.messages)
     }
   }
 
@@ -137,8 +146,10 @@ export class ChatNewDetailedComponent implements OnInit{
             quien: data.msx.quien,
             urlMedios: data.msx.urlMedios,
             user: data.msx.user,
+            createdAt: data.msx.createdAt,
             txt: data.msx.body,
             typeTxt: data.msx.typeTxt,
+            sendWhatsapp: data.msx.sendWhatsapp,
             relationMessage: data.msx.relationMessage,
             idWhatsapp: data.msx.idWhatsapp,
             dataRelationMessage: data.msx.relationMessage ? this.messages.find( item => item.idWhatsapp === data.msx.relationMessage ) : null
@@ -146,7 +157,7 @@ export class ChatNewDetailedComponent implements OnInit{
         }
       }
       //this.invertMessagesOrder();
-      setTimeout(()=> this.scrollToBottom(), 100 );
+      if( data.msx.ids === this.data.id ) setTimeout(()=> this.scrollToBottom(), 200 );
     } catch (error) { }
     this.processIdUni();
     //console.log( this.messages )
@@ -160,7 +171,9 @@ export class ChatNewDetailedComponent implements OnInit{
     this.id = (this.activate.snapshot.paramMap.get('id'));
     if( this.id ) {
       await this.getWhatsappInit( this.id );
-      if( opt === true ) this.handleEventFater();
+      try {
+        if( opt === true ) this.handleEventFater();
+      } catch (error) { }
     }
   }
 
@@ -177,7 +190,7 @@ export class ChatNewDetailedComponent implements OnInit{
     // Lógica que deseas ejecutar cuando se llama desde el padre
     console.log('Función ejecutada desde el hijo, entre', this.data );
     this.messages = [];
-    this.processSpinnerValue('init');
+    //this.processSpinnerValue('init');
     setTimeout(async()=>{
       if( this.data.id ) {
         this.processId( false );
@@ -185,16 +198,21 @@ export class ChatNewDetailedComponent implements OnInit{
         this.messages = result;
         //this.invertMessagesOrder();
         setTimeout(()=> this.scrollToBottom(), 200 );
-        this.processSpinnerValue('end');
+        //this.processSpinnerValue('end');
       }else this.messages = [];
     }, 200)
   }
 
   getWhatsappDetails(){
     return new Promise( resolve =>{
-      this._whatsappDetails.getDetails( { where: { whatsappTxt: this.data.id }, limit: 1000000, sort: "updatedAt ASC" } ).subscribe( res =>{
-        resolve( res.data );
-      })
+      try {
+        this._whatsappDetails.getDetails( { where: { whatsappTxt: this.data.id }, limit: 1000000, sort: "updatedAt ASC" } ).subscribe( res =>{
+          res = res.data;
+          resolve( res || [] );
+        });
+      } catch (error) {
+        resolve([])
+      }
     })
   }
 
@@ -385,11 +403,12 @@ export class ChatNewDetailedComponent implements OnInit{
           "body": `*${ this.dataUser.name }*: \n ${ message }`,
           "urlMedios": "",
           "typeTxt": "txt",
-          "quien": 1,
+          "quien": 2,
           "id": this._toolsService.codigo(),
           "userCreate": this.dataUser.id,
           "relationMessage": opt.relationMessage || '',
           "sendWhatsapp": 0,
+          "seen": 1
         },
         "user": { "id": this.dataUser.cabeza }
       };
@@ -402,7 +421,8 @@ export class ChatNewDetailedComponent implements OnInit{
           urlMedios: newMessage.msx.urlMedios,
           relationMessage: newMessage.msx.relationMessage,
           sendWhatsapp: 0,
-          createdAt: moment().format()
+          createdAt: moment().format( "DD-MM-YYYY, H:mm:ss" ),
+          seen: newMessage.msx.seen
         }
        );
        this.chatService.enviarMensaje( newMessage );

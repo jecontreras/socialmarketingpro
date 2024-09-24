@@ -59,9 +59,10 @@ export class ListChatComponent implements OnInit {
           userId: this.dataUser.id,
           assignedMe: 0,
           estado: 0,
-          sendAnswered: 0
+          sendAnswered: 0,
+          whatsappId: { '!=': null }
         },
-        limit: 100,
+        limit: 1000000,
         page: 0
       };
       this.querys2 = {
@@ -69,9 +70,10 @@ export class ListChatComponent implements OnInit {
           userId: this.dataUser.id,
           assignedMe: 0,
           estado: 0,
-          sendAnswered: 1
+          sendAnswered: 1,
+          whatsappId: { '!=': null }
         },
-        limit: 100,
+        limit: 1000000,
         page: 0
       };
       this.querys3 = {
@@ -79,9 +81,10 @@ export class ListChatComponent implements OnInit {
           userId: this.dataUser.id,
           assignedMe: 0,
           estado: 1,
-          sendAnswered: 2
+          sendAnswered: 2,
+          whatsappId: { '!=': null }
         },
-        limit: 100,
+        limit: 1000000,
         page: 0
       };
   };

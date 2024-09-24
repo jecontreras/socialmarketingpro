@@ -1,5 +1,5 @@
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
@@ -17,6 +17,14 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { appReducer } from './redux/app';
 import { environment } from 'src/environments/environment';
 import { MyOwnCustomMaterialModule } from './app.material.module';
+import { registerLocaleData } from '@angular/common';
+import localePy from '@angular/common/locales/es-PY';
+import localePt from '@angular/common/locales/pt';
+import localeEn from '@angular/common/locales/en';
+// registrar los locales con el nombre que quieras utilizar a la hora de proveer
+registerLocaleData(localePy, 'es');
+registerLocaleData(localePt, 'pt');
+registerLocaleData(localeEn, 'en')
 
 @NgModule({
   imports: [
@@ -40,7 +48,9 @@ import { MyOwnCustomMaterialModule } from './app.material.module';
     AdminLayoutComponent,
     AuthLayoutComponent
   ],
-  providers: [],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'es-Co', },
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

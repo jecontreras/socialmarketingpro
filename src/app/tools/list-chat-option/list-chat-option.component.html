@@ -30,7 +30,7 @@
           <div>
             <div class="chat-room__user-name r8">
               <span class="full-name-text r1"> {{ _toolsService.formatNumer( item.whatsappIdList.to ) }} </span>
-              <span class="r4"> <span *ngIf="( item.seen === 0 )" class="text-success">●</span>  {{ item.whatsappIdList.createdAt | date:'h:mm a' }} </span>
+              <span class="r4"> <span *ngIf="( item.seen === 0 )" class="text-success">●</span>  {{ item.date1 | date:'h:mm a' }} </span>
             </div>
           </div>
           <div class="chat-room__info-row r5">
