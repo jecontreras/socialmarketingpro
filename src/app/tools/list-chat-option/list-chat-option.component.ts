@@ -13,6 +13,7 @@ import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.servic
 import { ChatNewDetailedComponent } from '../chat-new-detailed/chat-new-detailed.component';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { FormControl, FormGroup } from '@angular/forms';
 
 @Component({
   selector: 'app-list-chat-option',
@@ -27,11 +28,16 @@ export class ListChatOptionComponent implements OnInit {
   dataUser: USERT;
   loader:boolean = true;
   txtFilter:string;
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl()
+  });
 
   @ViewChild('sonChat') sonChat: ChatNewDetailedComponent;
   @Output() dataSent = new EventEmitter<string>();
 
   @Input() querys:any = {};
+  listState = [{ id: 0, txt:"Sin Contestar"}, { id: 1, txt:"Contestados"}, { id: 3, txt:"Todos"}];
 
   constructor(
     private _config: ConfigKeysService,
@@ -138,7 +144,7 @@ export class ListChatOptionComponent implements OnInit {
     let filterNumber = _.findIndex(this.listChat, ['whatsappId', data.whatsappTxt]);
     console.log("*******120", filterNumber )
     if( filterNumber >= 0 ){
-      if( data.quien === 0 ) this.listChat[ filterNumber ].seen = 0;
+      if( data.quien === 0 ) this.listChat[ filterNumber ].seen = data.seen;
       this.listChat[ filterNumber ].date = (moment( new Date(), 'DD-MM-YYYY, H:mm:ss' )).unix();
       if( data.typeTxt === "txt" ) this.listChat[ filterNumber ].whatsappIdList.txt = data.txt || data.body;
       else this.listChat[ filterNumber ].whatsappIdList.txt = 'documento';
@@ -206,15 +212,37 @@ export class ListChatOptionComponent implements OnInit {
   async handleFilter(){
     this.loader = true;
     this.listChat = [];
-    //console.log(this.datoBusqueda);
-    this.txtFilter = this.txtFilter.trim();
-    this.querys.limit = 1000;
-    this.querys.page = 0;
-    //let result:any = await this.getListChat( this.querys );
-    let result = this.dataChatClone;
-    if(this.txtFilter != '') this.listChat = this._toolsService.searchKeyword( result, this.txtFilter );
-    else this.listChat = result;
+
+    if( this.txtFilter ){
+      this.txtFilter = this.txtFilter.trim();
+      let result = this.dataChatClone;
+      if(this.txtFilter != '') this.listChat = this._toolsService.searchKeyword( result, this.txtFilter );
+      else this.listChat = result;
+    }
+    if( this.range.value.end ){
+      let result:WHATSAPP[] = this.dataChatClone;
+      this.listChat = result.filter(row => {
+        const createdAt = moment(row.date1); // Convierte la fecha ISO en un objeto moment
+        const startDate = moment(this.range.value.start).startOf('day'); // Comienza desde el inicio del día
+        const endDate = moment(this.range.value.end).endOf('day'); // Hasta el final del día
+
+        return createdAt.isBetween(startDate, endDate, undefined, '[]');  // '[]' incluye las fechas de inicio y fin
+      });
+    }
+    if( !this.range.value.end && !this.txtFilter ) this.listChat = this.dataChatClone;
+
   }
+
+  async handleFilterState(){
+    this.loader = true;
+    this.listChat = [];
+    console.log("******239", this.txtFilter)
+    let result = this.dataChatClone;
+    if( Number( this.txtFilter ) !== 2 ) this.listChat = result.filter( row => row.seen === Number( this.txtFilter ) );
+    else this.listChat = this.dataChatClone;
+
+  }
+
 
   async handleEventState(){
     this.loader = true;

@@ -143,7 +143,8 @@ export class ConfigKeysService {
       txtCrearFile: "Crear archivo",
       txtChatNew: "Chat Nuevos",
       txtChatAnswered: "Chat Contestado",
-      txtChatFinalized: "Chat Finalizado"
+      txtChatFinalized: "Chat Finalizado",
+      txtDateTime: "Buscar por fechas"
     }
   };
   constructor() { }

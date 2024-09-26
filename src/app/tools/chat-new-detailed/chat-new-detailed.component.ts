@@ -97,12 +97,12 @@ export class ChatNewDetailedComponent implements OnInit{
     this.processId( true );
     this.childEmitter.emit( this.data );
     this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
-      console.log("****31", data, this.messages)
+      //console.log("****31", data, this.messages)
       this.processMessage( data );
     });
 
     this.chatService.receiveMessageInit().subscribe(async (data: MSG) => {
-      console.log("****31", data, this.messages)
+      //console.log("****31", data, this.messages)
       try {
         this.processMessage( data );
       } catch (error) {
@@ -129,7 +129,6 @@ export class ChatNewDetailedComponent implements OnInit{
     if( filterId >= 0 ){
       this.messages[filterId] = dataDbs;
       this.dataSent.emit( this.messages[filterId] ); //el que elimina de la lista cuando se ha respondido
-      console.log("********124", this.messages)
     }
   }
 

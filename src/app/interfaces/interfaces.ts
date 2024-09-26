@@ -70,6 +70,7 @@ export interface Componente {
     seen?: number;
     To?: string;
     date?: any;
+    date1?: string;
   }
   export interface WHATSAPPDETAILS{
     id?: string;
