@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormAllChatComponent } from 'src/app/dialog/form-all-chat/form-all-chat.component';
-import { MSG, USERT, WHATSAPP, WHATSAPPDETAILS } from 'src/app/interfaces/interfaces';
+import { MSG, SEQUENCESUSER, USERT, WHATSAPP, WHATSAPPDETAILS } from 'src/app/interfaces/interfaces';
 import { USER } from 'src/app/interfaces/user';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { ToolsService } from 'src/app/services/tools.service';
@@ -14,6 +14,7 @@ import { ChatNewDetailedComponent } from '../chat-new-detailed/chat-new-detailed
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { FormControl, FormGroup } from '@angular/forms';
+import { SequencesService } from 'src/app/servicesComponent/sequences.service';
 
 @Component({
   selector: 'app-list-chat-option',
@@ -38,7 +39,7 @@ export class ListChatOptionComponent implements OnInit {
 
   @Input() querys:any = {};
   listState = [{ id: 0, txt:"Sin Contestar"}, { id: 1, txt:"Contestados"}, { id: 3, txt:"Todos"}];
-
+  listSequence:SEQUENCESUSER[];
   constructor(
     private _config: ConfigKeysService,
     private _whatsappTxtUserService: WhatsappTxtUserService,
@@ -48,7 +49,8 @@ export class ListChatOptionComponent implements OnInit {
     private _router: Router,
     public _toolsService: ToolsService,
     private activate: ActivatedRoute,
-    private _whatsappTxtService : WhatsappTxtService
+    private _whatsappTxtService : WhatsappTxtService,
+    private _sequence: SequencesService
   ) {
     this.dataConfig = _config._config.keys;
     this._store.subscribe((store: any) => {
@@ -82,6 +84,8 @@ export class ListChatOptionComponent implements OnInit {
       start: new FormControl(moment().startOf('day').toDate()),  // Fecha de inicio
       end: new FormControl(moment().endOf('day').toDate())       // Fecha de final
     });
+    let resultSequences:any = await this.getListSequences();
+    this.listSequence = resultSequences;
     //this.reloadCharge();
   }
 
@@ -126,6 +130,14 @@ export class ListChatOptionComponent implements OnInit {
     }
   }
 
+  getListSequences( ){
+    return new Promise( resolve =>{
+      this._sequence.getUser( { where: { companyId: this.dataUser.empresa } } ).subscribe( res => {
+        resolve( res.data );
+      });
+    });
+  }
+
   nexProcessNewWhatsapp( data ){
     try {
       data = data.txt;
@@ -165,7 +177,7 @@ export class ListChatOptionComponent implements OnInit {
         date1: moment.unix( item.date ).format("YYYY-MM-DD HH:mm")
       }
     });
-    this.listChat = _.orderBy(this.listChat, ['senquenceEnd','date'], ['desc','desc']);
+    this.listChat = _.orderBy(this.listChat, ['date'], ['desc']);
     console.log("********105", this.listChat );
   }
 
@@ -221,10 +233,15 @@ export class ListChatOptionComponent implements OnInit {
     if( this.txtFilter ){
       this.txtFilter = this.txtFilter.trim();
       let result = this.dataChatClone;
-      if(this.txtFilter != '') this.listChat = this._toolsService.searchKeyword( result, this.txtFilter );
+      if(this.txtFilter != '') {
+        //this.listChat = this._toolsService.searchKeyword( result, this.txtFilter );
+        let result:any = await this.getNumberId(  this.txtFilter );
+        console.log("*****r", result)
+        this.listChat = result;
+      }
       else this.listChat = result;
     }
-    if( this.range.value.end ){
+    if( ( !this.txtFilter ) && ( this.range.value.end ) ){
       const startDate = moment( this.range.value.start ).startOf('day').toDate(); // Desde ayer a las 00:00
       const endDate = moment(this.range.value.end).endOf('day').toDate(); // Hasta hoy a las 23:59:59
       console.log("*****226", startDate, endDate );
@@ -245,6 +262,20 @@ export class ListChatOptionComponent implements OnInit {
 
   }
 
+  async getNumberId( number: string ){
+    return new Promise( async ( resolve ) =>{
+      let dataQuerys = {
+        where:{
+          to: {
+            contains: number
+          }
+        },
+        user: this.querys.where.userId,
+      };
+      await this._whatsappTxtService.getIdNumber( dataQuerys ).subscribe( res => resolve( res.data ) );
+    });
+  }
+
   async handleFilterState(){
     this.loader = true;
     this.listChat = [];
@@ -263,6 +294,10 @@ export class ListChatOptionComponent implements OnInit {
     this.querys.page = 0;
     let result:any = await this.getListChat( this.querys );
     this.listChat = result;
+  }
+
+  handleFilterSequence(){
+    this
   }
 
 }

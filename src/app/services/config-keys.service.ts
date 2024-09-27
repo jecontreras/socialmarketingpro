@@ -145,7 +145,8 @@ export class ConfigKeysService {
       txtChatAnswered: "Chat Contestado",
       txtChatFinalized: "Chat Finalizado",
       txtDateTime: "Buscar por fechas",
-      txtStateChat: "Estados de Chat"
+      txtStateChat: "Estados de Chat",
+      txtSearchSequences: "Secuencia del usuario"
     }
   };
   constructor() { }

@@ -222,6 +222,17 @@ export interface SEQUENCES{
   contactList?: CONTACT;
 }
 
+
+export interface SEQUENCESUSER{
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  sequence?: string;
+  whatsappTxt?: string;
+  companyId?: string;
+  state?: string;
+}
+
 export interface CAMPAIGNS{
   id?: string;
   createdAt?: string;
