@@ -78,14 +78,18 @@ export class ListChatOptionComponent implements OnInit {
       console.log("*******85", data )
       this.processMessageUpdate( data.dataDbs );
     });
+    this.range = new FormGroup({
+      start: new FormControl(moment().startOf('day').toDate()),  // Fecha de inicio
+      end: new FormControl(moment().endOf('day').toDate())       // Fecha de final
+    });
     //this.reloadCharge();
   }
 
   async handleDataSentDestroy( item ){
     console.log( "*****item", item , this.listChat, this.querys)
-    if( this.querys.where.sendAnswered === 0 ){
+    /*if( this.querys.where.sendAnswered === 0 ){
       this.listChat = this.listChat.filter( row => row.To !== item.to );
-    }
+    }*/
     if( this.querys.where.sendAnswered === 1 ){
       let filterR = this.listChat.find( row => row.To === item.to );
       if( !filterR ){
@@ -111,6 +115,7 @@ export class ListChatOptionComponent implements OnInit {
     this.dataChatClone = _.clone( result );
     this.handleOrderChat();
     this.processColorItem();
+    return true;
   }
 
   processColorItem(){
@@ -144,7 +149,7 @@ export class ListChatOptionComponent implements OnInit {
     let filterNumber = _.findIndex(this.listChat, ['whatsappId', data.whatsappTxt]);
     console.log("*******120", filterNumber )
     if( filterNumber >= 0 ){
-      if( data.quien === 0 ) this.listChat[ filterNumber ].seen = data.seen;
+      this.listChat[ filterNumber ].seen = data.seen;
       this.listChat[ filterNumber ].date = (moment( new Date(), 'DD-MM-YYYY, H:mm:ss' )).unix();
       if( data.typeTxt === "txt" ) this.listChat[ filterNumber ].whatsappIdList.txt = data.txt || data.body;
       else this.listChat[ filterNumber ].whatsappIdList.txt = 'documento';
@@ -160,7 +165,7 @@ export class ListChatOptionComponent implements OnInit {
         date1: moment.unix( item.date ).format("YYYY-MM-DD HH:mm")
       }
     });
-    this.listChat = _.orderBy(this.listChat, ['date'], ['desc']);
+    this.listChat = _.orderBy(this.listChat, ['senquenceEnd','date'], ['desc','desc']);
     console.log("********105", this.listChat );
   }
 
@@ -196,12 +201,12 @@ export class ListChatOptionComponent implements OnInit {
 
   handleSelectChat( item ){
     item.check = true;
-    this.dataSelect = item;
-    this._router.navigate(['/liveChat', this.dataSelect.id ] );
     item.seen=1;
+    this.dataSelect = item.whatsappIdList;
+    this._router.navigate(['/liveChat', this.dataSelect.id ] );
     this.handleUpdateState();
-    setTimeout(()=>this.handleEventSon( item ), 100)
-    console.log("***", item, this.listChat)
+    setTimeout(()=>this.handleEventSon( item.whatsappIdList ), 100)
+    //console.log("***", item, this.listChat)
   }
 
   handleUpdateState(){
@@ -220,8 +225,15 @@ export class ListChatOptionComponent implements OnInit {
       else this.listChat = result;
     }
     if( this.range.value.end ){
-      let result:WHATSAPP[] = this.dataChatClone;
-      this.listChat = result.filter(row => {
+      const startDate = moment( this.range.value.start ).startOf('day').toDate(); // Desde ayer a las 00:00
+      const endDate = moment(this.range.value.end).endOf('day').toDate(); // Hasta hoy a las 23:59:59
+      console.log("*****226", startDate, endDate );
+      this.querys.where.updatedAt= {
+        '>=': startDate,
+        '<=': endDate
+      };
+      await this.reloadCharge();
+      this.listChat = this.dataChatClone.filter(row => {
         const createdAt = moment(row.date1); // Convierte la fecha ISO en un objeto moment
         const startDate = moment(this.range.value.start).startOf('day'); // Comienza desde el inicio del día
         const endDate = moment(this.range.value.end).endOf('day'); // Hasta el final del día

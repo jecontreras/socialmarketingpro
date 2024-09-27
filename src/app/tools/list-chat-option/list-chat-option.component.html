@@ -38,7 +38,7 @@
     <mat-list-item
       *ngFor="let item of listChat"
       class="mat-elevation-z2 mouse"
-      (click)="handleSelectChat( item.whatsappIdList )"
+      (click)="handleSelectChat( item )"
       [ngClass]="
             { 'checkSelect': item.check == true,
               'checkShipment': item.whatsappIdList['tipeGuide'],
@@ -58,6 +58,7 @@
             <div class="chat-room__user-name r8">
               <span class="full-name-text r1"> {{ _toolsService.formatNumer( item.whatsappIdList.to ) }} </span>
               <span class="r4"> <span *ngIf="( item.seen === 0 )" class="text-success">●</span>  {{ item.date1 }} </span>
+              <span class="r4"> <span *ngIf="( item.senquenceEnd === true )" class="text-success">!!</span>  {{ item.date1 }} </span>
             </div>
           </div>
           <div class="chat-room__info-row r5">
