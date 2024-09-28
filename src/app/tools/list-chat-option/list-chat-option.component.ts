@@ -132,7 +132,7 @@ export class ListChatOptionComponent implements OnInit {
 
   getListSequences( ){
     return new Promise( resolve =>{
-      this._sequence.getUser( { where: { companyId: this.dataUser.empresa } } ).subscribe( res => {
+      this._sequence.get( { where: { state: "activo" } } ).subscribe( res => {
         resolve( res.data );
       });
     });
@@ -226,6 +226,12 @@ export class ListChatOptionComponent implements OnInit {
       this._whatsappTxtService.update( { id: this.dataSelect.id, seen: 1 }).subscribe( res => resolve( res ),error => resolve( error ) );
     });
   }
+  disabledFilter:boolean = false;
+
+  handleViewFilter(){
+    this.disabledFilter = !this.disabledFilter;
+  }
+
   async handleFilter(){
     this.loader = true;
     this.listChat = [];
@@ -296,8 +302,33 @@ export class ListChatOptionComponent implements OnInit {
     this.listChat = result;
   }
 
-  handleFilterSequence(){
-    this
+  async handleFilterSequence(){
+    this.loader = true;
+    this.listChat = [];
+    let result:any = await this.processSequeceChat( this.txtFilter );
+    this.listChat = result;
+    this.dataChatClone = _.clone( result );
+    this.handleOrderChat();
+    this.processColorItem();
+  }
+
+  async processSequeceChat( filter ){
+    return new Promise( async ( resolve ) =>{
+      const startDate = moment( this.range.value.start ).startOf('day').toDate(); // Desde ayer a las 00:00
+      const endDate = moment(this.range.value.end).endOf('day').toDate(); // Hasta hoy a las 23:59:59
+      let dataQuerys = {
+        where:{
+          sequence: filter,
+          companyId: this.dataUser.empresa,
+          updatedAt: {
+            '>=': startDate,
+            '<=': endDate
+          }
+        },
+        limit: 100000
+      };
+      await this._sequence.getUserSequenceChat( dataQuerys ).subscribe( res => resolve( res.data ) );
+    });
   }
 
 }

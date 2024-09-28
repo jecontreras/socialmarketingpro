@@ -328,7 +328,7 @@ export class ChatNewDetailedComponent implements OnInit{
               "urlMedios": urlHalf,
               "typeTxt": type,
               "quien": 1,
-              "id": 1,
+              "seen": 1,
               "userCreate": this.dataUser.id,
               "relationMessage": optR.relationMessage,
 
@@ -598,6 +598,10 @@ export class ChatNewDetailedComponent implements OnInit{
         element.classList.remove('highlight');
       }, 2000);
     }
+  }
+
+  handleDropChatMsx(){
+
   }
 
 }

@@ -113,6 +113,7 @@
               <span class="message-date">{{ message.date }}</span>
               <mat-icon class="message-status" *ngIf="message.sendWhatsapp === 0">done</mat-icon>
               <mat-icon class="message-status double-check" *ngIf="message.sendWhatsapp === 1">done_all</mat-icon>
+              <!--<mat-icon *ngIf="message.sendWhatsapp === 1" (click)="handleDropChatMsx()">restore_from_trash</mat-icon>-->
             </div>
       </div>
     </div>

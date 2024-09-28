@@ -26,6 +26,9 @@ export class SequencesService {
   getUser(query:any){
     return this._model.querys('sequencesUser/querys',query, 'post');
   }
+  getUserSequenceChat(query:any){
+    return this._model.querys('sequencesUser/getSecuenseUser',query, 'post');
+  }
   createUser(query:any){
     return this._model.querys('sequencesUser',query, 'post');
   }
