@@ -69,15 +69,15 @@ export class ListChatOptionComponent implements OnInit {
 
   async ngOnInit() {
     this.chatService.receiveChatAssigned().subscribe(async (data: MSG) => {
-      console.log("****77", data, this.listChat)
+      //console.log("****77", data, this.listChat)
        this.nexProcessNewWhatsapp( data );
     });
     this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
-      console.log("****81", data, this.listChat)
+      //console.log("****81", data, this.listChat)
       this.processMessageUpdate( { ...data.msx, whatsappTxt: data.msx.ids, } );
     });
     this.chatService.receiveMessageUpdateId().subscribe(async (data: MSG) => {
-      console.log("*******85", data )
+      //console.log("*******85", data )
       this.processMessageUpdate( data.dataDbs );
     });
     this.range = new FormGroup({
@@ -90,7 +90,7 @@ export class ListChatOptionComponent implements OnInit {
   }
 
   async handleDataSentDestroy( item ){
-    console.log( "*****item", item , this.listChat, this.querys)
+    //console.log( "*****item", item , this.listChat, this.querys)
     /*if( this.querys.where.sendAnswered === 0 ){
       this.listChat = this.listChat.filter( row => row.To !== item.to );
     }*/
@@ -98,7 +98,7 @@ export class ListChatOptionComponent implements OnInit {
       let filterR = this.listChat.find( row => row.To === item.to );
       if( !filterR ){
         let dataChat = await this.getIdChat( item.whatsappTxt, item.userCreate )
-        console.log("*******87", dataChat )
+        //console.log("*******87", dataChat )
         this.listChat.push( dataChat );
       }
     }

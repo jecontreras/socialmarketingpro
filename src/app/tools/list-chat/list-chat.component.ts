@@ -31,6 +31,7 @@ export class ListChatComponent implements OnInit {
   querys2:any = { where:{ } };
   querys3:any = { where:{ } };
   selectedTabIndex: number = 0;
+  rolName: string;
 
   constructor(
     private _config: ConfigKeysService,
@@ -43,6 +44,7 @@ export class ListChatComponent implements OnInit {
       store = store.name;
       if(!store) return false;
       this.dataUser = store.user || {};
+      if( this.dataUser.id ) this.rolName = this.dataUser.rol.nombre;
     });
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then((stream) => {
@@ -88,7 +90,6 @@ export class ListChatComponent implements OnInit {
       };
       this.querys3 = {
         where:{
-          userId: this.dataUser.id,
           assignedMe: 0,
           estado: 1,
           sendAnswered: 2,
@@ -102,6 +103,7 @@ export class ListChatComponent implements OnInit {
         limit: 1000000,
         page: 0
       };
+      if( this.rolName !== 'montador' ) this.querys3.where.userId = this.dataUser.id;
   };
 
   btnDataDs = {

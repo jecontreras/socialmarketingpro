@@ -125,7 +125,7 @@ export class ChatNewDetailedComponent implements OnInit{
     let dataDbs:any = data.dataDbs;
     let dataChat:any = data.dataFront;
     let filterId = _.findIndex( this.messages, ['id', dataChat.msx.id ] );
-    console.log("******119", filterId )
+    //console.log("******119", filterId )
     if( filterId >= 0 ){
       this.messages[filterId] = dataDbs;
       this.dataSent.emit( this.messages[filterId] ); //el que elimina de la lista cuando se ha respondido
@@ -602,6 +602,18 @@ export class ChatNewDetailedComponent implements OnInit{
 
   handleDropChatMsx(){
 
+  }
+
+  async handleCheckChat(){
+    let utr = await this.handleUpdateState( { id:  this.id, checkOrder: 1 } );
+    this._toolsService.tooast( { title: this.dataConfig.txtUpdate } )
+
+  }
+
+  async handleUpdateState( data ){
+    return new Promise( resolve=>{
+      this._whatsappDetails.update( data ).subscribe( res => resolve( res ),error => resolve( error ) );
+    });
   }
 
 }
