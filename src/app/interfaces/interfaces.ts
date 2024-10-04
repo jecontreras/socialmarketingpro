@@ -41,7 +41,20 @@ export interface Componente {
     username?: string;
     password?: string;
     rol?: any;
+    percentage?: number;
+    check?: boolean;
+    idUserAdviser?: string;
   }
+
+  export interface ROL{
+    id?: string;
+    createdAt?: string;
+    updatedAt?: string;
+    descripcion?: string;
+    estado?: string;
+    nombre?: string;
+  }
+
   export interface WHATSAPP{
     id?: string;
     to?: string;
@@ -53,6 +66,11 @@ export interface Componente {
     contactId?: any;
     check?: boolean;
     whatsappIdList?: any;
+    sendAnswered?: number;
+    seen?: number;
+    To?: string;
+    date?: any;
+    date1?: string;
   }
   export interface WHATSAPPDETAILS{
     id?: string;
@@ -67,9 +85,13 @@ export interface Componente {
     viewFile?: string;
     typeTxt?: string;
     seen?: number;
-    relationMessage?: number;
+    relationMessage?: string;
     estado?: number;
     numberGuide?: string;
+    idWhatsapp?: string;
+    dataRelationMessage?: any;
+    tipeGuide?:string;
+    contactIdList?: any;
   }
 
   export interface MSG{
@@ -78,6 +100,9 @@ export interface Componente {
     user?:string;
     msx?:any;
     contactId?:any;
+    dataFront?:any;
+    dataDbs?:any;
+    ids?:string;
   }
 
   export interface BLOCK {
@@ -99,6 +124,11 @@ export interface Componente {
     id?: string;
     createdAt?: string;
     updatedAt?: string;
+    idInfoWhatsapp?: string;
+    views?:string;
+    text?: string;
+    indicador?: string;
+    listLogic?: any;
   }
   export interface TAG {
     id?: string;
@@ -192,6 +222,17 @@ export interface SEQUENCES{
   contactList?: CONTACT;
 }
 
+
+export interface SEQUENCESUSER{
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  sequence?: string;
+  whatsappTxt?: string;
+  companyId?: string;
+  state?: string;
+}
+
 export interface CAMPAIGNS{
   id?: string;
   createdAt?: string;
@@ -236,11 +277,25 @@ export interface FASTANSWER{
   companyId?: string;
   companyIdList?: USERT;
   userCreationId?: string;
-  userCreationIdList?: USERT
+  userCreationIdList?: USERT;
+  descripcion?: string;
 }
 export interface GALERIA{
   id?: string;
   createdAt?: string;
   updatedAt?: string;
+}
+
+export interface GALERIA{
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+
+}
+
+export interface Fruit {
+  id?: any;
+  nombre?: string;
+  usu_email: string;
 }
 

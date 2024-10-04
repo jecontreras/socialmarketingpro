@@ -1,0 +1,56 @@
+<div class="header bg-gradient-danger pb-5 pt-2 pt-md-5">
+</div>
+<div class="content container">
+  <div class="row">
+    <div class="col-12">
+      <div class="d-flex justify-content-between">
+        <div></div>
+        <div></div>
+        <div>
+          <button mat-raised-button color="danger" (click)="resetGet( )">Actualizar</button>
+          <button mat-raised-button color="primary" (click)="handleOpenDialog( {} )">Crear</button>
+        </div>
+      </div>
+    </div>
+    <div class="col-12">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="Opcion">
+          <th mat-header-cell *matHeaderCellDef> Opciones. </th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-mini-fab aria-label="Ver Mas" color="primary" (click)="handleOpenDialog( element )">
+              <mat-icon>remove_red_eye</mat-icon>
+            </button>
+            <button mat-mini-fab aria-label="Ver Mas"  (click)="handleDropItem( element )">
+              <mat-icon>restore_from_trash</mat-icon>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Titulo">
+          <th mat-header-cell *matHeaderCellDef> Titulo. </th>
+          <td mat-cell *matCellDef="let element"> {{element.subtitulo}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Estado">
+          <th mat-header-cell *matHeaderCellDef> Estado </th>
+          <td mat-cell *matCellDef="let element"> {{element.estado === 0 ? 'Activo' : 'Completado'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="Creado">
+          <th mat-header-cell *matHeaderCellDef> Creado </th>
+          <td mat-cell *matCellDef="let element"> {{element.createdAt | date }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="UserC">
+          <th mat-header-cell *matHeaderCellDef> Usuario Creador </th>
+          <td mat-cell *matCellDef="let element"> {{element['creado']['email']  }} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+      <mat-paginator [length]="resultsLength" [pageSize]="10" [pageSizeOptions]="[10, 25, 100]" (page)="pageEvent($event)"></mat-paginator>
+    </div>
+  </div>
+</div>

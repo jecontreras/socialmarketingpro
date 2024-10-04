@@ -14,6 +14,8 @@ import { FormBroadcastComponent } from './form-broadcast/form-broadcast.componen
 import { FormAllChatComponent } from './form-all-chat/form-all-chat.component';
 import { OpenGalleriaComponent } from './open-galleria/open-galleria.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
+import { FormWhatsappComponent } from './form-whatsapp/form-whatsapp.component';
+import { ListAdvisorsComponent } from './list-advisors/list-advisors.component';
 
 
 
@@ -26,7 +28,8 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     FileDetailComponent,
     FormFlowsComponent,
     FormTagComponent,
-    FormAllChatComponent
+    FormAllChatComponent,
+    FormWhatsappComponent
 
   ],
   declarations: [
@@ -40,7 +43,9 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     FormBroadcastComponent,
     FormAllChatComponent,
     BottomSheetSheetTag,
-    OpenGalleriaComponent
+    OpenGalleriaComponent,
+    FormWhatsappComponent,
+    ListAdvisorsComponent
     ,
   ],
   exports:[
@@ -52,6 +57,7 @@ import { NgxDropzoneModule } from 'ngx-dropzone';
     FormFlowsComponent,
     FormTagComponent,
     FormAllChatComponent,
+    FormWhatsappComponent
 
   ],
   imports: [

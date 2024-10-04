@@ -1,0 +1,100 @@
+.mat-list-icon {
+  color: rgba(0, 0, 0, 0.54);
+}
+
+.r1 {
+  color: #313940;
+  font-size: 13px;
+  font-weight: 600;
+  left: 0px;
+  line-height: 18px;
+  max-width: 62%;
+  overflow: hidden;
+  position: absolute;
+  text-overflow: ellipsis;
+  text-wrap: nowrap;
+  top: 0px;
+}
+
+.r2 {
+  background-color: lightsteelblue;
+  background-size: cover;
+  border-radius: 50%;
+  height: 36px;
+  width: 36px;
+}
+
+.r3 {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  width: 259px;
+}
+
+.r4 {
+  color: #848b91;
+  font-size: 10px;
+  line-height: 13px;
+  position: absolute;
+  right: 0%;
+  text-align: right;
+}
+
+.r5{
+  align-items: center; display: flex; flex-direction: row; justify-content: space-between;
+}
+
+.r6{
+  color: #848b91; font-size: 12px; line-height: 16px;
+}
+
+.r8{
+  min-height: 20px; position: relative;
+}
+
+.r9{
+  align-items: center; display: flex; gap: 5px; margin-right: 10px; width: 300px;
+}
+.list-container {
+  max-height: 53vh;
+  overflow-y: auto; /* Habilita el desplazamiento vertical */
+}
+
+.checkSelect{
+  background: rgb(134, 247, 176) !important;
+}
+.checkShipment{
+  background: rgb(107, 244, 107);
+}
+.checkNewMessage{
+  background: #ffb0b0;
+}
+.checkOrder{
+  background: #2fff05;
+}
+
+
+.wave-text {
+  display: inline-block;
+  font-size: 1.2em;
+  animation: wave 2s infinite ease-in-out;
+  white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+}
+
+@keyframes wave {
+  0%, 100% {
+    transform: translateY(0); /* Punto inicial y final: sin desplazamiento vertical */
+  }
+  20% {
+    transform: translateY(-5px); /* Movimiento hacia arriba */
+  }
+  40% {
+    transform: translateY(5px);  /* Movimiento hacia abajo */
+  }
+  60% {
+    transform: translateY(-5px); /* Movimiento hacia arriba */
+  }
+  80% {
+    transform: translateY(5px);  /* Movimiento hacia abajo */
+  }
+}

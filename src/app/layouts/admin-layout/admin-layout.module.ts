@@ -30,6 +30,7 @@ import { FastAnswerComponent } from 'src/app/pages/fast-answer/fast-answer.compo
 import { TeamMembersComponent } from 'src/app/pages/team-members/team-members.component';
 import { OfficeHoursComponent } from 'src/app/pages/office-hours/office-hours.component';
 import { DefaultFlowsComponent } from 'src/app/pages/default-flows/default-flows.component';
+import { WhatsappComponent } from 'src/app/pages/whatsapp/whatsapp.component';
 // import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -65,7 +66,8 @@ import { DefaultFlowsComponent } from 'src/app/pages/default-flows/default-flows
     FastAnswerComponent,
     TeamMembersComponent,
     OfficeHoursComponent,
-    DefaultFlowsComponent
+    DefaultFlowsComponent,
+    WhatsappComponent
   ]
 })
 

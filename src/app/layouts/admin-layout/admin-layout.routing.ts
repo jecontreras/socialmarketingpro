@@ -12,6 +12,7 @@ import { BroadcastComponent } from 'src/app/pages/broadcast/broadcast.component'
 import { FlowsComponent } from 'src/app/pages/flows/flows.component';
 import { ConfigComponent } from 'src/app/pages/config/config.component';
 import { LiveChatComponent } from 'src/app/pages/live-chat/live-chat.component';
+import { WhatsappComponent } from 'src/app/pages/whatsapp/whatsapp.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -27,4 +28,5 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'liveChat/:id',           component: LiveChatComponent },
     { path: 'flows',           component: FlowsComponent },
     { path: 'config',           component: ConfigComponent },
+    { path: 'whatsapp',           component: WhatsappComponent },
 ];

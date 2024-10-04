@@ -1,0 +1,177 @@
+<div class="chat-container">
+  <!-- Header del chat -->
+  <div class="chat-header">
+    <div class="chat-user-info">
+      <img [src]="data['contactIdList']?.foto || './assets/imagenes/perfil.png'" alt="Foto de perfil" class="user-photo">
+      <span class="user-name">
+        {{  _toolsService.formatNumer( data.to )  }}
+      </span>
+      <span class="user-name" *ngIf="data.contactIdList" style="font-size: 8px;">
+        {{ data.contactIdList.name  }}
+      </span>
+    </div>
+    <div class="row">
+      <div class="col-12">
+        <div class="d-flex bd-highlight">
+          <div class="p-2 flex-grow-1 bd-highlight">
+            <label *ngIf="data.tipeGuide">Transportadora: {{ data.tipeGuide }}</label>
+              <div class="col-12">
+                <div class="form-group">
+                  <input
+                    class="form-control"
+                    type="number"
+                    [(ngModel)]="data.numberGuide"
+                    [placeholder]="dataConfig.numberGuider"
+                    (change)="handleUpdateNumber()"
+                  >
+                </div>
+              </div>
+          </div>
+          <div class="p-2 bd-highlight">
+            <!--<button mat-mini-fab color="warn" (click)="drawer.toggle()">
+              <mat-icon>perm_identity</mat-icon>
+            </button>-->
+            <button mat-mini-fab color="warn" (click)="handleOpenContact()">
+              <mat-icon>perm_identity</mat-icon>
+            </button>
+            <button mat-mini-fab color="accent" (click)="handleCheckChat()">
+              <mat-icon>check_circle</mat-icon>
+            </button>
+            <button mat-mini-fab color="primary" (click)="handleClose()">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-messages" #chatContainer>
+    <div
+      *ngFor="let message of messages"
+      [@messageAnimation]
+      [ngClass]="{
+        'message-sent': message.quien !== 0,
+        'message-received': message.quien === 0
+      }"
+      [attr.id]="message.id"
+    >
+      <!-- Mensaje relacionado -->
+      <div *ngIf="message.dataRelationMessage" class="related-message">
+        <span (click)="scrollToMessage(message.dataRelationMessage.id)" class="related-link">
+          Respuesta a: {{ message.dataRelationMessage.txt }}
+        </span>
+      </div>
+
+      <!-- Contenido del mensaje -->
+      <div class="message-content">
+        <!-- Imágenes -->
+        <img
+          *ngIf="message.typeTxt === 'image' || message.typeTxt === 'photo'"
+          [src]="message.urlMedios"
+          alt="imagen"
+          class="image-message"
+        />
+
+        <!-- Audio -->
+        <audio *ngIf="message.typeTxt === 'audio'" controls>
+          <source [src]="message.urlMedios" type="audio/mp3" />
+        </audio>
+
+        <!-- Video -->
+        <video *ngIf="message.typeTxt === 'video'" controls>
+          <source [src]="message.urlMedios" type="video/mp4" />
+        </video>
+
+        <!-- Documentos -->
+        <a
+          *ngIf="message.typeTxt === 'document'"
+          [href]="message.urlMedios"
+          download="{{ message.urlMedios }}"
+          target="_blank"
+          class="document-link"
+          >{{ message.urlMedios }}</a
+        >
+
+        <!-- Flujos -->
+        <span *ngIf="message.typeTxt === 'flow'">
+          <button
+            mat-mini-fab
+            color="primary"
+            aria-label="Example icon button with a menu icon"
+            (click)="handleOpenFlows(message)"
+          >
+            <mat-icon>remove_red_eye</mat-icon>
+          </button>
+          Flujo
+        </span>
+
+        <!-- Texto -->
+        <span *ngIf="message.txt">
+          {{ message.txt }}
+        </span>
+
+           <!-- Fecha y estado del mensaje juntos -->
+            <div class="message-info">
+              <span class="message-date">{{ message.date }}</span>
+              <mat-icon class="message-status" *ngIf="message.sendWhatsapp === 0">done</mat-icon>
+              <mat-icon class="message-status double-check" *ngIf="message.sendWhatsapp === 1">done_all</mat-icon>
+              <!--<mat-icon *ngIf="message.sendWhatsapp === 1" (click)="handleDropChatMsx()">restore_from_trash</mat-icon>-->
+            </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="d-flex bd-highlight" style="background-color: #f1f1f1;">
+    <div class="p-2 flex-grow-1 bd-highlight">
+      <form [formGroup]="chatForm" (ngSubmit)="sendMessage()">
+        <div class="input-container">
+
+          <!-- Campo de texto para el mensaje -->
+          <input
+            type="text"
+            formControlName="message"
+            (keydown.enter)="handleEnter($event)"
+            placeholder="Escribe un mensaje..."
+            class="chat-input"
+            (click)="emojiPickerVisible=false;"
+            [disabled]="!btnDisabled"
+          />
+
+          <!-- Botón para enviar -->
+          <button type="submit">➤</button>
+        </div>
+      </form>
+    </div>
+    <div class="p-2 bd-highlight">
+      <div class="input-container">
+        <button mat-icon-button [matMenuTriggerFor]="menu" color="warn" (click)="emojiPickerVisible=false;">
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="handleFile('document')">
+            <mat-icon>file_copy</mat-icon>
+          </button>
+          <button mat-menu-item  (click)="handleFile('video')">
+            <mat-icon>movie</mat-icon>
+          </button>
+          <button mat-menu-item (click)="handleFile('photo')">
+            <mat-icon> insert_photo</mat-icon>
+          </button>
+        </mat-menu>
+
+        <!--<input type="file" (change)="handleFileInput($event)" multiple hidden #fileInput>
+        <button (click)="fileInput.click()">📎</button>-->
+
+        <button (click)="toggleEmojiPicker()">😊</button>
+        <div *ngIf="emojiPickerVisible" #emojiPicker>
+          <emoji-mart set="twitter" (emojiSelect)="addEmoji($event)" [style]="{ position: 'absolute', bottom: '73px', right: '20px' }"></emoji-mart>
+        </div>
+        <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFastAnswer();emojiPickerVisible=false;">
+          <i class="ni ni-user-run"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

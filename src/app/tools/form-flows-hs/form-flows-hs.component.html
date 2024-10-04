@@ -1,26 +1,28 @@
 <div class="container">
   <div class="row">
-    <div class="col-12">
-      <h3> {{ dataConfig.initialDetails }} </h3>
-    </div>
-    <div class="col-12 col-sm-6 form-group">
-      <label for="exampleFormControlInput1"> {{ dataConfig.txtFormName }} </label>
-      <input type="text" class="form-control" [(ngModel)]="data.titulo">
-    </div>
-    <div class="col-12 col-sm-6 form-group">
-      <label for="exampleFormControlSelect1"> {{ dataConfig.txtFormNumber }} </label>
-      <select class="form-control" [(ngModel)]="data.numero">
-        <option [value]="item.id" *ngFor="let item of listWhatsappInfo" >
-          {{ item.titulo }} - {{ item.numero }}
-        </option>
-      </select>
-    </div>
-    <div class="col-12 form-group">
-      <label for="exampleFormControlInput1"> {{ dataConfig.description }} </label>
-      <textarea class="form-control" [(ngModel)]="data.descripcion" rows="3"></textarea>
-    </div>
-    <div class="col-12">
-      <button class="btn btn-primary" (click)="handleSubmit()" type="button"> {{ dataConfig.btnSaved }} </button>
+    <div class="col-12 row" *ngIf="views==='one'">
+      <div class="col-12">
+        <h3> {{ dataConfig.initialDetails }} </h3>
+      </div>
+      <div class="col-12 col-sm-6 form-group">
+        <label for="exampleFormControlInput1"> {{ dataConfig.txtFormName }} </label>
+        <input type="text" class="form-control" [(ngModel)]="data.titulo">
+      </div>
+      <div class="col-12 col-sm-6 form-group">
+        <label for="exampleFormControlSelect1"> {{ dataConfig.txtFormNumber }} </label>
+        <select class="form-control" [(ngModel)]="data.numero">
+          <option [value]="item.id" *ngFor="let item of listWhatsappInfo" >
+            {{ item.titulo }} - {{ item.numero }}
+          </option>
+        </select>
+      </div>
+      <div class="col-12 form-group">
+        <label for="exampleFormControlInput1"> {{ dataConfig.description }} </label>
+        <textarea class="form-control" [(ngModel)]="data.descripcion" rows="3"></textarea>
+      </div>
+      <div class="col-12">
+        <button class="btn btn-primary" (click)="handleSubmit()" type="button"> {{ dataConfig.btnSaved }} </button>
+      </div>
     </div>
     <div class="col-12">
       <div class="d-flex bd-highlight">
@@ -56,11 +58,16 @@
             </div>
             <div class="col-12 form-group">
               <label for="exampleFormControlInput1"> {{ dataConfig.indicatorNumber }} </label>
-              <input type="text" class="form-control"  [(ngModel)]="data.titulo">
+              <input type="text" class="form-control"  [(ngModel)]="item.indicador">
+            </div>
+            <div class="col-12 form-group" *ngIf="item.indicadorButton">
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtIndicatorButton }} </label>
+              <input type="text" class="form-control"  [(ngModel)]="item.indicadorButton" disabled>
             </div>
             <!--<div class="col-12 form-group">
               <mat-form-field class="example-chip-list">
-                  <mat-chip-list #chipList [aria-label]="dataConfig.indicatorDeep">
+
+                <mat-chip-list #chipList [aria-label]="dataConfig.indicatorDeep">
                       <mat-chip *ngFor="let key of item.deepIndicator"
                           [selectable]="selectable" [removable]="removable"
                           (removed)="remove( key, item )">
@@ -75,6 +82,13 @@
                </mat-form-field>
             </div>-->
             <div class="col-12 form-group">
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtTypeAction }} </label>
+              <select class="form-control" [(ngModel)]="item.typeAction">
+                <option [value]="item" *ngFor="let item of listTypeAction">
+                    {{ item }}</option>
+              </select>
+            </div>
+            <div class="col-12 form-group" *ngIf="( item.typeAction !== 'txt' && item.typeAction !== 'button' )">
               <label for="exampleFormControlInput1"> {{ dataConfig.urlMedia }} </label>
               <select class="form-control" [(ngModel)]="item.urlMedios">
                 <option value="">
@@ -83,10 +97,69 @@
                 <option [value]="item.id" *ngFor="let item of listGaleria">
                     {{ item.titulo }}</option>
               </select>
+              <button class="btn btn-primary" type="button" (click)="getGaleria()"> {{ dataConfig.txtReload }} </button>
+              <button class="btn btn-primary" type="button" (click)="handleFile()"> {{ dataConfig.txtCrearFile }} </button>
+            </div>
+            <div class="col-12 form-group" *ngIf="item.typeAction == 'button'">
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtButtonShift }} </label>
+              <mat-form-field class="example-chip-list">
+
+                <mat-chip-list #chipList [aria-label]="dataConfig.txtButtonShift">
+                      <mat-chip *ngFor="let key of item.listButton"
+                          [selectable]="selectable" [removable]="removable"
+                          (removed)="removeListButtonShift( key, item )">
+                          {{ key.text }}
+                          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                      </mat-chip>
+                      <input [placeholder]="dataConfig.listButtonShift" [matChipInputFor]="chipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          [matChipInputAddOnBlur]="addOnBlur"
+                          (matChipInputTokenEnd)="addListButtonShift($event, item)">
+                  </mat-chip-list>
+               </mat-form-field>
+            </div>
+            <div class="col-12 form-group" *ngIf="item.typeAction == 'button'">
+              <mat-list dense>
+                <mat-list-item
+                  *ngFor="let button of item.listButton"
+                >
+                  {{ button.text }}
+                  <button mat-button color="primary" (click)="handleOpenFlow( button, item )">
+                    {{ dataConfig.txtButtonCrearFlows }}
+                  </button>
+                </mat-list-item>
+               </mat-list>
             </div>
             <div class="col-12 form-group">
               <label for="exampleFormControlInput1"> {{ dataConfig.answer }} </label>
               <textarea class="form-control" [(ngModel)]="item.respuesta" rows="6" ></textarea>
+            </div>
+            <div class="col-12 form-group">
+              <section class="example-section">
+                <mat-checkbox class="example-margin" [(ngModel)]="item.respUser">Espera una Respues!</mat-checkbox>
+              </section>
+
+            </div>
+            <div class="col-12 form-group">
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtTimeMessage }} </label>
+              <input type="number" class="form-control"  [(ngModel)]="item.timeSend">
+            </div>
+            <div class="col-12 form-group" >
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtNextSequence }} </label>
+              <mat-form-field class="example-chip-list">
+                <mat-chip-list #chipList [aria-label]="dataConfig.txtNextSequence">
+                      <mat-chip *ngFor="let key of item.listFollowing"
+                          [selectable]="selectable" [removable]="removable"
+                          (removed)="removeNextSequence( key, item )">
+                          {{ key.idFollowing }}
+                          <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+                      </mat-chip>
+                      <input [placeholder]="dataConfig.listNextSequence" [matChipInputFor]="chipList"
+                          [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+                          [matChipInputAddOnBlur]="addOnBlur"
+                          (matChipInputTokenEnd)="addNextSequence($event, item)">
+                  </mat-chip-list>
+               </mat-form-field>
             </div>
           </div>
         </li>

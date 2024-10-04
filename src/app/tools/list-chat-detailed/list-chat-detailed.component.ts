@@ -87,7 +87,7 @@ export class ListChatDetailedComponent implements OnInit {
 
   processIframeWeb( item ){
     item.viewFile = this._toolsService.seguridadIfrane( item.urlMedios || item.href );
-    this.invertMessagesOrder();
+    //this.invertMessagesOrder();
     this.scrollToBottom();
   }
   handleOpenFlows( item ){
@@ -115,12 +115,14 @@ export class ListChatDetailedComponent implements OnInit {
             urlMedios: data.msx.urlMedios,
             user: data.msx.user,
             txt: data.msx.body,
-            typeTxt: data.msx.typeTxt
+            typeTxt: data.msx.typeTxt,
+            relationMessage: data.msx.relationMessage,
+            dataRelationMessage: this.listDetails.find( item => item.idWhatsapp === data.msx.relationMessage )
           });
         }
       }
-      this.invertMessagesOrder();
-      //this.scrollToBottom();
+      //this.invertMessagesOrder();
+      this.scrollToBottom();
     } catch (error) { }
     //console.log( this.listDetails )
   }
@@ -168,7 +170,7 @@ export class ListChatDetailedComponent implements OnInit {
 
   getWhatsappDetails(){
     return new Promise( resolve =>{
-      this._whatsappDetails.getDetails( { where: { whatsappTxt: this.data.id }, limit: 1000000 } ).subscribe( res =>{
+      this._whatsappDetails.getDetails( { where: { whatsappTxt: this.data.id }, limit: 1000000, sort: "updatedAt ASC" } ).subscribe( res =>{
         resolve( res.data );
       })
     })
@@ -286,6 +288,7 @@ export class ListChatDetailedComponent implements OnInit {
     }
 
     openBottomSheetFastAnswer(): void {
+
       const bottomSheetRef = this._bottomSheet.open(BottomSheetSheetFastAnswer);
 
       // Escucha el evento después de que se cierre el bottom sheet
@@ -307,6 +310,7 @@ export class ListChatDetailedComponent implements OnInit {
         console.log('Valor devuelto:', result);
         //this.msg.txt = result.description;
       });
+
     }
 
     async handleOpenContact(){
@@ -392,7 +396,7 @@ export class BottomSheetSheetFastAnswer {
       this.dataUser = store.user || {};
     });
     (async ()=>{
-      let list:any = await this.getListFastAnswer( { where:{ userCreationId: this.dataUser.id, check: true }, limit: 1000, page: 0 } );
+      let list:any = await this.getListFastAnswer( { where:{ companyId: this.dataUser.empresa, check: true }, limit: 1000, page: 0 } );
       this.listFastAnswer = list;
     })();
   }
@@ -442,3 +446,4 @@ export class BottomSheetSheetFlows {
     //event.preventDefault();
   }
 }
+

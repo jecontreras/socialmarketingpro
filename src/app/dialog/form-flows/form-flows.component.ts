@@ -31,6 +31,7 @@ export class FormFlowsComponent implements OnInit {
 
   ngOnInit(): void {
     this.data = this.datas || {};
+    this.dataConfig = this._config._config.keys;
   }
 
 }

@@ -11,8 +11,9 @@ import * as _ from 'lodash';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { FLOWS, INDICATOR } from 'src/app/interfaces/interfaces';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormFlowsComponent } from 'src/app/dialog/form-flows/form-flows.component';
+import { FileDetailComponent } from 'src/app/dialog/file-detail/file-detail.component';
 
 @Component({
   selector: 'app-form-flows-hs',
@@ -27,139 +28,20 @@ export class FormFlowsHsComponent implements OnInit {
   titulo:string="Crear"
   listLogic:any = [
     {
-      indicador: "He visto esto en Facebook",
+      indicador: "",
       urlMedios: "",
-      respuesta: `¡Hola Buen Día! Bienvenidos a la Tienda Virtual @liam_stilos
-        01. Ver catalogó!
-        02. Hacer pedido!
-        03. ¡Chatear con un asesor!
-        00. Volver al menú principal!
-      `
+      listFollowing: [],
+      listButton: [],
+      respuesta: ``
     },
-    {
-      indicador: "hola",
-      urlMedios: "",
-      respuesta: `¡Hola Buen Día! Bienvenidos a la Tienda Virtual @liam_stilos
-        01. Ver catalogó!
-        02. Hacer pedido!
-        03. ¡Chatear con un asesor!
-        00. Volver al menú principal!
-      `
-    },
-    {
-      indicador: "1",
-      urlMedios: "",
-      respuesta: `
-        4 *Ver Catalogo de Hombre*
-        5 *Ver Catalogo de Mujer*
-        6 *Ver Catalogo de Jean Hombre*
-        7 *Ver Catalogo de Jean Mujer*
-        0. *Volver al menú principal*
-      `
-    },
-    {
-      indicador: "2",
-      urlMedios: "",
-      respuesta: `
-      *Para el proceso de hacer pedido los requisitos son*
-      *. Foto o modelo del producto interesado?
-      *. Ciudad de Destino?
-      *. Nombre de la persona a recibir?
-      *. Talla interesado?
-      *. ¿Direccion a recibir?
-      *. ¿Telefono de quien lo recibe?
-
-      ¡Nota! Una vez nos manda toda la información nosotros nos encargamos del proceso de validación de tu pedido y en breve te mandaremos el número de guía.
-
- Recuerda que todos nuestros envíos son dé forma *Gratuita*
-
- ¡Gracias por tu compra y por preferirnos Feliz día!
-
-      `
-    },
-    {
-      indicador: "3",
-      urlMedios: "",
-      respuesta: ` *En unos Momentos un Asesor se Comunicara contigo*! `
-    },
-    {
-      indicador: "4",
-      urlMedios: "64ae40b5802dc8001412ac05",
-      respuesta: `
-      *Para el proceso de hacer pedido los requisitos son*
-                    *. Foto o modelo del producto interesado?
-                    *. Ciudad de Destino?
-                    *. Nombre de la persona a recibir?
-                    *. Talla interesado?
-                    *. ¿Direccion a recibir?
-                    *. ¿Telefono de quien lo recibe?
-
-                    ¡Nota! Una vez nos manda toda la información nosotros nos encargamos del proceso de validación de tu pedido y en breve te mandaremos el número de guía.
-                    Recuerda que todos nuestros envíos son dé forma *Gratuita*
-                    ¡Gracias por tu compra y por preferirnos Feliz día!
-      `
-    },
-    {
-      indicador: "5",
-      urlMedios: "64af63db865a1300140ee306",
-      respuesta: `
-      *Para el proceso de hacer pedido los requisitos son*
-                    *. Foto o modelo del producto interesado?
-                    *. Ciudad de Destino?
-                    *. Nombre de la persona a recibir?
-                    *. Talla interesado?
-                    *. ¿Direccion a recibir?
-                    *. ¿Telefono de quien lo recibe?
-
-                    ¡Nota! Una vez nos manda toda la información nosotros nos encargamos del proceso de validación de tu pedido y en breve te mandaremos el número de guía.
-                    Recuerda que todos nuestros envíos son dé forma *Gratuita*
-                    ¡Gracias por tu compra y por preferirnos Feliz día!
-      `
-    },
-    {
-      indicador: "6",
-      urlMedios: "64af63db865a1300140ee306",
-      respuesta: `
-      *Para el proceso de hacer pedido los requisitos son*
-                    *. Foto o modelo del producto interesado?
-                    *. Ciudad de Destino?
-                    *. Nombre de la persona a recibir?
-                    *. Talla interesado?
-                    *. ¿Direccion a recibir?
-                    *. ¿Telefono de quien lo recibe?
-
-                    ¡Nota! Una vez nos manda toda la información nosotros nos encargamos del proceso de validación de tu pedido y en breve te mandaremos el número de guía.
-                    Recuerda que todos nuestros envíos son dé forma *Gratuita*
-                    ¡Gracias por tu compra y por preferirnos Feliz día!
-      `
-    },
-    {
-      indicador: "7",
-      urlMedios: "64af63db865a1300140ee306",
-      respuesta: `
-      *Para el proceso de hacer pedido los requisitos son*
-                    *. Foto o modelo del producto interesado?
-                    *. Ciudad de Destino?
-                    *. Nombre de la persona a recibir?
-                    *. Talla interesado?
-                    *. ¿Direccion a recibir?
-                    *. ¿Telefono de quien lo recibe?
-
-                    ¡Nota! Una vez nos manda toda la información nosotros nos encargamos del proceso de validación de tu pedido y en breve te mandaremos el número de guía.
-                    Recuerda que todos nuestros envíos son dé forma *Gratuita*
-                    ¡Gracias por tu compra y por preferirnos Feliz día!
-      `
-    },
-    {
-      indicador: "0",
-      urlMedios: "",
-      respuesta: `¡Hola Buen Día! Bienvenidos a la Tienda Virtual @liam_stilos
-        01. Ver catalogó!
-        02. Hacer pedido!
-        03. ¡Chatear con un asesor!
-        00. Volver al menú principal!
-      `
-    },
+  ];
+  listTypeAction:string[] = [
+    "img",
+    "video",
+    "pdf",
+    "audio",
+    "txt",
+    "button"
   ];
   disableBtn:boolean = false;
   id:string;
@@ -172,17 +54,18 @@ export class FormFlowsHsComponent implements OnInit {
   addOnBlur = true;
   readonly separatorKeysCodes: number[] = [ENTER, COMMA];
   dataConfig:any = {};
+  views:string = "one";
+  disabledFunctionApi:boolean = true;
 
   constructor(
     private _logicWhatsapp: InfoWhatsappService,
     private _Tools: ToolsService,
-    private Router: Router,
-    private activate: ActivatedRoute,
     private _store: Store<USER>,
     private _galeria: GaleriaService,
     private _whatsappInfo: WhatsappInfoService,
     private _config: ConfigKeysService,
     public dialogRef: MatDialogRef<FormFlowsComponent>,
+    public dialog: MatDialog
   ) {
     this.dataConfig = this._config._config.keys;
     this._store.subscribe((store: any) => {
@@ -191,11 +74,11 @@ export class FormFlowsHsComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     /*this.id = (this.activate.snapshot.paramMap.get('id'));
     if( this.id ) this.getId();*/
-    if( this.dataId.id ) {
-      this.data = this.dataId;
+    if( this.dataId.id && !this.dataId.views ) {
+      this.data = await this.getFlowId( this.dataId.id ); this.dataId;
       this.id = this.data.id;
       this.listLogic = this.data.listLogic;
       try {
@@ -203,10 +86,53 @@ export class FormFlowsHsComponent implements OnInit {
       } catch (error) {
 
       }
+    }else{
+      this.views = this.dataId.views || 'one';
+      if( this.views === 'button' ){
+        this.disabledFunctionApi = false;
+        try {
+          if( this.dataId.listLogic.listLogic.length ){
+            this.listLogic = this.dataId.listLogic.listLogic.filter( row => row.indicadorButton === this.dataId.id );
+            this.id = this.dataId.listLogic.id;
+          }else{
+            this.listLogic= [
+              {
+                indicador: this.dataId.indicador,
+                indicadorButton: this.dataId.id,
+                urlMedios: "",
+                listFollowing: [],
+                listButton: [],
+                respuesta: ""
+              }
+            ]
+          }
+        } catch (error) {
+          this.listLogic= [
+            {
+              indicador: this.dataId.indicador,
+              indicadorButton: this.dataId.id,
+              urlMedios: "",
+              listFollowing: [],
+              listButton: [],
+              respuesta: ""
+            }
+          ]
+        }
+      }
+      console.log("ELSE", this.dataId)
     }
     console.log("***", this.data)
     this.getGaleria();
     this.getWhatsappInfo();
+  }
+
+  getFlowId( id ){
+    return new Promise( resolve =>{
+      this._logicWhatsapp.get( { where: { id: id }, limit: 1 } ).subscribe( res =>{
+        res = res.data[0];
+        resolve( res );
+      }, ( )=> resolve( {} ) );
+    });
   }
 
   getId(){
@@ -236,7 +162,10 @@ export class FormFlowsHsComponent implements OnInit {
   }
 
   handleDropList(){
-    this.listLogic = [{}];
+    this.listLogic = [{
+      listButton:[],
+      listFollowing: []
+    }];
   }
 
 
@@ -254,11 +183,15 @@ export class FormFlowsHsComponent implements OnInit {
   }
 
   async handleSubmit(){
+    if( this.disabledFunctionApi === false ) {
+      this.closeDialog( { detalle: this.data, listDetails: this.listLogic } );
+      return false;
+    }
     if( this.disableBtn ) return false;
     this.disableBtn = true;
     if( this.id ) await this.handleUpdate();
     else await this.handleCreate();
-    this.closeDialog();
+    this.closeDialog({});
     this.disableBtn = false;
   }
 
@@ -294,7 +227,8 @@ export class FormFlowsHsComponent implements OnInit {
 
   handleUpdateDetails( item:any ){
     return new Promise( resolve =>{
-      if( !item.id ) resolve( true );
+      if( !item.id ) return resolve( true );
+      //if( this.disabledFunctionApi === false ) return resolve( true );
       this._logicWhatsapp.updateWhatsappDetalle( {
         detalle: {
           estado: 1
@@ -326,6 +260,45 @@ export class FormFlowsHsComponent implements OnInit {
     }
   }
 
+  addListButtonShift(event: MatChipInputEvent, item ): void {
+    const input = event.input;
+    const value = event.value;
+    console.log( value )
+    if( !item.listButton ) item.listButton = []
+    // Add our fruit
+    if ((value || '').trim()) {
+      item.listButton.push(
+        {
+          text: value,
+          id: this._Tools.codigo()
+        });
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  addNextSequence(event: MatChipInputEvent, item ): void {
+    const input = event.input;
+    const value = event.value;
+    console.log( value )
+    if( !item.listFollowing ) item.listFollowing = []
+    // Add our fruit
+    if ((value || '').trim()) {
+      item.listFollowing.push(
+        {
+          idFollowing: value
+        });
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+
   async remove(fruit: INDICATOR, item) {
     const index = item.deepIndicator.indexOf(fruit);
 
@@ -335,14 +308,86 @@ export class FormFlowsHsComponent implements OnInit {
     }
   }
 
+  async removelistButton(txtButtonShift: string, item) {
+    const index = item.listButton.indexOf(txtButtonShift);
+
+    if (index >= 0) {
+      console.log( item.listButton[index] );
+      item.listButton.splice(index, 1);
+    }
+  }
+
+  async removeNextSequence(txtButtonShift: string, item) {
+    const index = item.listFollowing.indexOf(txtButtonShift);
+
+    if (index >= 0) {
+      console.log( item.listFollowing[index] );
+      item.listFollowing.splice(index, 1);
+    }
+  }
+
   handleDouble( item:any ){
       let data = _.clone( item );
       data.indicador = "clone " + data.indicador;
       this.listLogic.push( { ...data } );
   }
 
-  closeDialog(){
-    this.dialogRef.close();
+  closeDialog( obj:any ){
+
+    this.dialogRef.close( obj || null );
+  }
+
+  handleOpenFlow( button, row ){
+    button.idInfoWhatsapp = this.data.id;
+    button.views = 'button';
+    button.indicador = row.indicador;
+    button = {
+      ...button,
+      listLogic: row
+    }
+    const dialogRef = this.dialog.open(FormFlowsComponent, {
+      width: '100%',
+      data: button || {},
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result);
+      if( !result ) return false;
+      if( this.views === 'one'){
+        if( !row.listButtonLogic ) row.listButtonLogic = [];
+        for( let itemD of result.listDetails ){
+          itemD.indicadorButton = button.id;
+          row.listButtonLogic.push( itemD );
+        }
+      }
+      if( this.views === 'button'){
+        if( !row.listButtonLogic ) row.listButtonLogic = [];
+        for( let itemD of result.listDetails ){
+          itemD.indicadorButton = button.id;
+          row.listButtonLogic.push( itemD );
+        }
+      }
+      console.log("******344", this.listLogic, this.data )
+    });
+  }
+
+  handleFile( txtFormat:string ){
+    const dialogRef = this.dialog.open(FileDetailComponent, {
+      width: '50%',
+      height: "600px",
+      data: {
+        format: txtFormat,
+        user: this.dataUser.id
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(async  ( result ) => {
+      console.log('The dialog was closed', result );
+      if( result.id ){
+        this.data.urlMedios = result.id;
+      }
+
+    });
   }
 
 }

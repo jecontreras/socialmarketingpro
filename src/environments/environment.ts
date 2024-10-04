@@ -4,11 +4,11 @@
 
 export const environment = {
   production: false,
-  url: "https://socialmarketingapi-baf712cf13d8.herokuapp.com",
-  urlFile: "https://apilokomproaqui1-9219656b6da1.herokuapp.com"
-  //url: "https://socialmarketingapi-baf712cf13d8.herokuapp.com",
+  //url: "http://localhost:1337",
+  urlFile: "https://apilokomproaqui1-9219656b6da1.herokuapp.com",
+  url: "https://backsocialfront-5cc16f1b6a09.herokuapp.com",
   //urlFile: "https://apilokomproaqui1-9219656b6da1.herokuapp.com"
-  //url: "https://1337-jecontreras-socialmarke-5zz4ycanzj9.ws-us110.gitpod.io"
+  //url: "https://1337-jecontreras-socialmarke-r9pote9hj0o.ws-us116.gitpod.io"
 };
 
 /*

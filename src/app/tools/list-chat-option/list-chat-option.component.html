@@ -1,0 +1,107 @@
+<div class="col-12">
+  <div class="form-group">
+    <input class="form-control" type="search" [(ngModel)]="txtFilter" [placeholder]="dataConfig.search" id="example-search-input" (change)="handleFilter()">
+    <div class="row">
+      <div class="col-12">
+        <button mat-raised-button color="accent" (click)="handleViewFilter()">{{ dataConfig.txtBtnFilter }}</button>
+      </div>
+      <div class="col-12" *ngIf="disabledFilter">
+        <div class="row">
+          <div class="col-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{ dataConfig.txtDateTime }}</mat-label>
+              <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                <input matStartDate formControlName="start" placeholder="Start date">
+                <input matEndDate formControlName="end" placeholder="End date">
+              </mat-date-range-input>
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-date-range-picker #picker></mat-date-range-picker>
+
+              <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+              <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{ dataConfig.txtStateChat }}</mat-label>
+              <mat-select (selectionChange)="handleFilterState()" [(ngModel)]="txtFilter">
+                <mat-option *ngFor="let item of listState" [value]="item.id">
+                  {{item.txt }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-12">
+            <mat-form-field appearance="fill">
+              <mat-label>{{ dataConfig.txtSearchSequences }}</mat-label>
+              <mat-select (selectionChange)="handleFilterSequence()" [(ngModel)]="txtFilter">
+                <mat-option *ngFor="let item of listSequence" [value]="item.id">
+                  {{item.sequences }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-12">
+          <button mat-raised-button color="accent" (click)="handleFilter()">{{ dataConfig.search }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="col-12">
+  <button mat-raised-button color="primary" (click)="reloadCharge()">{{ dataConfig.txtUpdateWhatsapp }}</button>
+  <p>{{ dataConfig.txtCountChat }} : {{ countChat }}</p>
+</div>
+<div class="col-12 list-container">
+  <mat-list>
+    <mat-list-item
+      *ngFor="let item of listChat"
+      class="mat-elevation-z2 mouse"
+      (click)="handleSelectChat( item )"
+      [ngClass]="
+            { 'checkSelect': item.check == true,
+              'checkShipment': item.whatsappIdList['tipeGuide'],
+              'checkNewMessage': item.seen === 0,
+              'checkOrder': item.checkOrder === 1
+            }
+          "
+    >
+      <div mat-line>
+        <div class="chat-room__content r9">
+        <div class="chat-room__users-avatar-container">
+          <img alt="Default Avatar" class="chat-room__users-avatar r2"
+            src="{{ item.whatsappIdList['contactIdList']?.foto || './assets/img/theme/team-4-800x800.jpg' }}?stp=dst-jpg_s96x96&amp;ccb=11-4&amp;oh=01_ASBO06DXF88XYlaIfx-YqvV1eJejfPAe8FjEoSPkUYzd8w&amp;oe=66268F45&amp;_nc_sid=e6ed6c&amp;_nc_cat=111"
+          />
+        </div>
+        <div class="chat-room__info r3">
+          <div>
+            <div class="chat-room__user-name r8">
+              <span class="full-name-text r1"> 
+                {{ _toolsService.formatNumer( item.whatsappIdList.to ) }}  -  {{ item.whatsappIdList.contactIdList.name }}
+              </span>
+              <span class="r4"> <span *ngIf="( item.seen === 0 )" class="text-success">●</span>  {{ item.date1 }} </span>
+              <span class="r4"> <span *ngIf="( item.senquenceEnd === true )" class="text-success">!!</span>  {{ item.date1 }} </span>
+            </div>
+          </div>
+          <div class="chat-room__info-row r5">
+            <div class="chat-room__last-message r6">
+              <div class="chat-room-last-message__container">
+                <span class="last-message last-message-pre" *ngIf="( item.seen === 1 )">
+                  <span *ngIf="item.whatsappIdList.txt" >{{ item.whatsappIdList.txt }}</span>
+                  <span *ngIf="!item.whatsappIdList.txt" >document</span>
+                </span>
+                <span class="last-message last-message-pre" *ngIf="( item.seen === 0 )">
+                  <span class="wave-text" *ngIf="item.whatsappIdList.txt" >{{ item.whatsappIdList.txt }}</span>
+                  <span class="wave-text" *ngIf="!item.whatsappIdList.txt" >document</span>
+                </span>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      </div>
+    </mat-list-item>
+  </mat-list>
+</div>
