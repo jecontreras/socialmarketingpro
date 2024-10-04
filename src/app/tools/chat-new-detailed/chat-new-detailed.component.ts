@@ -319,7 +319,7 @@ export class ChatNewDetailedComponent implements OnInit{
         }
       }
       if( result.id ){
-        this.ProcessTxtChatNew( {}, result.id, '', 'flow');
+        this.ProcessTxtChatNew( {}, '', result.id, 'flow');
       }
 
     });
