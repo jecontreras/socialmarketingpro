@@ -135,7 +135,7 @@
             (keydown.enter)="handleEnter($event)"
             placeholder="Escribe un mensaje..."
             class="chat-input"
-            (click)="toggleEmojiPicker()"
+            (click)="emojiPickerVisible=false;"
             [disabled]="!btnDisabled"
           />
 
@@ -146,7 +146,7 @@
     </div>
     <div class="p-2 bd-highlight">
       <div class="input-container">
-        <button mat-icon-button [matMenuTriggerFor]="menu" color="warn" (click)="toggleEmojiPicker()">
+        <button mat-icon-button [matMenuTriggerFor]="menu" color="warn" (click)="emojiPickerVisible=false;">
           <mat-icon>add_circle_outline</mat-icon>
         </button>
         <mat-menu #menu="matMenu">
@@ -168,7 +168,7 @@
         <div *ngIf="emojiPickerVisible" #emojiPicker>
           <emoji-mart set="twitter" (emojiSelect)="addEmoji($event)" [style]="{ position: 'absolute', bottom: '73px', right: '20px' }"></emoji-mart>
         </div>
-        <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFastAnswer();toggleEmojiPicker()">
+        <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFastAnswer();emojiPickerVisible=false;">
           <i class="ni ni-user-run"></i>
         </button>
       </div>
