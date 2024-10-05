@@ -1,4 +1,4 @@
-<div class="chat-container">
+<div class="chat-container" >
   <!-- Header del chat -->
   <div class="chat-header">
     <div class="chat-user-info">
@@ -46,7 +46,7 @@
     </div>
   </div>
 
-  <div class="chat-messages" #chatContainer>
+  <div class="chat-messages" #chatContainer (scroll)="onScroll($event)">
     <div
       *ngFor="let message of messages"
       [@messageAnimation]
@@ -120,58 +120,65 @@
             </div>
       </div>
     </div>
+    <button mat-mini-fab color="warn" class="scroll-btn scroll-down" *ngIf="!isAtBottom" (click)="scrollToBottom()">
+      <mat-icon> vertical_align_bottom</mat-icon>
+    </button>
+
+    <button mat-mini-fab color="warn" class="scroll-btn scroll-up" *ngIf="!isAtTop" (click)="scrollToTop()">
+      <mat-icon> vertical_align_top</mat-icon>
+    </button>
   </div>
-
-
   <div class="d-flex bd-highlight" style="background-color: #f1f1f1;">
     <div class="p-2 flex-grow-1 bd-highlight">
       <form [formGroup]="chatForm" (ngSubmit)="sendMessage()">
-        <div class="input-container">
+        <div class="chat-input-wrapper">
+          <!-- Botón de adjuntar -->
+          <button mat-icon-button [matMenuTriggerFor]="menu" color="primary" class="attach-button">
+            <mat-icon>add_circle_outline</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="handleFile('document')">
+              <mat-icon>file_copy</mat-icon>
+            </button>
+            <button mat-menu-item (click)="handleFile('video')">
+              <mat-icon>movie</mat-icon>
+            </button>
+            <button mat-menu-item (click)="handleFile('photo')">
+              <mat-icon>insert_photo</mat-icon>
+            </button>
+          </mat-menu>
 
-          <!-- Campo de texto para el mensaje -->
-          <input
-            type="text"
+          <!-- Input para escribir mensaje -->
+          <textarea
             formControlName="message"
             (keydown.enter)="handleEnter($event)"
             placeholder="Escribe un mensaje..."
-            class="chat-input"
-            (click)="emojiPickerVisible=false;"
+            class="chat-input-area"
+            rows="1"
+            (click)="emojiPickerVisible=false"
             [disabled]="!btnDisabled"
-          />
+          ></textarea>
 
-          <!-- Botón para enviar -->
-          <button type="submit">➤</button>
+          <!-- Botón de emoji -->
+          <button type="button" mat-icon-button (click)="toggleEmojiPicker()" class="emoji-button">
+            😊
+          </button>
+
+          <!-- Picker de emojis -->
+          <div *ngIf="emojiPickerVisible" class="emoji-picker">
+            <emoji-mart set="twitter" (emojiSelect)="addEmoji($event)"></emoji-mart>
+          </div>
+          <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFastAnswer();emojiPickerVisible=false;">
+            <i class="ni ni-user-run"></i>
+          </button>
+
+          <!-- Botón de enviar -->
+          <button type="submit" mat-mini-fab color="accent" class="send-button">
+            ➤
+          </button>
         </div>
       </form>
     </div>
-    <div class="p-2 bd-highlight">
-      <div class="input-container">
-        <button mat-icon-button [matMenuTriggerFor]="menu" color="warn" (click)="emojiPickerVisible=false;">
-          <mat-icon>add_circle_outline</mat-icon>
-        </button>
-        <mat-menu #menu="matMenu">
-          <button mat-menu-item (click)="handleFile('document')">
-            <mat-icon>file_copy</mat-icon>
-          </button>
-          <button mat-menu-item  (click)="handleFile('video')">
-            <mat-icon>movie</mat-icon>
-          </button>
-          <button mat-menu-item (click)="handleFile('photo')">
-            <mat-icon> insert_photo</mat-icon>
-          </button>
-        </mat-menu>
-
-        <!--<input type="file" (change)="handleFileInput($event)" multiple hidden #fileInput>
-        <button (click)="fileInput.click()">📎</button>-->
-
-        <button (click)="toggleEmojiPicker()">😊</button>
-        <div *ngIf="emojiPickerVisible" #emojiPicker>
-          <emoji-mart set="twitter" (emojiSelect)="addEmoji($event)" [style]="{ position: 'absolute', bottom: '73px', right: '20px' }"></emoji-mart>
-        </div>
-        <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFastAnswer();emojiPickerVisible=false;">
-          <i class="ni ni-user-run"></i>
-        </button>
-      </div>
-    </div>
   </div>
+
 </div>

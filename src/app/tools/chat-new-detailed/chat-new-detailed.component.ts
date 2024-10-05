@@ -1,5 +1,5 @@
 import { animate, style, transition, trigger } from '@angular/animations';
-import { Component, ElementRef, Input, OnInit, Output, ViewChild,EventEmitter } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, Output, ViewChild,EventEmitter, HostListener } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatBottomSheet } from '@angular/material/bottom-sheet';
 import { MatDialog } from '@angular/material/dialog';
@@ -62,6 +62,9 @@ export class ChatNewDetailedComponent implements OnInit{
   audioBlob;
   btnDisabled: boolean;
 
+  isAtBottom = true;
+  isAtTop = false;
+
 
   constructor(
     private fb: FormBuilder,
@@ -119,6 +122,29 @@ export class ChatNewDetailedComponent implements OnInit{
       }
     });
 
+  }
+
+  ngAfterViewInit() {
+    // Escucha los cambios en el campo de texto y ajusta la altura
+    this.chatForm.get('message').valueChanges.subscribe(() => {
+      this.adjustTextareaHeight();
+    });
+  }
+
+  adjustTextareaHeight( optN:string=""  ) {
+    const textarea = document.querySelector('.chat-input-area') as HTMLTextAreaElement;
+    if (textarea) {
+      textarea.style.height = 'auto'; // Reinicia la altura para recalcular
+      console.log("*********135", optN, textarea.scrollHeight)
+      textarea.style.height = optN || textarea.scrollHeight + 'px'; // Ajusta a la altura necesaria
+    }
+  }
+
+  @HostListener('scroll', ['$event'])
+  onScroll(event: any) {
+    const container = this.chatContainer.nativeElement;
+    this.isAtBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
+    this.isAtTop = container.scrollTop === 0;
   }
 
   ProcessIdChat( data ){
@@ -187,7 +213,7 @@ export class ChatNewDetailedComponent implements OnInit{
 
   async handleEventFater() {
     // Lógica que deseas ejecutar cuando se llama desde el padre
-    console.log('Función ejecutada desde el hijo, entre', this.data );
+    //console.log('Función ejecutada desde el hijo, entre', this.data );
     this.messages = [];
     //this.processSpinnerValue('init');
     setTimeout(async()=>{
@@ -247,6 +273,16 @@ export class ChatNewDetailedComponent implements OnInit{
       this.chatContainer.nativeElement.scrollTop = this.chatContainer.nativeElement.scrollHeight;
     } catch (err) {
       console.error('Error scrolling to bottom:', err);
+    }
+  }
+
+  // Función para hacer scroll hasta arriba
+  scrollToTop(): void {
+    try {
+      const container = this.chatContainer.nativeElement;
+      container.scrollTop = 0;
+    } catch (error) {
+      console.error('Error scrolling to bottom:', error);
     }
   }
 
@@ -428,6 +464,7 @@ export class ChatNewDetailedComponent implements OnInit{
       this.ProcessTxtChatNew( opt, message,'', 'txt');
       // Restablece el campo después de enviar
       this.chatForm.reset();
+      this.btnDisabled = false;
       setTimeout(()=> this.scrollToBottom(), 100 );
     }
   }
@@ -464,14 +501,15 @@ export class ChatNewDetailedComponent implements OnInit{
      );
      this.chatService.enviarMensaje( newMessage );
     this.newMessage = '';
-
+    setTimeout(()=> this.adjustTextareaHeight( '34' ), 300 )
     this.checkVisibilityAndNotify(newMessage);
   }
 
   handleEnter(event: KeyboardEvent): void {
     // Enviar el mensaje al presionar Enter
+    console.log("*******488*******RRR", event)
     if (event.key === 'Enter') {
-      //this.sendMessage();
+      this.sendMessage();
     }
   }
 
