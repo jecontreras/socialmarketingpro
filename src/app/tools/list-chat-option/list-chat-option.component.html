@@ -51,6 +51,7 @@
 </div>
 <div class="col-12">
   <button mat-raised-button color="primary" (click)="reloadCharge()">{{ dataConfig.txtUpdateWhatsapp }}</button>
+  <p>{{ dataConfig.txtCountChat }} : {{ countChat }}</p>
 </div>
 <div class="col-12 list-container">
   <mat-list>
@@ -76,7 +77,9 @@
         <div class="chat-room__info r3">
           <div>
             <div class="chat-room__user-name r8">
-              <span class="full-name-text r1"> {{ _toolsService.formatNumer( item.whatsappIdList.to ) }} </span>
+              <span class="full-name-text r1"> 
+                {{ _toolsService.formatNumer( item.whatsappIdList.to ) }}  -  {{ item.whatsappIdList.contactIdList.name }}
+              </span>
               <span class="r4"> <span *ngIf="( item.seen === 0 )" class="text-success">●</span>  {{ item.date1 }} </span>
               <span class="r4"> <span *ngIf="( item.senquenceEnd === true )" class="text-success">!!</span>  {{ item.date1 }} </span>
             </div>

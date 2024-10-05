@@ -232,7 +232,9 @@ export class ChatNewDetailedComponent implements OnInit{
   }
 
   addEmoji(event) {
-    this.newMessage += event.emoji.native;
+    //this.newMessage += event.emoji.native;
+    const currentMessage = this.chatForm.get('message').value || ''; // Obtener el valor actual, si es null usar ''
+    this.chatForm.get('message').patchValue(currentMessage + event.emoji.native);
   }
 
 
@@ -269,7 +271,7 @@ export class ChatNewDetailedComponent implements OnInit{
     }
   }
 
-  handleFile( txtFormat:string ){
+  /*handleFile( txtFormat:string ){
     const dialogRef = this.dialog.open(FileDetailComponent, {
       width: '50%',
       height: "600px",
@@ -290,6 +292,34 @@ export class ChatNewDetailedComponent implements OnInit{
       }
       if( result.id ){
         await this.handleProcessWhatsapp( result.id, 'flow');
+      }
+
+    });
+  }*/
+
+  handleFile( txtFormat:string ){
+    const dialogRef = this.dialog.open(FileDetailComponent, {
+      width: '50%',
+      height: "600px",
+      data: {
+        format: txtFormat,
+        user: this.dataUser
+      },
+    });
+
+    dialogRef.afterClosed().subscribe(async  ( result ) => {
+      console.log('The dialog was closed', result );
+      if( !result.id ) {
+        for( let row of result ) {
+          let typeMsx = "txt";
+          if( row.type === "application/pdf" ) typeMsx = 'document';
+          else if( row.type === "video/mp4" ) typeMsx = 'video';
+          else  typeMsx="photo";
+          this.ProcessTxtChatNew( {}, "", row.href, typeMsx);
+        }
+      }
+      if( result.id ){
+        this.ProcessTxtChatNew( {}, result.id, '', 'flow');
       }
 
     });
@@ -395,44 +425,47 @@ export class ChatNewDetailedComponent implements OnInit{
       if( !message ) { this.btnDisabled = false; return false;}
 
       this.btnDisabled = false;
-      let newMessage = {
-        "msx": {
-          "from": this.data.from,
-          "to": this.data.to,
-          "body": `*${ this.dataUser.name }*: \n ${ message }`,
-          "urlMedios": "",
-          "typeTxt": "txt",
-          "quien": 2,
-          "id": this._toolsService.codigo(),
-          "userCreate": this.dataUser.id,
-          "relationMessage": opt.relationMessage || '',
-          "sendWhatsapp": 0,
-          "seen": 1
-        },
-        "user": { "id": this.dataUser.cabeza }
-      };
-      this.messages.push(
-        {
-          id: newMessage.msx.id,
-          txt: message,
-          quien: 1,
-          typeTxt: newMessage.msx.typeTxt,
-          urlMedios: newMessage.msx.urlMedios,
-          relationMessage: newMessage.msx.relationMessage,
-          sendWhatsapp: 0,
-          createdAt: moment().format( "DD-MM-YYYY, H:mm:ss" ),
-          seen: newMessage.msx.seen
-        }
-       );
-       this.chatService.enviarMensaje( newMessage );
-      this.newMessage = '';
-
-      this.checkVisibilityAndNotify(newMessage);
+      this.ProcessTxtChatNew( opt, message,'', 'txt');
       // Restablece el campo después de enviar
       this.chatForm.reset();
       setTimeout(()=> this.scrollToBottom(), 100 );
     }
+  }
 
+  ProcessTxtChatNew( opt, message, urlMedios = "", typeMsx ){
+    let newMessage = {
+      "msx": {
+        "from": this.data.from,
+        "to": this.data.to,
+        "body": `*${ this.dataUser.name }*: \n ${ message }`,
+        "urlMedios": urlMedios || "",
+        "typeTxt": typeMsx || "txt",
+        "quien": 2,
+        "id": this._toolsService.codigo(),
+        "userCreate": this.dataUser.id,
+        "relationMessage": opt.relationMessage || '',
+        "sendWhatsapp": 0,
+        "seen": 1
+      },
+      "user": { "id": this.dataUser.cabeza }
+    };
+    this.messages.push(
+      {
+        id: newMessage.msx.id,
+        txt: message,
+        quien: 1,
+        typeTxt: newMessage.msx.typeTxt,
+        urlMedios: newMessage.msx.urlMedios,
+        relationMessage: newMessage.msx.relationMessage,
+        sendWhatsapp: 0,
+        createdAt: moment().format( "DD-MM-YYYY, H:mm:ss" ),
+        seen: newMessage.msx.seen
+      }
+     );
+     this.chatService.enviarMensaje( newMessage );
+    this.newMessage = '';
+
+    this.checkVisibilityAndNotify(newMessage);
   }
 
   handleEnter(event: KeyboardEvent): void {

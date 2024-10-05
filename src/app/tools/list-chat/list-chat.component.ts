@@ -61,7 +61,7 @@ export class ListChatComponent implements OnInit {
           userId: this.dataUser.id,
           assignedMe: 0,
           estado: 0,
-          sendAnswered: 0,
+          sendAnswered: [0,1],
           whatsappId: { '!=': null },
           updatedAt: {
             '>=': startDate,
@@ -92,7 +92,6 @@ export class ListChatComponent implements OnInit {
         where:{
           assignedMe: 0,
           estado: 1,
-          sendAnswered: 2,
           whatsappId: { '!=': null },
           updatedAt: {
             '>=': startDate,

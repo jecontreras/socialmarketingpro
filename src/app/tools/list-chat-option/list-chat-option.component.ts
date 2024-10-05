@@ -40,6 +40,8 @@ export class ListChatOptionComponent implements OnInit {
   @Input() querys:any = {};
   listState = [{ id: 0, txt:"Sin Contestar"}, { id: 1, txt:"Contestados"}, { id: 3, txt:"Todos"}];
   listSequence:SEQUENCESUSER[];
+  countChat: 0;
+
   constructor(
     private _config: ConfigKeysService,
     private _whatsappTxtUserService: WhatsappTxtUserService,
@@ -87,6 +89,24 @@ export class ListChatOptionComponent implements OnInit {
     let resultSequences:any = await this.getListSequences();
     this.listSequence = resultSequences;
     //this.reloadCharge();
+    let countRChat:any = await this.getCountChat();
+    this.countChat = countRChat;
+    console.log("*********94", this.countChat)
+  }
+
+  async getCountChat(){
+    return new Promise( resolve =>{
+      const startDate = moment( this.range.value.start ).startOf('day').toDate(); // Desde ayer a las 00:00
+      const endDate = moment(this.range.value.end).endOf('day').toDate(); // Hasta hoy a las 23:59:59
+
+      this._whatsappTxtUserService.countChatUser( { where: { createdAt: {
+        '>=': startDate,
+        '<=': endDate
+      } } } ).subscribe( res =>{
+        res = res.count;
+        resolve( res );
+      },()=> resolve( false ) );
+    });
   }
 
   async handleDataSentDestroy( item ){
