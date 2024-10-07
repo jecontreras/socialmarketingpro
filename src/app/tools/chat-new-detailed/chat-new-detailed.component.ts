@@ -25,6 +25,7 @@ import { COMMA, ENTER } from '@angular/cdk/keycodes';
 import { MatChipInputEvent } from '@angular/material/chips';
 import { map, Observable, startWith } from 'rxjs';
 import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { UsuariosService } from 'src/app/servicesComponent/usuarios.service';
 
 @Component({
   selector: 'app-chat-new-detailed',
@@ -69,6 +70,7 @@ export class ChatNewDetailedComponent implements OnInit{
   isAtBottom = true;
   isAtTop = false;
   listAdviser:USERT[];
+  listUserAdviser:USERT[];
 
   visible = true;
   selectable = true;
@@ -95,6 +97,7 @@ export class ChatNewDetailedComponent implements OnInit{
     private Router: Router,
     private _whatsappTxtUser: WhatsappTxtUserService,
     private _bottomSheet: MatBottomSheet,
+    private _userServices: UsuariosService
   ) {
     this.dataConfig = _config._config.keys;
     this._store.subscribe((store: any) => {
@@ -102,9 +105,6 @@ export class ChatNewDetailedComponent implements OnInit{
       if(!store) return false;
       this.dataUser = store.user || {};
     });
-    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
-      startWith(null),
-      map((fruit: string | null) => fruit ? this._filter(fruit) : this.listAdviser.slice()));
   }
 
   ngOnInit() {
@@ -180,6 +180,20 @@ export class ChatNewDetailedComponent implements OnInit{
     } );
   }
 
+  getListAdviser(){
+    return new Promise( resolve =>{
+      this._userServices.get( { 
+        where:{
+          empresa: this.dataUser.empresa,
+          estado: "activo"
+        }
+      } ).subscribe( res => {
+        res = res.data;
+        resolve( res );
+      });
+    } );
+  }
+
   ProcessIdChat( data ){
     let dataDbs:any = data.dataDbs;
     let dataChat:any = data.dataFront;
@@ -233,6 +247,13 @@ export class ChatNewDetailedComponent implements OnInit{
         if( opt === true ) this.handleEventFater();
       } catch (error) { }
     }
+    let resultAdviser:any = await this.getListAdviser();
+    this.listUserAdviser = resultAdviser;
+    try {
+      this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+        startWith(null),
+        map((fruit: string | null) => fruit ? this._filter(fruit) : this.listUserAdviser ));
+    } catch (error) { }
   }
 
   getWhatsappInit( id:string ){
@@ -246,7 +267,7 @@ export class ChatNewDetailedComponent implements OnInit{
 
   async handleEventFater() {
     // Lógica que deseas ejecutar cuando se llama desde el padre
-    //console.log('Función ejecutada desde el hijo, entre', this.data );
+    console.log('Función ejecutada desde el hijo, entre', this.data );
     this.messages = [];
     //this.processSpinnerValue('init');
     setTimeout(async()=>{
@@ -722,7 +743,7 @@ export class ChatNewDetailedComponent implements OnInit{
   async add(event: MatChipInputEvent) {
     const input = event.input;
     const value = event.value;
-
+    console.log("*********746", value )
     // Add our fruit
     if ((value || '').trim()) {
       //this.listAdviser.push({name: value.trim()});
@@ -776,7 +797,7 @@ export class ChatNewDetailedComponent implements OnInit{
   private _filter(value: string): any[] {
     const filterValue = value.toLowerCase();
 
-    return this.listAdviser.filter(fruit => fruit.name.toLowerCase().indexOf(filterValue) === 0);
+    return this.listUserAdviser.filter(fruit => fruit.email.toLowerCase().indexOf(filterValue) === 0);
   }
 
 }
