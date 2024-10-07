@@ -45,6 +45,37 @@
       </div>
     </div>
   </div>
+  <!--<div class="col-12">
+    <div class="row">
+      <div class="col-12">
+        <mat-form-field class="example-chip-list">
+          <mat-chip-list #chipList aria-label="Fruit selection">
+            <mat-chip
+              *ngFor="let item of listAdviser"
+              [selectable]="selectable"
+              [removable]="removable"
+              (removed)="remove( item )">
+              {{ item.name }}
+              <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+            </mat-chip>
+            <input
+              [placeholder]="dataConfig.txtListAdviser"
+              #fruitInput
+              [formControl]="fruitCtrl"
+              [matAutocomplete]="auto"
+              [matChipInputFor]="chipList"
+              [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+              (matChipInputTokenEnd)="add($event)">
+          </mat-chip-list>
+          <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+            <mat-option *ngFor="let item of filteredFruits | async" [value]="item.id">
+              {{ item.name }}
+            </mat-option>
+          </mat-autocomplete>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>-->
 
   <div class="chat-messages" #chatContainer (scroll)="onScroll($event)">
     <div

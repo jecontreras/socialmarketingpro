@@ -19,6 +19,9 @@ export class WhatsappTxtUserService {
   countChatUser(query:any){
     return this._model.querys('whatsappTxtUser/countChatUser',query, 'post');
   }
+  getChatAdviser(query:any){
+    return this._model.querys('whatsappTxtUser/querysAdviser',query, 'post');
+  }
   create(query:any){
     return this._model.querys('whatsappTxtUser',query, 'post');
   }

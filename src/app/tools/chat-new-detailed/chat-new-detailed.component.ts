@@ -21,6 +21,10 @@ import { WhatsappTxtService } from 'src/app/servicesComponent/whatsappTxt.servic
 import { BottomSheetSheetFastAnswer, BottomSheetSheetFlows } from '../list-chat-detailed/list-chat-detailed.component';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { COMMA, ENTER } from '@angular/cdk/keycodes';
+import { MatChipInputEvent } from '@angular/material/chips';
+import { map, Observable, startWith } from 'rxjs';
+import { MatAutocomplete, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 
 @Component({
   selector: 'app-chat-new-detailed',
@@ -64,6 +68,17 @@ export class ChatNewDetailedComponent implements OnInit{
 
   isAtBottom = true;
   isAtTop = false;
+  listAdviser:USERT[];
+
+  visible = true;
+  selectable = true;
+  removable = true;
+  separatorKeysCodes: number[] = [ENTER, COMMA];
+  fruitCtrl = new FormControl();
+  filteredFruits: Observable<string[]>;
+
+  @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
+  @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
 
   constructor(
@@ -87,6 +102,9 @@ export class ChatNewDetailedComponent implements OnInit{
       if(!store) return false;
       this.dataUser = store.user || {};
     });
+    this.filteredFruits = this.fruitCtrl.valueChanges.pipe(
+      startWith(null),
+      map((fruit: string | null) => fruit ? this._filter(fruit) : this.listAdviser.slice()));
   }
 
   ngOnInit() {
@@ -145,6 +163,21 @@ export class ChatNewDetailedComponent implements OnInit{
     const container = this.chatContainer.nativeElement;
     this.isAtBottom = container.scrollHeight - container.scrollTop === container.clientHeight;
     this.isAtTop = container.scrollTop === 0;
+  }
+
+  getChatAdviser(){
+    return new Promise( resolve =>{
+      this._whatsappTxtUser.getChatAdviser( { 
+        where:{
+          whatsappId: this.data.id,
+          assignedMe: 0,
+          companyId: this.dataUser.empresa
+        }
+      } ).subscribe( res => {
+        res = res.data;
+        resolve( res );
+      });
+    } );
   }
 
   ProcessIdChat( data ){
@@ -223,6 +256,8 @@ export class ChatNewDetailedComponent implements OnInit{
         this.messages = result;
         //this.invertMessagesOrder();
         setTimeout(()=> this.scrollToBottom(), 200 );
+        let resultAdviser:any = await this.getChatAdviser();
+        this.listAdviser = resultAdviser;
         //this.processSpinnerValue('end');
       }else this.messages = [];
     }, 200)
@@ -357,7 +392,7 @@ export class ChatNewDetailedComponent implements OnInit{
       if( result.id ){
         this.ProcessTxtChatNew( {}, '', result.id, 'flow');
       }
-
+      setTimeout(()=>this.scrollToBottom(), 200 );
     });
   }
 
@@ -452,8 +487,6 @@ export class ChatNewDetailedComponent implements OnInit{
   }*/
 
   async sendMessage( opt:any = {} ) {
-    if( this.btnDisabled ) return false;
-    this.btnDisabled = true;
     // Lógica para enviar el mensaje
     if (this.chatForm.valid) {
       const message = this.chatForm.get('message').value;
@@ -464,7 +497,6 @@ export class ChatNewDetailedComponent implements OnInit{
       this.ProcessTxtChatNew( opt, message,'', 'txt');
       // Restablece el campo después de enviar
       this.chatForm.reset();
-      this.btnDisabled = false;
       setTimeout(()=> this.scrollToBottom(), 100 );
     }
   }
@@ -685,6 +717,66 @@ export class ChatNewDetailedComponent implements OnInit{
     return new Promise( resolve=>{
       this._whatsappDetails.update( data ).subscribe( res => resolve( res ),error => resolve( error ) );
     });
+  }
+
+  async add(event: MatChipInputEvent) {
+    const input = event.input;
+    const value = event.value;
+
+    // Add our fruit
+    if ((value || '').trim()) {
+      //this.listAdviser.push({name: value.trim()});
+      //let result:any = await this.handleProccesAdviserCreate( { userId: } );
+    }
+
+    // Reset the input value
+    if (input) {
+      input.value = '';
+    }
+  }
+
+  async remove( item: USERT ) {
+    let result = await this.handleProccesAdviserUpdate( { id: item.idAviserAsigned, assignedMe: 1 } );
+    if( result ) {
+      this.listAdviser = this.listAdviser.filter( row => row.idAviserAsigned === item.idAviserAsigned )
+      this._toolsService.tooast( { title: this.dataConfig.txtUpdate } )
+    }else{
+      this._toolsService.tooast( { title: this.dataConfig.txtError } )
+    }
+  }
+
+  handleProccesAdviserUpdate( data ){
+    return new Promise( resolve =>{
+      this._whatsappTxtUser.update( { id: data.id, assignedMe: data.assignedMe  } ).subscribe( res =>{
+        resolve( res );
+      })
+    });
+  }
+
+  handleProccesAdviserCreate( data ){
+    return new Promise( resolve =>{
+      this._whatsappTxtUser.create( { 
+        userId: data.userId, 
+        whatsappId: this.data.id, 
+        companyId: this.dataUser.empresa 
+      }).subscribe( res =>{
+        resolve( res );
+      })
+    });
+  }
+
+  selected(event: MatAutocompleteSelectedEvent): void {
+    console.log("***769", event.option );
+    /*this.fruits.push(event.option.viewValue);
+    this.fruitInput.nativeElement.value = '';
+    this.fruitCtrl.setValue(null);
+    */
+  }
+
+  private _filter(value: string): any[] {
+    const filterValue = value.toLowerCase();
+
+    return this.listAdviser.filter(fruit => fruit.name.toLowerCase().indexOf(filterValue) === 0);
   }
 
 }

@@ -148,7 +148,8 @@ export class ConfigKeysService {
       txtStateChat: "Estados de Chat",
       txtSearchSequences: "Secuencia del usuario",
       txtBtnFilter: "Buscar Por Filtros",
-      txtCountChat: "Cantidad de Chat en el Dia"
+      txtCountChat: "Cantidad de Chat en el Dia",
+    
     }
   };
   constructor() { }

@@ -44,6 +44,7 @@ export interface Componente {
     percentage?: number;
     check?: boolean;
     idUserAdviser?: string;
+    idAviserAsigned?: string;
   }
 
   export interface ROL{
