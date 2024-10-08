@@ -25,7 +25,7 @@ export class ChatService {
       store = store.name;
       if(!store) return false;
       this.dataUser = store.user || {};
-      this.url = this.dataUser.urlSocket || this.url;
+      this.url =  this.dataUser.urlSocket || this.url;
     });
     this.socket = io(this.url, socketOptions);
     this.socket.on('connect', () => {
@@ -51,6 +51,10 @@ export class ChatService {
 
   deleteChat(id: any) {
     this.socket.emit('deleteChat', { id: id });
+  }
+
+  initChatopp( data:any ) {
+    this.socket.emit('initMessage', data );
   }
 
   recibirMensajes( ): Observable<any> {

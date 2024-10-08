@@ -122,7 +122,7 @@ export class ChatNewDetailedComponent implements OnInit{
     this.processId( true );
     this.childEmitter.emit( this.data );
     this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
-      //console.log("****31", data, this.messages)
+      console.log("****31", data, this.messages)
       this.processMessage( data );
     });
 
@@ -249,7 +249,7 @@ export class ChatNewDetailedComponent implements OnInit{
         }
       }
       //this.invertMessagesOrder();
-      if( data.msx.ids === this.data.id ) setTimeout(()=> this.scrollToBottom(), 200 );
+      if( data.msx.ids === this.data.id ) setTimeout(()=> this.scrollToBottom(), 100 );
     } catch (error) { }
     this.processIdUni();
     //console.log( this.messages )
@@ -420,7 +420,7 @@ export class ChatNewDetailedComponent implements OnInit{
     });
 
     dialogRef.afterClosed().subscribe(async  ( result ) => {
-      console.log('The dialog was closed', result );
+      //console.log('The dialog was closed', result );
       if( !result.id ) {
         for( let row of result ) {
           let typeMsx = "txt";
@@ -543,7 +543,8 @@ export class ChatNewDetailedComponent implements OnInit{
   }
 
   ProcessTxtChatNew( opt, message, urlMedios = "", typeMsx ){
-    if( this.replyingToMessage ) { opt = { relationMessage: this.replyingToMessage.idWhatsapp }; this.cancelReply(); }
+    if( this.replyingToMessage ) { opt = { relationMessage: this.replyingToMessage.idWhatsapp }; }
+    //console.log("*****546", this.replyingToMessage, opt)
     let newMessage = {
       "msx": {
         "from": this.data.from,
@@ -560,24 +561,54 @@ export class ChatNewDetailedComponent implements OnInit{
       },
       "user": { "id": this.dataUser.cabeza }
     };
-    this.messages.push(
-      {
-        id: newMessage.msx.id,
-        txt: message,
-        quien: 1,
-        typeTxt: newMessage.msx.typeTxt,
-        urlMedios: newMessage.msx.urlMedios,
-        relationMessage: newMessage.msx.relationMessage,
-        sendWhatsapp: 0,
-        createdAt: moment().format( "DD-MM-YYYY, H:mm:ss" ),
-        seen: newMessage.msx.seen
+     let validateDate = this.verificarTiempoTranscurrido();
+     //console.log("******577 R", validateDate)
+     if( validateDate ) this.chatService.initChatopp( newMessage );
+     else {
+      this.chatService.enviarMensaje( newMessage );
+      this.messages.push(
+        {
+          id: newMessage.msx.id,
+          txt: message,
+          quien: 1,
+          typeTxt: newMessage.msx.typeTxt,
+          urlMedios: newMessage.msx.urlMedios,
+          relationMessage: newMessage.msx.relationMessage,
+          sendWhatsapp: 0,
+          createdAt: moment().format( "DD-MM-YYYY, H:mm:ss" ),
+          seen: newMessage.msx.seen
+        }
+       );
       }
-     );
-     this.chatService.enviarMensaje( newMessage );
     this.newMessage = '';
     setTimeout(()=> this.adjustTextareaHeight( '34' ), 300 )
     this.checkVisibilityAndNotify(newMessage);
+    this.cancelReply();
   }
+
+  verificarTiempoTranscurrido() {
+    // Fecha actual
+    const fechaActual = moment();  // La fecha y hora actuales
+    const fechaReferencia = moment(this.data.date, "DD-MM-YYYY HH:mm:ss");
+
+    // Diferencia en horas entre la fecha guardada y la fecha actual
+    if (!fechaReferencia.isValid()) {
+      console.error('La fecha no es válida');
+      return false;
+    }
+    const diferenciaHoras = fechaActual.diff(fechaReferencia, 'hours');
+    //console.log("*******", diferenciaHoras, this.data.date, fechaReferencia)
+    // Verifica si la fecha es válida
+    // Si la diferencia es mayor a 24 horas
+    if (diferenciaHoras >= 24) {
+      console.log("**RR YA PASO LAS Horas" )
+      return true;
+    } else {
+      console.log('Aún no han pasado 24 horas.');
+      return false;
+    }
+  }
+
 
   handleEnter(event: KeyboardEvent): void {
     // Enviar el mensaje al presionar Enter

@@ -351,4 +351,8 @@ export class ListChatOptionComponent implements OnInit {
     });
   }
 
+  handleInitChat( data:any ){
+    this.chatService.initChatopp( { number: data.number, body: data.body } );
+  }
+
 }

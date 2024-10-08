@@ -93,6 +93,7 @@ export interface Componente {
     dataRelationMessage?: any;
     tipeGuide?:string;
     contactIdList?: any;
+    date?: string;
   }
 
   export interface MSG{

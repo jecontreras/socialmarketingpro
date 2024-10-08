@@ -67,40 +67,43 @@
             }
           "
     >
-      <div mat-line>
-        <div class="chat-room__content r9">
-        <div class="chat-room__users-avatar-container">
-          <img alt="Default Avatar" class="chat-room__users-avatar r2"
-            src="{{ item.whatsappIdList['contactIdList']?.foto || './assets/img/theme/team-4-800x800.jpg' }}?stp=dst-jpg_s96x96&amp;ccb=11-4&amp;oh=01_ASBO06DXF88XYlaIfx-YqvV1eJejfPAe8FjEoSPkUYzd8w&amp;oe=66268F45&amp;_nc_sid=e6ed6c&amp;_nc_cat=111"
-          />
-        </div>
-        <div class="chat-room__info r3">
-          <div>
-            <div class="chat-room__user-name r8">
-              <span class="full-name-text r1"> 
-                {{ _toolsService.formatNumer( item.whatsappIdList.to ) }}  -  {{ item.whatsappIdList.contactIdList.name }}
-              </span>
-              <span class="r4"> <span *ngIf="( item.seen === 0 )" class="text-success">●</span>  {{ item.date1 }} </span>
-              <span class="r4"> <span *ngIf="( item.senquenceEnd === true )" class="text-success">!!</span>  {{ item.date1 }} </span>
+        <div mat-line>
+          <div class="chat-room__content r9">
+            <div class="chat-room__users-avatar-container">
+              <img alt="Default Avatar" class="chat-room__users-avatar r2"
+                src="{{ item.whatsappIdList['contactIdList']?.foto || './assets/img/theme/team-4-800x800.jpg' }}?stp=dst-jpg_s96x96&amp;ccb=11-4&amp;oh=01_ASBO06DXF88XYlaIfx-YqvV1eJejfPAe8FjEoSPkUYzd8w&amp;oe=66268F45&amp;_nc_sid=e6ed6c&amp;_nc_cat=111"
+              />
             </div>
-          </div>
-          <div class="chat-room__info-row r5">
-            <div class="chat-room__last-message r6">
-              <div class="chat-room-last-message__container">
-                <span class="last-message last-message-pre" *ngIf="( item.seen === 1 )">
-                  <span *ngIf="item.whatsappIdList.txt" >{{ item.whatsappIdList.txt }}</span>
-                  <span *ngIf="!item.whatsappIdList.txt" >document</span>
+          <div class="chat-room__info r3">
+            <div>
+              <div class="chat-room__user-name r8">
+                <span class="full-name-text r1"> 
+                  {{ _toolsService.formatNumer( item.whatsappIdList.to ) }}  -  {{ item.whatsappIdList.contactIdList.name }}
                 </span>
-                <span class="last-message last-message-pre" *ngIf="( item.seen === 0 )">
-                  <span class="wave-text" *ngIf="item.whatsappIdList.txt" >{{ item.whatsappIdList.txt }}</span>
-                  <span class="wave-text" *ngIf="!item.whatsappIdList.txt" >document</span>
-                </span>
+                <span class="r4"> <span *ngIf="( item.seen === 0 )" class="text-success">●</span>  {{ item.date1 }} </span>
+                <span class="r4"> <span *ngIf="( item.senquenceEnd === true )" class="text-success">!!</span>  {{ item.date1 }} </span>
               </div>
+            </div>
+            <div class="chat-room__info-row r5">
+              <div class="chat-room__last-message r6">
+                <div class="chat-room-last-message__container">
+                  <span class="last-message last-message-pre" *ngIf="( item.seen === 1 )">
+                    <span *ngIf="item.whatsappIdList.txt" >{{ item.whatsappIdList.txt }}</span>
+                    <span *ngIf="!item.whatsappIdList.txt" >document</span>
+                  </span>
+                  <span class="last-message last-message-pre" *ngIf="( item.seen === 0 )">
+                    <span class="wave-text" *ngIf="item.whatsappIdList.txt" >{{ item.whatsappIdList.txt }}</span>
+                    <span class="wave-text" *ngIf="!item.whatsappIdList.txt" >document</span>
+                  </span>
+                </div>
 
+              </div>
             </div>
           </div>
         </div>
-      </div>
+        <div mat-line>
+          Etiquetas
+        </div>
       </div>
     </mat-list-item>
   </mat-list>

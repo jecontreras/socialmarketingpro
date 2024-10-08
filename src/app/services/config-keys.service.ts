@@ -149,7 +149,7 @@ export class ConfigKeysService {
       txtSearchSequences: "Secuencia del usuario",
       txtBtnFilter: "Buscar Por Filtros",
       txtCountChat: "Cantidad de Chat en el Dia",
-    
+      txtInitChat: "Iniciar Chat"
     }
   };
   constructor() { }
