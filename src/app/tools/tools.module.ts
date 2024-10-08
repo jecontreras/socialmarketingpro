@@ -18,6 +18,7 @@ import { FormFlowsHsComponent } from './form-flows-hs/form-flows-hs.component';
 import { MatListModule } from '@angular/material/list';
 import { ChatNewDetailedComponent } from './chat-new-detailed/chat-new-detailed.component';
 import { ListChatOptionComponent } from './list-chat-option/list-chat-option.component';
+import { A11yModule } from '@angular/cdk/a11y';
 
 @NgModule({
   declarations: [
@@ -57,7 +58,8 @@ import { ListChatOptionComponent } from './list-chat-option/list-chat-option.com
     MatListModule ,
     FormsModule,
     PickerModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    A11yModule
   ],
   providers: [FullConnectionService]
 })

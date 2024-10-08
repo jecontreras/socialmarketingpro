@@ -143,7 +143,13 @@
               <span class="message-date">{{ message.date }}</span>
               <mat-icon class="message-status" *ngIf="message.sendWhatsapp === 0">done</mat-icon>
               <mat-icon class="message-status double-check" *ngIf="message.sendWhatsapp === 1">done_all</mat-icon>
-              <!--<mat-icon *ngIf="message.sendWhatsapp === 1" (click)="handleDropChatMsx()">restore_from_trash</mat-icon>-->
+              <button mat-button [matMenuTriggerFor]="menu1">
+                <mat-icon>save_alt</mat-icon>
+              </button>
+              <mat-menu #menu1="matMenu">
+                <button mat-menu-item (click)="setReply(message)" >Responder</button>
+              </mat-menu>
+              <mat-icon class="mouse" *ngIf="message.sendWhatsapp === 1" (click)="handleDropChatMsx( message.idWhatsapp )">restore_from_trash</mat-icon>
             </div>
       </div>
     </div>
@@ -155,6 +161,14 @@
       <mat-icon> vertical_align_top</mat-icon>
     </button>
   </div>
+     <!-- Si existe un mensaje al que se está respondiendo -->
+     <div *ngIf="replyingToMessage" class="reply-preview">
+      <span>Respondiendo a: {{ replyingToMessage.txt || replyingToMessage.urlMedios }}</span>
+      <button mat-mini-fab color="warn" (click)="cancelReply()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+    
   <div class="d-flex bd-highlight" style="background-color: #f1f1f1;">
     <div class="p-2 flex-grow-1 bd-highlight">
       <form [formGroup]="chatForm" (ngSubmit)="sendMessage()">
@@ -177,13 +191,14 @@
 
           <!-- Input para escribir mensaje -->
           <textarea
+            #chatInput
+            cdkFocusInitial
             formControlName="message"
             (keydown.enter)="handleEnter($event)"
             placeholder="Escribe un mensaje..."
             class="chat-input-area"
             rows="1"
             (click)="emojiPickerVisible=false"
-            [disabled]="!btnDisabled"
           ></textarea>
 
           <!-- Botón de emoji -->

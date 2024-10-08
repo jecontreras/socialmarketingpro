@@ -274,3 +274,26 @@ ngx-emoji-mart {
 .example-chip-list {
   width: 100%;
 }
+
+
+.reply-preview {
+  display: flex;
+  align-items: center;
+  padding: 5px;
+  border-left: 3px solid #007bff;
+  background-color: #f1f1f1;
+  margin-bottom: 5px;
+}
+
+.reply-preview span {
+  flex-grow: 1;
+}
+
+.reply-preview button {
+  border: none;
+  cursor: pointer;
+}
+
+.reply-preview mat-icon {
+  font-size: 16px;
+}

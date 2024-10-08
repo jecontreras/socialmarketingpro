@@ -82,6 +82,10 @@ export class ChatNewDetailedComponent implements OnInit{
   @ViewChild('fruitInput') fruitInput: ElementRef<HTMLInputElement>;
   @ViewChild('auto') matAutocomplete: MatAutocomplete;
 
+  replyingToMessage: any = null; // Variable que guarda el mensaje al que se va a responder
+
+  @ViewChild('chatInput') chatInput!: ElementRef;
+
 
   constructor(
     private fb: FormBuilder,
@@ -140,6 +144,15 @@ export class ChatNewDetailedComponent implements OnInit{
       }
     });
 
+    this.chatService.receivedeleteChat().subscribe(async (data: MSG) => {
+      console.log("****108", data, this.messages)
+      try {
+
+      } catch (error) {
+
+      }
+    });
+
   }
 
   ngAfterViewInit() {
@@ -147,13 +160,17 @@ export class ChatNewDetailedComponent implements OnInit{
     this.chatForm.get('message').valueChanges.subscribe(() => {
       this.adjustTextareaHeight();
     });
+    // Espera un poco para asegurarte de que el textarea está visible
+    setTimeout(() => {
+      this.chatInput.nativeElement.focus();
+    }, 200);
   }
 
   adjustTextareaHeight( optN:string=""  ) {
     const textarea = document.querySelector('.chat-input-area') as HTMLTextAreaElement;
     if (textarea) {
       textarea.style.height = 'auto'; // Reinicia la altura para recalcular
-      console.log("*********135", optN, textarea.scrollHeight)
+      //console.log("*********135", optN, textarea.scrollHeight)
       textarea.style.height = optN || textarea.scrollHeight + 'px'; // Ajusta a la altura necesaria
     }
   }
@@ -200,8 +217,11 @@ export class ChatNewDetailedComponent implements OnInit{
     let filterId = _.findIndex( this.messages, ['id', dataChat.msx.id ] );
     //console.log("******119", filterId )
     if( filterId >= 0 ){
+      dataDbs.dataRelationMessage = dataDbs.relationMessage ? this.messages.find( item => item.idWhatsapp === dataDbs.relationMessage ) : null;
+      this.dataSent.emit( dataDbs ); //el que elimina de la lista cuando se ha respondido
+      dataDbs.date = this.messages[filterId].createdAt;
+      if( typeof dataDbs.date  === "number" ) dataDbs.date = (moment( dataDbs.date, 'DD-MM-YYYY, H:mm:ss' )).unix();
       this.messages[filterId] = dataDbs;
-      this.dataSent.emit( this.messages[filterId] ); //el que elimina de la lista cuando se ha respondido
     }
   }
 
@@ -523,6 +543,7 @@ export class ChatNewDetailedComponent implements OnInit{
   }
 
   ProcessTxtChatNew( opt, message, urlMedios = "", typeMsx ){
+    if( this.replyingToMessage ) { opt = { relationMessage: this.replyingToMessage.idWhatsapp }; this.cancelReply(); }
     let newMessage = {
       "msx": {
         "from": this.data.from,
@@ -724,8 +745,9 @@ export class ChatNewDetailedComponent implements OnInit{
     }
   }
 
-  handleDropChatMsx(){
-
+  handleDropChatMsx( id:string ){
+    let idMsx = id;
+    this.chatService.deleteChat( idMsx );
   }
 
   async handleCheckChat(){
@@ -757,12 +779,16 @@ export class ChatNewDetailedComponent implements OnInit{
   }
 
   async remove( item: USERT ) {
-    let result = await this.handleProccesAdviserUpdate( { id: item.idAviserAsigned, assignedMe: 1 } );
-    if( result ) {
-      this.listAdviser = this.listAdviser.filter( row => row.idAviserAsigned === item.idAviserAsigned )
-      this._toolsService.tooast( { title: this.dataConfig.txtUpdate } )
-    }else{
-      this._toolsService.tooast( { title: this.dataConfig.txtError } )
+    try {
+      let result = await this.handleProccesAdviserUpdate( { id: item.idAviserAsigned, assignedMe: 1 } );
+      if( result ) {
+        this.listAdviser = this.listAdviser.filter( row => row.idAviserAsigned !== item.idAviserAsigned )
+        this._toolsService.tooast( { title: this.dataConfig.txtUpdate } )
+      }else{
+        this._toolsService.tooast( { title: this.dataConfig.txtError, icon: "error" } )
+      }
+    } catch (error) {
+      this._toolsService.tooast( { title: this.dataConfig.txtError, icon: "error" } )
     }
   }
 
@@ -786,8 +812,26 @@ export class ChatNewDetailedComponent implements OnInit{
     });
   }
 
-  selected(event: MatAutocompleteSelectedEvent): void {
-    console.log("***769", event.option );
+  async selected(event: MatAutocompleteSelectedEvent) {
+    //console.log("***769", event.option );
+    try {
+      let idUser = event.option.value;
+      let filterUserAdvise = this.listUserAdviser.find( row => row.id === idUser );
+      if( filterUserAdvise ){
+          let resultRes:any = await this.handleProccesAdviserCreate( { userId: idUser } );
+          if( resultRes ) {
+            this.listAdviser.unshift( {
+              ...resultRes.userId,
+              idAviserAsigned: resultRes.id
+            } );
+            this._toolsService.tooast( { title: this.dataConfig.txtUpdate } );      
+          }
+      }else{
+        this._toolsService.tooast( { title: this.dataConfig.txtError, icon: "error" } );  
+      }
+    } catch (error) {
+      this._toolsService.tooast( { title: this.dataConfig.txtError, icon: "error" } );
+    }
     /*this.fruits.push(event.option.viewValue);
     this.fruitInput.nativeElement.value = '';
     this.fruitCtrl.setValue(null);
@@ -798,6 +842,17 @@ export class ChatNewDetailedComponent implements OnInit{
     const filterValue = value.toLowerCase();
 
     return this.listUserAdviser.filter(fruit => fruit.email.toLowerCase().indexOf(filterValue) === 0);
+  }
+
+   // Función para establecer el mensaje al que se está respondiendo
+  setReply(message: any) {
+    this.replyingToMessage = message;
+    console.log("*********830", this.replyingToMessage)
+  }
+
+  // Función para cancelar la respuesta
+  cancelReply() {
+    this.replyingToMessage = null;
   }
 
 }
