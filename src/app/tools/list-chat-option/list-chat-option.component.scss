@@ -56,7 +56,6 @@
   align-items: center; display: flex; gap: 5px; margin-right: 10px; width: 300px;
 }
 .list-container {
-  max-height: 53vh;
   overflow-y: auto; /* Habilita el desplazamiento vertical */
 }
 
@@ -107,7 +106,7 @@
 }
 
 .full-height {
-  height: calc(100vh - 100px); /* Ajusta el 100px según el espacio que necesites para otros elementos */
+  //height: calc(100vh - 100px); /* Ajusta el 100px según el espacio que necesites para otros elementos */
   display: block;
 }
 

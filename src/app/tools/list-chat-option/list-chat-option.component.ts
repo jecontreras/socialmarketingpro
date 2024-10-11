@@ -90,9 +90,6 @@ export class ListChatOptionComponent implements OnInit {
     let resultSequences:any = await this.getListSequences();
     this.listSequence = resultSequences;
     //this.reloadCharge();
-    let countRChat:any = await this.getCountChat();
-    this.countChat = countRChat;
-    console.log("*********94", this.countChat)
   }
 
   async getCountChat(){
@@ -145,6 +142,9 @@ export class ListChatOptionComponent implements OnInit {
     this.dataChatClone = _.clone( result );
     this.handleOrderChat();
     this.processColorItem();
+    let countRChat:any = await this.getCountChat();
+    this.countChat = countRChat;
+    console.log("*********94", this.countChat)
     return true;
   }
 
