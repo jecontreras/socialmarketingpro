@@ -72,6 +72,7 @@ export interface Componente {
     To?: string;
     date?: any;
     date1?: string;
+    checkT?: boolean;
   }
   export interface WHATSAPPDETAILS{
     id?: string;

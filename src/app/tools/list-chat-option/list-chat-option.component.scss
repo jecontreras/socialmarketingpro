@@ -81,6 +81,46 @@
   white-space: nowrap; /* Evita que el texto se divida en varias líneas */
 }
 
+.example-viewport {
+  height: 500px; /* Ajusta esto según lo que necesites */
+  width: 100%;
+  overflow: auto;
+}
+
+.chat-room__content {
+  display: flex;
+  align-items: center;
+}
+
+.chat-room__users-avatar-container {
+  margin-right: 10px;
+}
+
+.chat-room__users-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+
+.chat-room__info {
+  flex: 1;
+}
+
+.full-height {
+  height: calc(100vh - 100px); /* Ajusta el 100px según el espacio que necesites para otros elementos */
+  display: block;
+}
+
+.cdk-virtual-scroll-viewport {
+  width: 100%; /* Asegura que el viewport ocupe todo el ancho */
+  overflow: auto;
+}
+
+.mat-list {
+  width: 100%;
+}
+
+
 @keyframes wave {
   0%, 100% {
     transform: translateY(0); /* Punto inicial y final: sin desplazamiento vertical */

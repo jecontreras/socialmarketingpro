@@ -85,7 +85,10 @@ export class ChatNewDetailedComponent implements OnInit{
   replyingToMessage: any = null; // Variable que guarda el mensaje al que se va a responder
 
   @ViewChild('chatInput') chatInput!: ElementRef;
+  rolName:string;
 
+  isModalOpen = false;
+  modalImageUrl = '';
 
   constructor(
     private fb: FormBuilder,
@@ -108,6 +111,7 @@ export class ChatNewDetailedComponent implements OnInit{
       store = store.name;
       if(!store) return false;
       this.dataUser = store.user || {};
+      if( this.dataUser.id ) this.rolName = this.dataUser.rol.nombre;
     });
   }
 
@@ -122,7 +126,7 @@ export class ChatNewDetailedComponent implements OnInit{
     this.processId( true );
     this.childEmitter.emit( this.data );
     this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
-      console.log("****31", data, this.messages)
+     // console.log("****31", data, this.messages)
       this.processMessage( data );
     });
 
@@ -420,7 +424,7 @@ export class ChatNewDetailedComponent implements OnInit{
     });
 
     dialogRef.afterClosed().subscribe(async  ( result ) => {
-      //console.log('The dialog was closed', result );
+      console.log('The dialog was closed', result );
       if( !result.id ) {
         for( let row of result ) {
           let typeMsx = "txt";
@@ -531,7 +535,7 @@ export class ChatNewDetailedComponent implements OnInit{
     // Lógica para enviar el mensaje
     if (this.chatForm.valid) {
       const message = this.chatForm.get('message').value;
-      console.log('Mensaje enviado:', message);
+      console.log('Mensaje enviado:', message.length );
       if( !message ) { this.btnDisabled = false; return false;}
 
       this.btnDisabled = false;
@@ -601,13 +605,25 @@ export class ChatNewDetailedComponent implements OnInit{
     // Verifica si la fecha es válida
     // Si la diferencia es mayor a 24 horas
     if (diferenciaHoras >= 24) {
-      console.log("**RR YA PASO LAS Horas" )
+      console.log("**RR YA PASO LAS Horas" );
+      this.nextUpdateWhatsappTxt( );
       return true;
     } else {
       console.log('Aún no han pasado 24 horas.');
       return false;
     }
   }
+
+  nextUpdateWhatsappTxt( ){
+    return new Promise( resolve =>{
+      this._whatsappDetails.update( { id: this.data.id, date: moment( ).format('DD-MM-YYYY, h:mm:ss') } ).subscribe( res =>{
+        this.data.date = res.date;
+        resolve( res );
+      }, ( error )=> resolve( error ) );
+    });
+  }
+
+
 
 
   handleEnter(event: KeyboardEvent): void {
@@ -884,6 +900,16 @@ export class ChatNewDetailedComponent implements OnInit{
   // Función para cancelar la respuesta
   cancelReply() {
     this.replyingToMessage = null;
+  }
+
+  openImageModal(imageUrl: string) {
+    this.isModalOpen = true;
+    this.modalImageUrl = imageUrl; // Aquí colocas la imagen de alta calidad
+  }
+
+  closeImageModal() {
+    this.isModalOpen = false;
+    this.modalImageUrl = '';
   }
 
 }

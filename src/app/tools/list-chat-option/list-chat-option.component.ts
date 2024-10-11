@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { FormAllChatComponent } from 'src/app/dialog/form-all-chat/form-all-chat.component';
+import { FastMsxComponent } from 'src/app/dialog/fast-msx/fast-msx.component';
 import { MSG, SEQUENCESUSER, USERT, WHATSAPP, WHATSAPPDETAILS } from 'src/app/interfaces/interfaces';
 import { USER } from 'src/app/interfaces/user';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
@@ -83,7 +84,7 @@ export class ListChatOptionComponent implements OnInit {
       this.processMessageUpdate( data.dataDbs );
     });
     this.range = new FormGroup({
-      start: new FormControl(moment().startOf('day').toDate()),  // Fecha de inicio
+      start: new FormControl(moment().subtract(1, 'day').startOf('day').toDate()),  // Fecha de inicio
       end: new FormControl(moment().endOf('day').toDate())       // Fecha de final
     });
     let resultSequences:any = await this.getListSequences();
@@ -123,6 +124,7 @@ export class ListChatOptionComponent implements OnInit {
       }
     }
   }
+  loading = false;
 
   getIdChat( id:string, user:string ){
     return new Promise( resolve =>{
@@ -134,12 +136,25 @@ export class ListChatOptionComponent implements OnInit {
   }
 
   async reloadCharge(){
+    if (this.loading) return;
+    this.loading = true;
     let result:any = await this.getListChat( this.querys );
-    this.listChat = result;
+    //this.listChat = result;
+    if( result.length > 0 ) this.loading = false;
+    this.listChat =_.unionBy(this.listChat || [], result, 'id');
     this.dataChatClone = _.clone( result );
     this.handleOrderChat();
     this.processColorItem();
     return true;
+  }
+
+  onScrollEnd() {
+    // Detecta cuando se llega al final del scroll
+    console.log("*****RRRR147", this.loading)
+    if (!this.loading) {
+      //this.querys.page++;
+      //this.reloadCharge();
+    }
   }
 
   processColorItem(){
@@ -353,6 +368,20 @@ export class ListChatOptionComponent implements OnInit {
 
   handleInitChat( data:any ){
     this.chatService.initChatopp( { number: data.number, body: data.body } );
+  }
+
+  handleOpenMsxFanst(){
+    let ListCheck:any = this.listChat.filter( row => row.checkT === true );
+    console.log("******375", ListCheck)
+    //if( listCheck.length === 0 ) return this._toolsService.tooast( { title: this.dataConfig.txtErrorSelectMsx } );
+    const dialogRef = this.dialog.open(FastMsxComponent, {
+      data: ListCheck,
+      width: '50%',
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed', result );
+    });
   }
 
 }

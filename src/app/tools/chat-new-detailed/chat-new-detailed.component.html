@@ -46,7 +46,7 @@
     </div>
   </div>
   <div>
-    <mat-form-field class="example-chip-list">
+    <mat-form-field class="example-chip-list" *ngIf=" rolName === 'admin' ">
       <mat-chip-list #chipList aria-label="Fruit selection">
         <mat-chip
           *ngFor="let item of listAdviser"
@@ -97,18 +97,30 @@
           *ngIf="message.typeTxt === 'image' || message.typeTxt === 'photo'"
           [src]="message.urlMedios"
           alt="imagen"
-          class="image-message"
+          class="image-message pixelated"
         />
+
+        <!-- Modal para mostrar la imagen en alta resolución -->
+        <!--<div class="modal" *ngIf="isModalOpen" (click)="closeImageModal()">
+          <img [src]="modalImageUrl" alt="imagen en alta calidad" class="full-image" />
+        </div>-->
 
         <!-- Audio -->
         <audio *ngIf="message.typeTxt === 'audio'" controls>
           <source [src]="message.urlMedios" type="audio/mp3" />
         </audio>
 
+        <a
+          *ngIf="message.typeTxt === 'video'"
+          [href]="message.urlMedios"
+          target="_blank"
+          class="document-link"
+          >{{ message.urlMedios }}</a
+        >
         <!-- Video -->
-        <video *ngIf="message.typeTxt === 'video'" controls>
+        <!--<video *ngIf="message.typeTxt === 'video'" controls>
           <source [src]="message.urlMedios" type="video/mp4" />
-        </video>
+        </video>-->
 
         <!-- Documentos -->
         <a
@@ -170,56 +182,59 @@
     </div>
     
   <div class="d-flex bd-highlight" style="background-color: #f1f1f1;">
-    <div class="p-2 flex-grow-1 bd-highlight">
-      <form [formGroup]="chatForm" (ngSubmit)="sendMessage()">
-        <div class="chat-input-wrapper">
-          <!-- Botón de adjuntar -->
-          <button mat-icon-button [matMenuTriggerFor]="menu" color="primary" class="attach-button">
-            <mat-icon>add_circle_outline</mat-icon>
+    <div class="d-flex justify-content-between" style="width: 100%">
+      <div>
+        <button mat-icon-button [matMenuTriggerFor]="menu" color="primary" class="attach-button">
+          <mat-icon>add_circle_outline</mat-icon>
+        </button>
+        <mat-menu #menu="matMenu">
+          <button mat-menu-item (click)="handleFile('document')">
+            <mat-icon>file_copy</mat-icon>
           </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="handleFile('document')">
-              <mat-icon>file_copy</mat-icon>
-            </button>
-            <button mat-menu-item (click)="handleFile('video')">
-              <mat-icon>movie</mat-icon>
-            </button>
-            <button mat-menu-item (click)="handleFile('photo')">
-              <mat-icon>insert_photo</mat-icon>
-            </button>
-          </mat-menu>
-
-          <!-- Input para escribir mensaje -->
-          <textarea
-            #chatInput
-            cdkFocusInitial
-            formControlName="message"
-            (keydown.enter)="handleEnter($event)"
-            placeholder="Escribe un mensaje..."
-            class="chat-input-area"
-            rows="1"
-            (click)="emojiPickerVisible=false"
-          ></textarea>
-
-          <!-- Botón de emoji -->
-          <button type="button" mat-icon-button (click)="toggleEmojiPicker()" class="emoji-button">
-            😊
+          <button mat-menu-item (click)="handleFile('video')">
+            <mat-icon>movie</mat-icon>
           </button>
-
-          <!-- Picker de emojis -->
-          <div *ngIf="emojiPickerVisible" class="emoji-picker">
-            <emoji-mart set="twitter" (emojiSelect)="addEmoji($event)"></emoji-mart>
+          <button mat-menu-item (click)="handleFile('photo')">
+            <mat-icon>insert_photo</mat-icon>
+          </button>
+        </mat-menu>
+      </div>
+      <div style="width: 100%">
+        <form [formGroup]="chatForm" (ngSubmit)="sendMessage()">
+          <div class="chat-input-wrapper">
+  
+            <!-- Input para escribir mensaje -->
+            <textarea
+              #chatInput
+              cdkFocusInitial
+              formControlName="message"
+              (keydown.enter)="handleEnter($event)"
+              placeholder="Escribe un mensaje..."
+              class="chat-input-area"
+              rows="1"
+              (click)="emojiPickerVisible=false"
+            ></textarea>
+  
+            <!-- Botón de emoji -->
+            <button type="button" mat-icon-button (click)="toggleEmojiPicker()" class="emoji-button">
+              😊
+            </button>
+  
+            <!-- Picker de emojis -->
+            <div *ngIf="emojiPickerVisible" class="emoji-picker">
+              <emoji-mart set="twitter" (emojiSelect)="addEmoji($event)"></emoji-mart>
+            </div>
+            <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFastAnswer();emojiPickerVisible=false;">
+              <i class="ni ni-user-run"></i>
+            </button>
+  
+            <!-- Botón de enviar -->
+            <button type="submit" mat-mini-fab color="accent" class="send-button">
+              ➤
+            </button>
           </div>
-          <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFastAnswer();emojiPickerVisible=false;">
-            <i class="ni ni-user-run"></i>
-          </button>
-
-          <!-- Botón de enviar -->
-          <button type="submit" mat-mini-fab color="accent" class="send-button">
-            ➤
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 

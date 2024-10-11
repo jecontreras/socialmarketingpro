@@ -1,0 +1,58 @@
+<section mat-dialog-title>
+    <div class="d-flex justify-content-between">
+      <div>
+        <h1>{{ dataConfig.txtMsxFanst }} </h1>
+      </div>
+      <div>
+        <button mat-mini-fab color="warn" mat-dialog-close>
+          <i class="ni ni-fat-remove"></i>
+        </button>
+      </div>
+    </div>
+  </section>
+  <mat-dialog-content class="mat-typography" id="print" style="    height: 435px;">
+
+    <form [formGroup]="chatForm" (ngSubmit)="sendMessage()">
+        <div class="chat-input-wrapper">
+
+          <!-- Input para escribir mensaje -->
+          <textarea
+            #chatInput
+            cdkFocusInitial
+            formControlName="message"
+            (keydown.enter)="handleEnter($event)"
+            placeholder="Escribe un mensaje..."
+            class="chat-input-area"
+            rows="1"
+            (click)="emojiPickerVisible=false"
+          ></textarea>
+
+          <!-- Botón de emoji -->
+          <button type="button" mat-icon-button (click)="toggleEmojiPicker()" class="emoji-button">
+            😊
+          </button>
+
+          <!-- Picker de emojis -->
+          <div *ngIf="emojiPickerVisible" class="emoji-picker">
+            <emoji-mart set="twitter" (emojiSelect)="addEmoji($event)"></emoji-mart>
+          </div>
+          <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon" (click)="openBottomSheetFastAnswer();emojiPickerVisible=false;">
+            <i class="ni ni-user-run"></i>
+          </button>
+
+          <!-- Botón de enviar -->
+          <button type="submit" mat-mini-fab color="accent" class="send-button">
+            ➤
+          </button>
+        </div>
+      </form>
+
+  </mat-dialog-content>
+  
+  <mat-dialog-actions align="end">
+    <button type="button" class="btn btn-success" ><i
+        class="fas fa-pencil-alt"></i>Actualizar Datos</button>
+  </mat-dialog-actions>
+  
+  
+  

@@ -16,6 +16,8 @@ import { OpenGalleriaComponent } from './open-galleria/open-galleria.component';
 import { NgxDropzoneModule } from 'ngx-dropzone';
 import { FormWhatsappComponent } from './form-whatsapp/form-whatsapp.component';
 import { ListAdvisorsComponent } from './list-advisors/list-advisors.component';
+import { FastMsxComponent } from './fast-msx/fast-msx.component';
+import { A11yModule } from '@angular/cdk/a11y';
 
 
 
@@ -45,7 +47,8 @@ import { ListAdvisorsComponent } from './list-advisors/list-advisors.component';
     BottomSheetSheetTag,
     OpenGalleriaComponent,
     FormWhatsappComponent,
-    ListAdvisorsComponent
+    ListAdvisorsComponent,
+    FastMsxComponent
     ,
   ],
   exports:[
@@ -67,6 +70,7 @@ import { ListAdvisorsComponent } from './list-advisors/list-advisors.component';
     MyOwnCustomMaterialModule,
     NgxDropzoneModule,
     ReactiveFormsModule,
+    A11yModule
 
   ]
 })
