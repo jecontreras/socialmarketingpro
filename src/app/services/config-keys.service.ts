@@ -14,6 +14,7 @@ export class ConfigKeysService {
       config: 'ConFiguraciones',
       whatsapp: "Whatsapp",
       createContact: 'Crear Contacto',
+      txtContact: "Contacto",
       txtCreateWhatsapp: "Crear Whatsapp",
       txtUpdateWhatsapp: "Actualizar Whatsapp",
       dischargeInfo: 'Descargar Informe',
