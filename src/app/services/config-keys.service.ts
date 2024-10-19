@@ -151,7 +151,9 @@ export class ConfigKeysService {
       txtCountChat: "Cantidad de Chat en el Dia",
       txtInitChat: "Iniciar Chat",
       txtMsxFanst: "Mensajes Rapidos",
-      txtErrorSelectMsx: "Error Seleccione Almenos un Chat"
+      txtErrorSelectMsx: "Error Seleccione Almenos un Chat",
+      titleConfigCon: "Quieres Iniciar la conversacion",
+      txtConfigCon: "Se va a inciar un mensaje por defecto"
     }
   };
   constructor() { }

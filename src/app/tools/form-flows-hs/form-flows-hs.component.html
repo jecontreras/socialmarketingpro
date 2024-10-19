@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <div class="col-12 row" *ngIf="views==='one'">
+    <div class="col-12 row mat-elevation-z8" *ngIf="views==='one'">
       <div class="col-12">
         <h3> {{ dataConfig.initialDetails }} </h3>
       </div>
@@ -42,8 +42,8 @@
     <div class="col-12">
       <ul class="list-group list-group-flush">
         <li *ngFor="let item of listLogic; let i=index;">
-          <div class="row">
-            <div class="col-12">
+          <div class="row mat-elevation-z8">
+            <div class="col-12" style="padding: 20px;">
               <div class="d-flex bd-highlight mb-3">
                 <div class="p-2 bd-highlight">
                   <button type="button" class="btn btn-primary" (click)="handlePushList()"> {{ dataConfig.BtnAddFurther }} </button>
