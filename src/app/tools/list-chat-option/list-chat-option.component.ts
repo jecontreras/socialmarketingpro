@@ -142,11 +142,11 @@ export class ListChatOptionComponent implements OnInit {
   }
 
   async reloadCharge(){
-    if (this.loading) return;
-    this.loading = true;
+    //if (this.loading) return;
+    //this.loading = true;
     let result:any = await this.getListChat( this.querys );
     //this.listChat = result;
-    if( result.length > 0 ) this.loading = false;
+    //if( result.length > 0 ) this.loading = false;
     this.listChat =_.unionBy(this.listChat || [], result, 'id');
     this.dataChatClone = _.clone( result );
     this.handleOrderChat();

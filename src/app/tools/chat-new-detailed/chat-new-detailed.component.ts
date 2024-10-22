@@ -209,7 +209,8 @@ export class ChatNewDetailedComponent implements OnInit{
         where:{
           empresa: this.dataUser.empresa,
           estado: "activo"
-        }
+        },
+        limit: 100
       } ).subscribe( res => {
         res = res.data;
         resolve( res );
@@ -312,6 +313,7 @@ export class ChatNewDetailedComponent implements OnInit{
     let valueDate = this.verificarTiempoTranscurrido();
     console.log("*****313", valueDate)
     if( valueDate ) this.btnDisabledChatInit = false;
+    else this.btnDisabledChatInit = true;
   }
 
   getWhatsappDetails(){
