@@ -325,7 +325,7 @@ export class ListChatOptionComponent implements OnInit {
           to: {
             contains: number
           },
-          user: this.querys.where.userId
+          //user: this.querys.where.userId
         },
         user: this.querys.where.userId,
       };
