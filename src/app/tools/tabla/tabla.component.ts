@@ -16,6 +16,7 @@ import { OpenQrComponent } from 'src/app/dialog/open-qr/open-qr.component';
 import { FormBellDialogComponent } from 'src/app/dialog/for-bell-dialog/form-bell-dialog.component';
 import { FormFlowsComponent } from 'src/app/dialog/form-flows/form-flows.component';
 import { FormTagComponent } from 'src/app/dialog/form-tag/form-tag.component';
+import { ConfigKeysService } from 'src/app/services/config-keys.service';
 export interface PeriodicElement {
   name: string;
   position: number;
@@ -79,6 +80,7 @@ export class TablaComponent implements OnInit {
   urlFront:string = window.location.origin;
   txtFilter:string;
   txtTipeFill:string = '1';
+  dataConfigKeys:any = {};
 
   constructor(
     private _router: Router,
@@ -86,13 +88,15 @@ export class TablaComponent implements OnInit {
     public _tools: ToolsService,
     private _store: Store<USER>,
     calendar: NgbCalendar,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _config: ConfigKeysService,
   ) {
     this._store.subscribe((store: any) => {
       store = store.name;
       if(!store) return false;
       this.dataUser = store.user || {};
     });
+    this.dataConfigKeys = this._config._config.keys;
     /*this.fromDate = calendar.getToday();
 		this.toDate = calendar.getNext(calendar.getToday(), 'd', 10);*/
   }

@@ -151,7 +151,10 @@ export class ConfigKeysService {
       txtCountChat: "Cantidad de Chat en el Dia",
       txtInitChat: "Iniciar Chat",
       txtMsxFanst: "Mensajes Rapidos",
-      txtErrorSelectMsx: "Error Seleccione Almenos un Chat"
+      txtErrorSelectMsx: "Error Seleccione Almenos un Chat",
+      txtTimeResponsePas: "Si no Escribe nada Seguir durante el tiempo !",
+      txtTimeResponse: "Espera una Respues!",
+      txtKeyElement: "Elemento donde guarda la respuesta"
     }
   };
   constructor() { }

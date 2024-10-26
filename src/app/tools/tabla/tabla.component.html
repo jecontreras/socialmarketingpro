@@ -27,6 +27,11 @@
                 </div>
               </div>
               <div class="col-12">
+                <button mat-button color="primary" (click)="filterTxt()">
+                  {{ dataConfigKeys.txtBtnFilter }}
+                </button>
+              </div>
+              <div class="col-12">
                 <div class="example-loading-shade"
                       *ngIf="isLoadingResults || isRateLimitReached">
                   <mat-spinner *ngIf="isLoadingResults"></mat-spinner>

@@ -136,9 +136,15 @@
             </div>
             <div class="col-12 form-group">
               <section class="example-section">
-                <mat-checkbox class="example-margin" [(ngModel)]="item.respUser">Espera una Respues!</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="item.respUser"> {{ dataConfig.txtTimeResponse }} </mat-checkbox>
               </section>
-
+              <section class="example-section">
+                <mat-checkbox class="example-margin" [(ngModel)]="item.continueRes">{{ dataConfig.txtTimeResponsePas }} </mat-checkbox>
+              </section>
+            </div>
+            <div class="col-12 form-group">
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtKeyElement }} </label>
+              <input type="text" class="form-control"  [(ngModel)]="item.elementKey">
             </div>
             <div class="col-12 form-group">
               <label for="exampleFormControlInput1"> {{ dataConfig.txtTimeMessage }} </label>

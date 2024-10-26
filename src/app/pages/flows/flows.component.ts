@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { USERT } from 'src/app/interfaces/interfaces';
+import { USER } from 'src/app/interfaces/user';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { InfoWhatsappService } from 'src/app/servicesComponent/info-whatsapp.service';
 
@@ -32,15 +35,22 @@ export class FlowsComponent implements OnInit {
     }
   };
   dataConfig:any = {};
+  dataUser:USERT;
 
   constructor(
     private _config: ConfigKeysService,
-    private _infoWhatsapp: InfoWhatsappService
+    private _infoWhatsapp: InfoWhatsappService,
+    private _store: Store<USER>,
   ) {
     this.dataConfig = _config._config.keys;
+    this._store.subscribe((store: any) => {
+      store = store.name;
+      this.dataUser = store.user;
+    });
    }
 
   ngOnInit(): void {
+    this._dataConfigTable.querys.where.user = this.dataUser.id;
     this._dataConfigTable.model = this._infoWhatsapp;
   }
 
