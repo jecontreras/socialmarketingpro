@@ -151,6 +151,13 @@
               <input type="number" class="form-control"  [(ngModel)]="item.timeSend">
             </div>
             <div class="col-12 form-group" >
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtSequenceId }} </label>
+              <select class="form-control" [(ngModel)]="item.sequencesIdA">
+                <option [value]="item.id" *ngFor="let item of listSequences">
+                    {{ item.sequences }}</option>
+              </select>
+            </div>
+            <div class="col-12 form-group" >
               <label for="exampleFormControlInput1"> {{ dataConfig.txtNextSequence }} </label>
               <mat-form-field class="example-chip-list">
                 <mat-chip-list #chipList [aria-label]="dataConfig.txtNextSequence">
