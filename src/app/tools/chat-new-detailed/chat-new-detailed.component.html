@@ -28,18 +28,21 @@
               </div>
           </div>
           <div class="p-2 bd-highlight">
-            <!--<button mat-mini-fab color="warn" (click)="drawer.toggle()">
-              <mat-icon>perm_identity</mat-icon>
-            </button>-->
-            <button mat-mini-fab color="warn" (click)="handleOpenContact()">
-              <mat-icon>perm_identity</mat-icon>
+
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+              <mat-icon>more_vert</mat-icon>
             </button>
-            <button mat-mini-fab color="accent" (click)="handleCheckChat()">
-              <mat-icon>check_circle</mat-icon>
-            </button>
-            <button mat-mini-fab color="primary" (click)="handleClose()">
-              <mat-icon>close</mat-icon>
-            </button>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item color="warn" (click)="handleOpenContact()">
+                <mat-icon>perm_identity</mat-icon>
+              </button>
+              <button mat-menu-item color="primary" (click)="handleCheckChat()">
+                <mat-icon>check_circle</mat-icon>
+              </button>
+              <button mat-menu-item color="warn" (click)="handleClose()">
+                <mat-icon>close</mat-icon>
+              </button>
+            </mat-menu>
           </div>
         </div>
       </div>
@@ -93,12 +96,19 @@
       <!-- Contenido del mensaje -->
       <div class="message-content">
         <!-- Imágenes -->
-        <img
-          *ngIf="message.typeTxt === 'image' || message.typeTxt === 'photo'"
-          [src]="message.urlMedios"
-          alt="imagen"
-          class="image-message pixelated"
-        />
+        <a
+          *ngIf="message.typeTxt === 'image' || message.typeTxt === 'photo'"  
+          [href]="message.urlMedios"
+          target="_blank"
+          class="document-link"
+          >
+          <img
+            [src]="message.urlMedios"
+            alt="imagen"
+            class="image-message pixelated"
+          />
+        </a>
+
 
         <!-- Modal para mostrar la imagen en alta resolución -->
         <!--<div class="modal" *ngIf="isModalOpen" (click)="closeImageModal()">
@@ -182,7 +192,7 @@
     </div>
     
   <div class="d-flex bd-highlight" style="background-color: #f1f1f1;">
-    <div class="d-flex justify-content-between" style="width: 100%">
+    <div class="d-flex justify-content-between" style="width: 100%" *ngIf="btnDisabledChatInit">
       <div>
         <button mat-icon-button [matMenuTriggerFor]="menu" color="primary" class="attach-button">
           <mat-icon>add_circle_outline</mat-icon>
@@ -234,6 +244,13 @@
             </button>
           </div>
         </form>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between" style="width: 100%" *ngIf="!btnDisabledChatInit">
+      <div class="d-flex justify-content-center">
+        <div style="width: 100%;">
+          <button mat-raised-button (click)="ProcessTxtChatNew( {}, 'Init','', 'txt'); btnDisabledChatInit = true;" color="primary">{{ dataConfig.txtInitChat }}</button>
+        </div>
       </div>
     </div>
   </div>
