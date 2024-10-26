@@ -153,14 +153,11 @@ export class ConfigKeysService {
       txtInitChat: "Iniciar Chat",
       txtMsxFanst: "Mensajes Rapidos",
       txtErrorSelectMsx: "Error Seleccione Almenos un Chat",
-<<<<<<< HEAD
       txtTimeResponsePas: "Si no Escribe nada Seguir durante el tiempo !",
-      txtTimeResponse: "Espera una Respues!",
-      txtKeyElement: "Elemento donde guarda la respuesta"
-=======
+      txtTimeResponse: "Espera una Respuesta!",
+      txtKeyElement: "Elemento donde guarda la respuesta",
       titleConfigCon: "Quieres Iniciar la conversacion",
       txtConfigCon: "Se va a inciar un mensaje por defecto"
->>>>>>> 75d561474137a641fa69e5e73ae1682c54e67f52
     }
   };
   constructor() { }
