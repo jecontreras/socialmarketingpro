@@ -15,6 +15,7 @@ import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormFlowsComponent } from 'src/app/dialog/form-flows/form-flows.component';
 import { FileDetailComponent } from 'src/app/dialog/file-detail/file-detail.component';
 import { SequencesService } from 'src/app/servicesComponent/sequences.service';
+import { ChatService } from 'src/app/servicesComponent/chat.service';
 
 @Component({
   selector: 'app-form-flows-hs',
@@ -68,7 +69,8 @@ export class FormFlowsHsComponent implements OnInit {
     private _config: ConfigKeysService,
     public dialogRef: MatDialogRef<FormFlowsComponent>,
     public dialog: MatDialog,
-    private _sequence: SequencesService
+    private _sequence: SequencesService,
+    private chatService: ChatService,
   ) {
     this.dataConfig = this._config._config.keys;
     this._store.subscribe((store: any) => {
@@ -205,6 +207,7 @@ export class FormFlowsHsComponent implements OnInit {
     if( this.id ) await this.handleUpdate();
     else await this.handleCreate();
     this.closeDialog({});
+    this.chatService.resetFlows( { opt: true } );
     this.disableBtn = false;
   }
 
