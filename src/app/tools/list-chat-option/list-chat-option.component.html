@@ -72,8 +72,8 @@
         <div mat-line>
           <div class="chat-room__content r9">
             <div class="chat-room__users-avatar-container">
-              <mat-checkbox class="example-margin" [(ngModel)]="item.checkT"></mat-checkbox>
-              <img alt="Default Avatar" class="chat-room__users-avatar r2"
+              <!--<mat-checkbox class="example-margin" [(ngModel)]="item.checkT"></mat-checkbox>-->
+              <img alt="Default Avatar" class="chat-room__users-avatar r2" (click)="handleSelectChat( item )"
                 src="{{ item.whatsappIdList['contactIdList']?.foto || './assets/img/theme/team-4-800x800.jpg' }}"
               />
             </div>
@@ -111,6 +111,9 @@
           </div>
           <!--<div mat-line>Etiquetas</div>-->
         </div>
+        <!--<div mat-line>
+          Etiqueta
+        </div>-->
       </mat-list-item>
     </mat-list>
   </cdk-virtual-scroll-viewport>
