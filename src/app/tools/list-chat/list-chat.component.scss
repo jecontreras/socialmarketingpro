@@ -1,0 +1,208 @@
+
+
+/* Tarjetas más compactas */
+.card {
+  display: flex;
+  gap: 8px;
+  background: #eaf1f7;
+  border-radius: 4px;
+  padding: 8px; /* Reducir padding */
+  font-size: 13px; /* Reducir tamaño de texto */
+  font-weight: 500;
+  color: #333333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  align-items: center;
+
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.3);
+}
+
+/* Estilo del preview (copia al arrastrar) */
+.card-preview {
+  opacity: 0.8;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background-color: #ffffff;
+  transform: scale(1.05); /* Agrandar ligeramente */
+}
+
+/* Placeholder visible durante el arrastre */
+.card-placeholder {
+  border: 2px dashed #dfe3e6;
+  background: #f7f9fc;
+  height: 60px; /* Asegura que el tamaño sea consistente */
+  border-radius: 4px;
+}
+
+/* Estilo de las columnas */
+.column {
+  display: flex;
+  flex-direction: column;
+  background: #f5f7fa;
+  border: 1px solid #dfe3e6;
+  border-radius: 4px;
+  padding: 8px;
+
+  /* Ajustar el ancho */
+  flex: 0 0 250px; /* Tamaño fijo de 250px */
+  max-width: 250px; /* Máximo ancho permitido */
+  min-width: 200px; /* Mínimo ancho permitido */
+  margin-right: 16px; /* Espacio entre columnas */
+
+  transition: background 0.3s ease;
+}
+
+/* Ajustar el último margen */
+.column:last-child {
+  margin-right: 0;
+}
+
+/* Contenedor del tablero para manejar columnas responsivas */
+.board {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto; /* Permite scroll horizontal si hay muchas columnas */
+  padding: 8px;
+  gap: 16px;
+}
+
+/* Hacer que el tablero ocupe todo el espacio disponible */
+.board::-webkit-scrollbar {
+  height: 8px;
+}
+
+.board::-webkit-scrollbar-thumb {
+  background: #dfe3e6;
+  border-radius: 4px;
+}
+
+.board::-webkit-scrollbar-thumb:hover {
+  background: #c4cace;
+}
+
+/* Cambiar color de fondo al arrastrar sobre una columna */
+.cdk-drop-list-dragging {
+  background: #e0ecf8;
+  transition: background 0.3s ease;
+}
+
+/* Animación durante el drag */
+.cdk-drag-preview {
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  transform: rotate(2deg) !important;
+}
+
+.cdk-drag-placeholder {
+  background: #e0e0e0;
+  border: 2px dashed #c0c0c0;
+}
+
+/* Encabezado de la columna */
+.column-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #ddd;
+}
+
+.column-header input {
+  font-size: 16px;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-weight: bold;
+}
+
+/* Cuerpo de la columna */
+.column-body {
+  flex-grow: 1;
+  overflow-y: auto; /* Permite desplazamiento vertical para muchos elementos */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Botón de agregar columna */
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #0056b3;
+}
+
+/* Botón de agregar columna */
+.add-column-btn {
+  margin-left: 8px; /* Separar del botón de eliminar */
+  background-color: #4caf50; /* Color verde para destacar */
+  color: white;
+  border-radius: 50%; /* Forma circular */
+  transition: transform 0.2s ease;
+}
+
+.add-column-btn:hover {
+  background-color: #45a049; /* Cambiar ligeramente en hover */
+  transform: scale(1.1); /* Pequeño efecto de zoom */
+}
+
+/* Foto del chat */
+.chat-photo {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Detalles del chat */
+.chat-details {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.chat-header {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;
+}
+
+.chat-name {
+  color: #333;
+  font-size: 14px;
+}
+
+.chat-time {
+  color: #888;
+  font-size: 12px;
+}
+
+.chat-message {
+  margin: 4px 0;
+  color: #555;
+  font-size: 13px;
+}
+
+.chat-date {
+  color: #aaa;
+  font-size: 12px;
+  text-align: end;
+}
+
+/* Reducir el ancho en pantallas pequeñas */
+@media screen and (max-width: 768px) {
+  .column {
+    flex: 0 0 180px; /* Más estrechas en pantallas pequeñas */
+    max-width: 180px;
+  }
+
+  .card {
+    font-size: 12px; /* Texto más pequeño */
+    padding: 6px; /* Menos padding */
+  }
+}

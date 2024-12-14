@@ -35,4 +35,9 @@ export class SequencesService {
   updateUser(query:any){
     return this._model.querys('sequencesUser/'+query.id, query, 'put');
   }
+
+  getTabsLive(query:any){
+    return this._model.querys('sequences/gettabslive',query, 'post');
+  }
+
 }
