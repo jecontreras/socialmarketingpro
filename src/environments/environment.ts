@@ -7,7 +7,7 @@ export const environment = {
   //url: "http://localhost:1337",
   urlFile: "https://apilokomproaqui3-8479ed1ed46c.herokuapp.com",
   //url: "https://1337-jecontreras-socialmarke-rb0pxdw8b6d.ws-us116.gitpod.io",
-  url: "https://1337-jecontreras-socialmarke-gi0k7bqhhip.ws-us117.gitpod.io",
+  url: "https://socialmarketingapi2-12ab86fb3d47.herokuapp.com",
   //urlFile: "https://apilokomproaqui1-9219656b6da1.herokuapp.com"
   //url: "https://1337-jecontreras-socialmarke-r9pote9hj0o.ws-us116.gitpod.io"
 };

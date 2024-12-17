@@ -750,7 +750,14 @@ export class OpenChatComponent implements OnInit {
 
   handleUpdateNumber(){
     this._whatsappDetails.update( { id: this.data.id, numberGuide: this.data.numberGuide } ).subscribe( res => {
-      this._toolsService.tooast("Actualizado");
+      this._toolsService.tooast(this.dataConfig.txtUpdate)
+    });
+  }
+
+  handleUpdateAiChatGpt(){
+    console.log( this.datas.aiChatGpt );
+    this._whatsappDetails.update( { id: this.data.id, aiChatGpt: this.datas.aiChatGpt } ).subscribe( res => {
+      this._toolsService.tooast(this.dataConfig.txtUpdate);
     });
   }
 

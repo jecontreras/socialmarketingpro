@@ -68,6 +68,7 @@ export class ListChatComponent implements OnInit {
     });
     this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
       console.log("****81", data, this.listChat)
+      this.handleProccessChat( data );
 
     });
     this.chatService.receiveMessageUpdateId().subscribe(async (data: MSG) => {
@@ -76,9 +77,73 @@ export class ListChatComponent implements OnInit {
     });
   }
 
+  handleProccessChat(dataChat) {
+    let idTabs = this.listChat.find(item => item.id === dataChat.whatsappUserTxt.sequenceId);
+  
+    if (idTabs) {
+      let indexIdChat = _.findIndex(idTabs.listChat, { id: dataChat.whatsappUserTxt.id });
+  
+      if (indexIdChat >= 0) {
+        // Actualizar chat existente
+        idTabs.listChat[ indexIdChat ].whatsappId['txt'] = dataChat.msx.body;
+        idTabs.listChat[ indexIdChat ].updatedAt = dataChat.msx.createdAt;
+        idTabs.listChat[ indexIdChat ].countChatV++;
+      } else {
+        // Agregar nuevo chat
+        idTabs.listChat = [
+          {
+            ...dataChat.whatsappUserTxt,
+            countChatV: 1,
+            whatsappId: {
+              id: dataChat.msx.id,
+              Sinto: this._tools.formatNumer( dataChat.msx.to ),
+              txt: dataChat.msx.body,
+            },
+            contactIdList: {
+              Sinto: this._tools.formatNumer( dataChat.msx.to ),
+              id: dataChat.msx.contactId.id,
+              name: dataChat.msx.contactId.name,
+            },
+            updatedAt: dataChat.msx.createdAt,
+          },
+          ...idTabs.listChat, // Insertar al inicio
+        ];
+      }
+  
+      // Ordenar los chats después de agregar/actualizar
+      this.sortChatsByDate(idTabs);
+  
+      // Asignar una nueva referencia al array principal
+      this.listChat = [...this.listChat];
+    }
+  
+    // Eliminar el chat de otras columnas
+    this.listChat = this.listChat.map(item => {
+      if (item.id !== dataChat.whatsappUserTxt.sequenceId) {
+        return {
+          ...item,
+          listChat: item.listChat.filter(row => row.id !== dataChat.whatsappUserTxt.id),
+        };
+      }
+      return item;
+    });
+  
+    console.log("***105", this.listChat);
+  }
+  
+
+  sortChatsByDate(column) {
+    column.listChat.sort((a, b) => {
+      const dateA = new Date(a.updatedAt).getTime();
+      const dateB = new Date(b.updatedAt).getTime();
+      return dateB - dateA; // Orden descendente
+    });
+  }
+
   async getFilter( startDate, endDate ){
     let result:any = await this.getchat( startDate, endDate );
     this.listChat = result.data;
+    for( let row of this.listChat ) this.sortChatsByDate( row );
   }
 
   getchat( startDate, endDate ){
@@ -147,6 +212,7 @@ export class ListChatComponent implements OnInit {
         event.currentIndex
       );
     }
+    console.log("***150", event)
   }
   // Agregar nueva columna
   addColumn() {
@@ -158,7 +224,7 @@ export class ListChatComponent implements OnInit {
     //console.log("**115", column );
     let validConfirm = await this._tools.confirm( { title: "Eliminar", text: "Deseas eliminar este item" } );
     console.log("****119", validConfirm)
-    if( validConfirm.value ) return false;
+    if( !validConfirm.value ) return false;
     // Elimina la columna seleccionada
     const columnIndex = this.listChat.indexOf(column);
     if (columnIndex !== -1) {

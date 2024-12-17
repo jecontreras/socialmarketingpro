@@ -1,4 +1,5 @@
-<div class="row">
+<div class="content">
+  <div class="row">
     <div class="col-12">
         <div class="d-flex justify-content-center">
             <div style="padding: 15px;">
@@ -24,17 +25,14 @@
         </div>
     </div>
 </div>
+</div>
 <div 
   class="board mouse" 
-  cdkDropList 
-  [cdkDropListData]="listChat" 
-  (cdkDropListDropped)="onDropColumn($event)"
 >
     <div
       class="column"
       *ngFor="let column of listChat"
-      cdkDrag
-      [cdkDragData]="column"
+      style="height: 97vh;"
     >
      <div class="column-header">
         <input [(ngModel)]="column.sequences" placeholder="Nombre de columna" (change)="handleUpdateDbsSequences( column.id, column.sequences )"/>
@@ -52,35 +50,52 @@
           <mat-icon>add</mat-icon>
         </button>
      </div>
-      <div 
-        class="column-body" 
-        cdkDropList 
-        [cdkDropListData]="column.listChat" 
-        [cdkDropListConnectedTo]="connectedLists" 
-        (cdkDropListDropped)="onDrop($event)"
-        style="height: 97vh;"
-      >
-        <div
-          class="card"
-          *ngFor="let item of column.listChat"
-          cdkDrag
-          [cdkDragData]="item"
-          (click)="openChatDialog(item)"
+     <div 
+      class="column-body" 
+      cdkDropList 
+      [cdkDropListData]="column.listChat" 
+      [cdkDropListConnectedTo]="connectedLists" 
+      (cdkDropListDropped)="onDrop($event)"
+    >
+        <!-- Virtual Scroll Viewport -->
+        <cdk-virtual-scroll-viewport 
+          itemSize="80" 
+          class="virtual-scroll-container"
         >
-          <div class="card-content" style="width: 100%;">
-            <div class="chat-details">
-              <div class="chat-header">
-                <span class="chat-name">
-                  <img [src]="( item['contactIdList']?.foto ) || './assets/imagenes/perfil.png'" alt="Foto" class="chat-photo" />
-                  {{ item['contactIdList']?.name }}
-                </span>
-                <!--<span class="chat-time">{{ item.updatedAt | date: 'hh:mm:ss' }}</span>-->
+          <div
+            class="card"
+            *cdkVirtualFor="let item of column.listChat"
+            cdkDrag
+            [cdkDragData]="item"
+            (click)="openChatDialog(item)"
+          >
+            <div class="card-content" style="width: 100%;">
+              <div class="chat-details">
+                <div class="chat-header">
+                  <span class="chat-name">
+                    <img 
+                      [src]="(item['contactIdList']?.foto) || './assets/imagenes/perfil.png'" 
+                      alt="Foto" 
+                      class="chat-photo" 
+                    />
+                    {{ item['contactIdList']?.name | slice: 0:10 }} - {{ item['whatsappId']?.Sinto }}
+                  </span>
+                </div>
+                <div 
+                  class="chat-message" 
+                  [matBadge]="item.countChatV" 
+                  matBadgeOverlap="false" 
+                  matBadgeColor="accent"
+                >
+                  {{ item['whatsappId']?.txt | slice: 0:30 }}
+                </div>
+                <div class="chat-date">
+                  {{ item.updatedAt | date: 'dd-MM-yyyy' }} {{ item.updatedAt | date: 'hh:mm:ss' }}
+                </div>
               </div>
-              <div class="chat-message">{{ item['whatsappId']?.txt | slice: 0:30 }}</div>
-              <div class="chat-date">{{ item.updatedAt | date: 'dd-MM-yyyy' }} {{ item.updatedAt | date: 'hh:mm:ss' }}</div>
             </div>
           </div>
-        </div>
+        </cdk-virtual-scroll-viewport>
       </div>
     </div>
 </div>
