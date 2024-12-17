@@ -45,7 +45,8 @@ import { WhatsappComponent } from 'src/app/pages/whatsapp/whatsapp.component';
     ToolsModule,
     FormModule,
     MyOwnCustomMaterialModule,
-    NgbAccordionModule
+    NgbAccordionModule,
+    ReactiveFormsModule,
   ],
   declarations: [
     DashboardComponent,

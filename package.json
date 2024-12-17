@@ -3,7 +3,7 @@
   "version": "1.4.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4400 --disable-host-check",
+    "start": "ng serve --hmr --port 4400 --disable-host-check --configuration=development",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",

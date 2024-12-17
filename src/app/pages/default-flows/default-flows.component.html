@@ -1,1 +1,53 @@
-<p>default-flows works!</p>
+<div class="content">
+    <div class="row">
+        <div class="col-12">
+            <mat-toolbar color="primary">
+                <span>Información del Negocio</span>
+              </mat-toolbar>
+              
+              <mat-card class="business-form-card">
+                <form [formGroup]="businessForm" (ngSubmit)="onSubmit()">
+                  <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Nombre de la Empresa</mat-label>
+                    <input matInput placeholder="Ej. Tienda XYZ" formControlName="titulo" />
+                  </mat-form-field>
+              
+                  <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Descripción</mat-label>
+                    <textarea matInput placeholder="Describe tu negocio" formControlName="descripcion"></textarea>
+                  </mat-form-field>
+              
+                  <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Ubicación</mat-label>
+                    <input matInput placeholder="Ej. Ciudad, Dirección" formControlName="location" />
+                  </mat-form-field>
+              
+                  <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Productos</mat-label>
+                    <input matInput placeholder="Ej. Ropa, Zapatos, Accesorios" formControlName="products" />
+                  </mat-form-field>
+              
+                  <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Promociones</mat-label>
+                    <input matInput placeholder="Ej. Descuentos especiales" formControlName="promotions" />
+                  </mat-form-field>
+              
+                  <mat-form-field appearance="fill" class="form-field">
+                    <mat-label>Sitio Web</mat-label>
+                    <input matInput placeholder="Ej. https://mi-tienda.com" formControlName="website" />
+                  </mat-form-field>
+              
+                  <div class="form-buttons">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="businessForm.invalid">
+                      Guardar Información
+                    </button>
+                    <!--<button mat-stroked-button color="warn" type="reset">
+                      Limpiar
+                    </button>-->
+                  </div>
+                </form>
+              </mat-card>
+              
+        </div>
+    </div>
+</div>

@@ -95,7 +95,7 @@ export class ListChatComponent implements OnInit {
             ...dataChat.whatsappUserTxt,
             countChatV: 1,
             whatsappId: {
-              id: dataChat.msx.id,
+              id: dataChat.msx.whatsappId,
               Sinto: this._tools.formatNumer( dataChat.msx.to ),
               txt: dataChat.msx.body,
             },

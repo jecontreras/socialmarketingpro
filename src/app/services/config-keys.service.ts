@@ -158,7 +158,8 @@ export class ConfigKeysService {
       txtKeyElement: "Elemento donde guarda la respuesta",
       titleConfigCon: "Quieres Iniciar la conversacion",
       txtConfigCon: "Se va a inciar un mensaje por defecto",
-      txtSequenceId: "Secuencias..."
+      txtSequenceId: "Secuencias...",
+      txtUpdateCompany: "¡Información guardada con éxito!"
     }
   };
   constructor() { }
