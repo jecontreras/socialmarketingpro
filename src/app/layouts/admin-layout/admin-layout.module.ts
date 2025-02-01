@@ -31,6 +31,8 @@ import { TeamMembersComponent } from 'src/app/pages/team-members/team-members.co
 import { OfficeHoursComponent } from 'src/app/pages/office-hours/office-hours.component';
 import { DefaultFlowsComponent } from 'src/app/pages/default-flows/default-flows.component';
 import { WhatsappComponent } from 'src/app/pages/whatsapp/whatsapp.component';
+import { QRCodeModule } from 'angularx-qrcode';
+import { GoogleSheetComponent } from 'src/app/pages/google-sheet/google-sheet.component';
 // import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -45,7 +47,9 @@ import { WhatsappComponent } from 'src/app/pages/whatsapp/whatsapp.component';
     ToolsModule,
     FormModule,
     MyOwnCustomMaterialModule,
-    NgbAccordionModule
+    NgbAccordionModule,
+    ReactiveFormsModule,
+    QRCodeModule
   ],
   declarations: [
     DashboardComponent,
@@ -67,7 +71,8 @@ import { WhatsappComponent } from 'src/app/pages/whatsapp/whatsapp.component';
     TeamMembersComponent,
     OfficeHoursComponent,
     DefaultFlowsComponent,
-    WhatsappComponent
+    WhatsappComponent,
+    GoogleSheetComponent
   ]
 })
 

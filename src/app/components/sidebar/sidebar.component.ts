@@ -56,6 +56,7 @@ export class SidebarComponent implements OnInit {
       { path: '/flows', title: this.dataConfig.flows,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'visitante' ) || ( this.viewProfile === 'admin' ) || ( this.viewProfile === 'subAdmin' ) },
       { path: '/config', title: this.dataConfig.config,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'admin' ) || ( this.viewProfile === 'subAdmin' ) },
       { path: '/whatsapp', title: this.dataConfig.whatsapp,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'admin' ) },
+      { path: '/googleSheet', title: this.dataConfig.googleSheet,  icon:'ni-pin-3 text-orange', class: '', disabled: ( this.viewProfile === 'admin' ) },
       { path: '/user-profile', title: 'Perfil',  icon:'ni-single-02 text-yellow', class: '' , disabled: ( this.viewProfile === 'usuario' ) || ( this.viewProfile === 'admin' ) || ( this.viewProfile === 'subAdmin' ) },
       { path: '/perfil', title: 'Roles',  icon:'ni-vector text-pink', class: '' , disabled:  ( this.viewProfile === 'admin' ) },
   ];

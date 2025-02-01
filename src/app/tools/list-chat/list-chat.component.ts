@@ -1,16 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { USERT, WHATSAPPDETAILS } from 'src/app/interfaces/interfaces';
-import { ConfigKeysService } from 'src/app/services/config-keys.service';
+import { Component, OnInit } from '@angular/core';
 import * as _ from 'lodash';
-import { FormAllChatComponent } from 'src/app/dialog/form-all-chat/form-all-chat.component';
-import { MatDialog } from '@angular/material/dialog';
+import { CdkDragDrop,moveItemInArray, transferArrayItem } from '@angular/cdk/drag-drop';
+import { ConfigKeysService } from 'src/app/services/config-keys.service';
+import { WhatsappTxtUserService } from 'src/app/servicesComponent/whatsapp-txt-user.service';
+import { SequencesService } from 'src/app/servicesComponent/sequences.service';
+import * as moment from 'moment';
 import { USER } from 'src/app/interfaces/user';
 import { Store } from '@ngrx/store';
+import { MSG, USERT } from 'src/app/interfaces/interfaces';
+import { MatDialog } from '@angular/material/dialog';
+import { OpenChatComponent } from 'src/app/dialog/open-chat/open-chat.component';
+import { FormControl, FormGroup } from '@angular/forms';
 import { ToolsService } from 'src/app/services/tools.service';
-import { ListChatOptionComponent } from '../list-chat-option/list-chat-option.component';
-import { ChatNewDetailedComponent } from '../chat-new-detailed/chat-new-detailed.component';
-import { MatTabChangeEvent } from '@angular/material/tabs';
-import * as moment from 'moment';
+import { ChatService } from 'src/app/servicesComponent/chat.service';
 
 @Component({
   selector: 'app-list-chat',
@@ -18,149 +20,262 @@ import * as moment from 'moment';
   styleUrls: ['./list-chat.component.scss']
 })
 export class ListChatComponent implements OnInit {
+
+  listChat = [];
   dataConfig:any = {};
-  dataSelect:WHATSAPPDETAILS = {};
   dataUser: USERT;
-  @ViewChild(ListChatOptionComponent) listChatOption: ListChatOptionComponent;  // Accedemos al hijo 2
-  @ViewChild('sonChat') sonChat: ChatNewDetailedComponent;
-  @ViewChild('dataSentDestroy1') dataSentDestroy1: ListChatOptionComponent;
-  @ViewChild('dataSentDestroy2') dataSentDestroy2: ListChatOptionComponent;
-  @ViewChild('dataSentDestroy3') dataSentDestroy3: ListChatOptionComponent;
-
-  querys1:any = { where:{ } };
-  querys2:any = { where:{ } };
-  querys3:any = { where:{ } };
-  selectedTabIndex: number = 0;
   rolName: string;
-
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl()
+  });
+ 
   constructor(
     private _config: ConfigKeysService,
+    private _userChat: WhatsappTxtUserService,
+    private _sequences: SequencesService,
+    private _store: Store<USER>,  
     public dialog: MatDialog,
-    private _store: Store<USER>,
-    public _toolsService: ToolsService,
+    private _tools: ToolsService,
+    private chatService: ChatService
   ) {
-    this.dataConfig = _config._config.keys;
+    this.dataConfig = this._config._config.keys;
     this._store.subscribe((store: any) => {
       store = store.name;
       if(!store) return false;
       this.dataUser = store.user || {};
       if( this.dataUser.id ) this.rolName = this.dataUser.rol.nombre;
     });
-    navigator.mediaDevices.getUserMedia({ audio: true })
-      .then((stream) => {
-        console.log('Permission granted');
-      })
-      .catch((err) => {
-        console.error('Permission denied:', err);
-      });
-      const startDate = moment().startOf('day').toDate(); // Desde ayer a las 00:00
-      const endDate = moment().endOf('day').toDate(); // Hasta hoy a las 23:59:59
-
-      this.querys1 = {
-        where:{
-          userId: this.dataUser.id,
-          assignedMe: 0,
-          estado: 0,
-          sendAnswered: [0,1],
-          whatsappId: { '!=': null },
-          updatedAt: {
-            '>=': startDate,
-            '<=': endDate
-          }
-        },
-        sort: 'updatedAt DESC',
-        limit: 1000000,
-        page: 0
-      };
-      this.querys2 = {
-        where:{
-          userId: this.dataUser.id,
-          assignedMe: 0,
-          estado: 0,
-          sendAnswered: 1,
-          whatsappId: { '!=': null },
-          updatedAt: {
-            '>=': startDate,
-            '<=': endDate
-          }
-        },
-        sort: 'updatedAt DESC',
-        limit: 1000000,
-        page: 0
-      };
-      this.querys3 = {
-        where:{
-          assignedMe: 0,
-          estado: 1,
-          whatsappId: { '!=': null },
-          updatedAt: {
-            '>=': startDate,
-            '<=': endDate
-          }
-        },
-        sort: 'updatedAt DESC',
-        limit: 1000000,
-        page: 0
-      };
-      if( this.rolName !== 'montador' ) this.querys3.where.userId = this.dataUser.id;
-  };
-
-  btnDataDs = {
-    tab1: true,
-    tab2: true,
-    tab3: true
   };
 
   async ngOnInit() {
-    setTimeout( ()=> this.handleProcessTab( 0 ), 200 )
-  }
+    const startDate = moment().startOf('day').toDate(); // Desde ayer a las 00:00
+    const endDate = moment().endOf('day').toDate(); // Hasta hoy a las 23:59:59
 
-  handleOpenAllChat(){
-    const dialogRef = this.dialog.open(FormAllChatComponent, {
-      data: { },
-      width: '50%',
+    this.range = new FormGroup({
+      start: new FormControl(moment().startOf('day').toDate()),  // Fecha de inicio
+      end: new FormControl(moment().endOf('day').toDate())       // Fecha de final
     });
 
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed', result );
+    this.getFilter( startDate, endDate );
+    this.handleEvent();
+  }
+
+  handleEvent(){
+    this.chatService.receiveChatAssigned().subscribe(async (data: MSG) => {
+      console.log("****77", data, this.listChat)
+       
+    });
+    this.chatService.recibirMensajes().subscribe(async (data: MSG) => {
+      console.log("****81", data, this.listChat)
+      this.handleProccessChat( data );
+
+    });
+    this.chatService.receiveMessageUpdateId().subscribe(async (data: MSG) => {
+      console.log("*******85", data )
+
     });
   }
 
-  goToTab(index: number) {
-    this.selectedTabIndex = index;
+  handleProccessChat(dataChat) {
+    let idTabs = this.listChat.find(item => item.id === dataChat.whatsappUserTxt.sequenceId);
+  
+    if (idTabs) {
+      let indexIdChat = _.findIndex(idTabs.listChat, { id: dataChat.whatsappUserTxt.id });
+  
+      if (indexIdChat >= 0) {
+        // Actualizar chat existente
+        idTabs.listChat[ indexIdChat ].whatsappId['txt'] = dataChat.msx.body;
+        idTabs.listChat[ indexIdChat ].updatedAt = dataChat.msx.createdAt;
+        idTabs.listChat[ indexIdChat ].countChatV++;
+      } else {
+        // Agregar nuevo chat
+        idTabs.listChat = [
+          {
+            ...dataChat.whatsappUserTxt,
+            countChatV: 1,
+            whatsappId: {
+              id: dataChat.msx.whatsappId,
+              Sinto: this._tools.formatNumer( dataChat.msx.to ),
+              txt: dataChat.msx.body,
+            },
+            contactIdList: {
+              Sinto: this._tools.formatNumer( dataChat.msx.to ),
+              id: dataChat.msx.contactId.id,
+              name: dataChat.msx.contactId.name,
+            },
+            updatedAt: dataChat.msx.createdAt,
+          },
+          ...idTabs.listChat, // Insertar al inicio
+        ];
+      }
+  
+      // Ordenar los chats después de agregar/actualizar
+      this.sortChatsByDate(idTabs);
+  
+      // Asignar una nueva referencia al array principal
+      this.listChat = [...this.listChat];
+    }
+  
+    // Eliminar el chat de otras columnas
+    this.listChat = this.listChat.map(item => {
+      if (item.id !== dataChat.whatsappUserTxt.sequenceId) {
+        return {
+          ...item,
+          listChat: item.listChat.filter(row => row.id !== dataChat.whatsappUserTxt.id),
+        };
+      }
+      return item;
+    });
+  
+    console.log("***105", this.listChat);
+  }
+  
+
+  sortChatsByDate(column) {
+    column.listChat.sort((a, b) => {
+      const dateA = new Date(a.updatedAt).getTime();
+      const dateB = new Date(b.updatedAt).getTime();
+      return dateB - dateA; // Orden descendente
+    });
   }
 
-  onTabClick( event: MatTabChangeEvent ){
-    let numberTab = event.index;
-    this.handleProcessTab( numberTab );
+  async getFilter( startDate, endDate ){
+    let result:any = await this.getchat( startDate, endDate );
+    this.listChat = result.data;
+    for( let row of this.listChat ) this.sortChatsByDate( row );
   }
 
-  handleProcessTab( tabIndex: number ){
-    if( tabIndex === 0  && ( this.btnDataDs.tab1 === true ) ) { this.btnDataDs.tab1= false; this.dataSentDestroy1.reloadCharge( ); }
-    if( tabIndex === 1  && ( this.btnDataDs.tab2 === true ) ) { this.btnDataDs.tab2= false; this.dataSentDestroy2.reloadCharge( ); }
-    if( tabIndex === 2  && ( this.btnDataDs.tab3 === true ) ) { this.btnDataDs.tab3= false; this.dataSentDestroy3.reloadCharge( ); }
+  getchat( startDate, endDate ){
+    return new Promise( resolve => {
+      this._sequences.getTabsLive( {
+        "where":{
+            "estado": 0,
+            "updatedAt": {
+                ">=": startDate,
+                "<=": endDate
+            },
+            "companyId": this.dataUser.empresa
+        },
+        "updatedAt": "DESC",
+        "populate": "whatsappId",
+        "UserC": this.dataUser.id,
+        "limit": 100
+    } ).subscribe( res => {
+        resolve( res );
+      }, ( error )=> { resolve( error ) } ); 
+    });
   }
 
-  receiveChatDestroy( item ){
-    //console.log("******item", item )
-    //if( this.selectedTabIndex === 0 ) this.goToTab( 1 );
-    this.dataSentDestroy1.handleDataSentDestroy( item );
-    this.dataSentDestroy2.handleDataSentDestroy( item );
-    this.dataSentDestroy3.handleDataSentDestroy( item );
-
+  handleFilterDate(){
+    const startDate = moment( this.range.value.start ).startOf('day').toDate(); // Desde ayer a las 00:00
+    const endDate = moment(this.range.value.end).endOf('day').toDate(); // Hasta hoy a las 23:59:59
+    console.log("*****226", startDate, endDate );
+    this.getFilter( startDate, endDate );
   }
 
-
-  receiveDataDestroyChat( item ){
-    //console.log( "*****item", item )
+   // Generar lista conectada para arrastrar
+   get connectedLists() {
+    return this.listChat.map((_, index) => `cdk-drop-list-${index}`);
   }
 
-
-  receiveDataFrom(data: WHATSAPPDETAILS) {
-    //console.log('Padre recibió los datos del Hijo 1:', data);
-    // Aquí llamamos a la función del Hijo 2
-    this.dataSelect = data;
-    setTimeout(()=> this.sonChat.handleEventFater(), 100 );
+  onDropColumn(event: CdkDragDrop<any[]>) {
+    console.log("****,,", event)
+    // Mueve las columnas en el array
+    moveItemInArray(this.listChat, event.previousIndex, event.currentIndex);
+  
+    // Crear el nuevo orden para enviarlo al backend
+    const updatedColumnOrder: any = this.listChat.map((column, index) => ({
+      id: String( column.id ),  // ID de la columna
+      order: Number( index )    // Nuevo orden
+    }));
+    for( let row of updatedColumnOrder ) this.handleUpdateColSequence( row );
+    console.log("****108", updatedColumnOrder )
+    this._tools.basic( this.dataConfig.txtUpdate )
   }
 
+  handleUpdateColSequence( data:{ id: string; order: number} ){
+    return new Promise( resolve =>{
+      this._sequences.update( data ).subscribe( res => {
+        resolve( true );
+      });
+    });
+  }
+
+  // Manejar arrastre
+  onDrop(event: CdkDragDrop<string[]>) {
+    if (event.previousContainer !== event.container) {
+      transferArrayItem(
+        event.previousContainer.data,
+        event.container.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+    }
+    console.log("***150", event)
+  }
+  // Agregar nueva columna
+  addColumn() {
+    this.listChat.push({ sequences: 'Nueva columna', listChat: [] });
+  }
+
+  // Eliminar columna
+  async deleteColumn(column: any) {
+    //console.log("**115", column );
+    let validConfirm = await this._tools.confirm( { title: "Eliminar", text: "Deseas eliminar este item" } );
+    console.log("****119", validConfirm)
+    if( !validConfirm.value ) return false;
+    // Elimina la columna seleccionada
+    const columnIndex = this.listChat.indexOf(column);
+    if (columnIndex !== -1) {
+      this.listChat.splice(columnIndex, 1);
+      await this.handleDropDbsSequences( column.id )
+    }
+  }
+  handleDropDbsSequences( id:string ){
+    return new Promise( resolve =>{
+      this._sequences.update( { id: id, state: 'eliminado' } ).subscribe( res => {
+        resolve( true );
+      });
+    });
+  }
+
+  openChatDialog(item: any): void {
+    console.log("ABRIENDO DIALOG", this.listChat)
+    const dialogRef = this.dialog.open(OpenChatComponent, {
+      data: item || {},
+      width: '100%',
+    });
+
+  }
+  addColumnAfter(column: any): void {
+    // Encuentra el índice de la columna actual
+    const columnIndex = this.listChat.indexOf(column);
+  
+    // Crea una nueva columna vacía
+    const newColumn = {
+      sequences: 'Nueva columna',
+      listChat: [], // Lista vacía
+      user: this.dataUser.cabeza,
+
+    };
+    this.handleCreteSequences( newColumn );
+    // Inserta la nueva columna justo después de la columna actual
+    this.listChat.splice(columnIndex + 1, 0, newColumn);
+  }
+  handleCreteSequences( data ){
+    return new Promise( resolve => {
+      this._sequences.create( data ).subscribe( res =>{
+        resolve( res );
+      });
+    });
+  }
+  handleUpdateDbsSequences( id:string, sequences:string ){
+    return new Promise( resolve =>{
+      this._sequences.update( { id: id, sequences: sequences } ).subscribe( res => {
+        this._tools.basic( this.dataConfig.txtUpdate )
+        resolve( true );
+      });
+    });
+  }
 }

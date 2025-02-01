@@ -34,6 +34,11 @@ export class WhatsappTxtService {
     return this._model.querys('WhatsappTxt/getNumberId',query, 'post');
   }
 
+  updateView(query:any){
+    return this._model.querys('WhatsappTxt/updateView',query, 'post');
+  }
+
+
   getDetails(query:any){
     return this._model.querys('WhatsappHistorial/querys',query, 'post');
   }

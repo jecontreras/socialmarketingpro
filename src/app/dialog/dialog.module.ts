@@ -18,6 +18,9 @@ import { FormWhatsappComponent } from './form-whatsapp/form-whatsapp.component';
 import { ListAdvisorsComponent } from './list-advisors/list-advisors.component';
 import { FastMsxComponent } from './fast-msx/fast-msx.component';
 import { A11yModule } from '@angular/cdk/a11y';
+import { OpenChatComponent } from './open-chat/open-chat.component';
+import { OpenConfigTextComponent } from './open-config-text/open-config-text.component';
+import { OpenConfigTimeComponent } from './open-config-time/open-config-time.component';
 
 
 
@@ -31,7 +34,9 @@ import { A11yModule } from '@angular/cdk/a11y';
     FormFlowsComponent,
     FormTagComponent,
     FormAllChatComponent,
-    FormWhatsappComponent
+    FormWhatsappComponent,
+    OpenConfigTextComponent,
+    OpenConfigTimeComponent
 
   ],
   declarations: [
@@ -48,7 +53,10 @@ import { A11yModule } from '@angular/cdk/a11y';
     OpenGalleriaComponent,
     FormWhatsappComponent,
     ListAdvisorsComponent,
-    FastMsxComponent
+    FastMsxComponent,
+    OpenChatComponent,
+    OpenConfigTextComponent,
+    OpenConfigTimeComponent
     ,
   ],
   exports:[
@@ -60,7 +68,9 @@ import { A11yModule } from '@angular/cdk/a11y';
     FormFlowsComponent,
     FormTagComponent,
     FormAllChatComponent,
-    FormWhatsappComponent
+    FormWhatsappComponent,
+    OpenConfigTextComponent,
+    OpenConfigTimeComponent
 
   ],
   imports: [

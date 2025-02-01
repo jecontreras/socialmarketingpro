@@ -89,4 +89,16 @@ export class ChatService {
     });
   }
 
+  qrWhatsapp( ): Observable<any> {
+    return new Observable<any>(observer => {
+      this.socket.on('qrWhatsapp', (data: any) => observer.next(data) );
+    });
+  }
+
+  statusWhatsapp( ): Observable<any> {
+    return new Observable<any>(observer => {
+      this.socket.on('statusWhatsapp', (data: any) => observer.next(data) );
+    });
+  }
+
 }

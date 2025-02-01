@@ -25,3 +25,13 @@ input[type=number]::-webkit-inner-spin-button,
   max-width: 80px !important;
   min-width: 10px !important;
 }
+
+.card {
+  transition: transform 0.3s ease-in-out;
+}
+.mat-badge-medium.mat-badge-after .mat-badge-content{
+  right: -9px !important;
+}
+.mat-badge-medium.mat-badge-above .mat-badge-content{
+  top: -50px !important;
+}

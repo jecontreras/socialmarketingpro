@@ -1,0 +1,27 @@
+.business-form-card {
+    max-width: 600px;
+    margin: 2rem auto;
+    padding: 2rem;
+  }
+  
+  .form-field {
+    width: 100%;
+    margin-bottom: 1rem;
+  }
+  
+  .form-buttons {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1rem;
+  }
+  
+  .snackbar-success {
+    background-color: #4caf50;
+    color: white;
+  }
+  
+  .snackbar-error {
+    background-color: #f44336;
+    color: white;
+  }
+  

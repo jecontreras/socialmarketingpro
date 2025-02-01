@@ -3,7 +3,7 @@
   "version": "1.4.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng serve --port 4400 --disable-host-check",
+    "start": "ng serve --hmr --port 4400 --disable-host-check --configuration=development",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -12,7 +12,7 @@
   },
   "private": true,
   "dependencies": {
-    "@angular/animations": "13.3.1",
+    "@angular/animations": "^13.4.0",
     "@angular/cdk": "^13.3.1",
     "@angular/common": "^13.3.1",
     "@angular/compiler": "^13.3.1",
@@ -30,7 +30,7 @@
     "@ngrx/store-devtools": "^9.2.0",
     "@popperjs/core": "^2.11.4",
     "angular-ng-autocomplete": "^2.0.12",
-    "angularx-qrcode": "^13.0.15",
+    "angularx-qrcode": "^13.0.11",
     "bootstrap": "4.6.1",
     "chart.js": "2.9.4",
     "clipboard": "2.0.10",

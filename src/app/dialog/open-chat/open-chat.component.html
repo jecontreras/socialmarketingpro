@@ -1,0 +1,236 @@
+<h2 mat-dialog-title>
+  <div class="d-flex bd-highlight" style="background-color: #128c7e;">
+    <div class="p-2 flex-grow-1 bd-highlight">
+      <div class="chat-header">
+        <div class="chat-user-info">
+          <img (click)="handleOpenContact()" [src]="data['contactIdList']?.foto || './assets/imagenes/perfil.png'" alt="Foto de perfil"
+            class="user-photo">
+          <span class="user-name">
+            {{ _toolsService.formatNumer( data.to ) }}
+          </span>
+          <span class="user-name" *ngIf="data.contactIdList" style="font-size: 8px;">
+            {{ data.contactIdList.name }}
+          </span>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <div class="d-flex bd-highlight">
+              <div class="p-2 flex-grow-1 bd-highlight">
+                <label *ngIf="data.tipeGuide">Transportadora: {{ data.tipeGuide }}</label>
+                <div class="col-12">
+                  <div class="form-group">
+                    <input class="form-control" type="number" [(ngModel)]="data.numberGuide"
+                      [placeholder]="dataConfig.numberGuider" (change)="handleUpdateNumber()">
+                  </div>
+                </div>
+              </div>
+              <div class="p-2 bd-highlight">
+
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item color="warn" (click)="handleOpenContact()">
+                    <mat-icon>perm_identity</mat-icon>
+                  </button>
+                  <button mat-menu-item color="primary" (click)="handleCheckChat()">
+                    <mat-icon>check_circle</mat-icon>
+                  </button>
+                  <button mat-menu-item color="warn" (click)="handleClose()">
+                    <mat-icon>close</mat-icon>
+                  </button>
+                </mat-menu>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-2 bd-highlight">
+      <section class="example-section">
+        <mat-checkbox class="example-margin" [(ngModel)]="datas.aiChatGpt" (change)="handleUpdateAiChatGpt()">
+          <mat-icon>android</mat-icon>
+        </mat-checkbox>
+      </section>
+    </div>
+    <div class="p-2 bd-highlight" style="    margin-top: 10px;">
+      <button mat-raised-button color="warn" mat-dialog-close aria-label="Cerrar">
+        <mat-icon>clear</mat-icon>
+      </button>
+    </div>
+  </div>
+</h2>
+<mat-dialog-content>
+  <div class="chat-container">
+    <div>
+      <mat-form-field class="example-chip-list" *ngIf=" rolName === 'admin' ">
+        <mat-chip-list #chipList aria-label="Fruit selection">
+          <mat-chip *ngFor="let item of listAdviser" [selectable]="selectable" [removable]="removable"
+            (removed)="remove( item )">
+            {{ item.name }}
+            <mat-icon matChipRemove *ngIf="removable">cancel</mat-icon>
+          </mat-chip>
+          <input [placeholder]="dataConfig.txtListAdviser" #fruitInput [formControl]="fruitCtrl"
+            [matAutocomplete]="auto" [matChipInputFor]="chipList" [matChipInputSeparatorKeyCodes]="separatorKeysCodes"
+            (matChipInputTokenEnd)="add($event)">
+        </mat-chip-list>
+        <mat-autocomplete #auto="matAutocomplete" (optionSelected)="selected($event)">
+          <mat-option *ngFor="let item of filteredFruits | async" [value]="item.id">
+            {{ item.name }} -- {{ item.email }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+    </div>
+
+    <div class="chat-messages" #chatContainer (scroll)="onScroll($event)">
+      <div *ngFor="let message of messages" [@messageAnimation] [ngClass]="{
+              'message-sent': message.quien !== 0,
+              'message-received': message.quien === 0
+            }" [attr.id]="message.id">
+        <!-- Mensaje relacionado -->
+        <div *ngIf="message.dataRelationMessage" class="related-message">
+          <span (click)="scrollToMessage(message.dataRelationMessage.id)" class="related-link">
+            Respuesta a: {{ message.dataRelationMessage.txt }}
+          </span>
+        </div>
+
+        <!-- Contenido del mensaje -->
+        <div class="message-content">
+          <!-- Imágenes -->
+          <a *ngIf="message.typeTxt === 'image' || message.typeTxt === 'photo'" [href]="message.urlMedios"
+            target="_blank" class="document-link">
+            <img [src]="message.urlMedios" alt="imagen" class="image-message pixelated" />
+          </a>
+
+
+          <!-- Modal para mostrar la imagen en alta resolución -->
+          <!--<div class="modal" *ngIf="isModalOpen" (click)="closeImageModal()">
+                <img [src]="modalImageUrl" alt="imagen en alta calidad" class="full-image" />
+              </div>-->
+
+          <!-- Audio -->
+          <audio *ngIf="message.typeTxt === 'audio'" controls>
+            <source [src]="message.urlMedios" type="audio/mp3" />
+          </audio>
+
+          <a *ngIf="message.typeTxt === 'video'" [href]="message.urlMedios" target="_blank" class="document-link">{{
+            message.urlMedios }}</a>
+          <!-- Video -->
+          <!--<video *ngIf="message.typeTxt === 'video'" controls>
+                <source [src]="message.urlMedios" type="video/mp4" />
+              </video>-->
+
+          <!-- Documentos -->
+          <a *ngIf="message.typeTxt === 'document'" [href]="message.urlMedios" download="{{ message.urlMedios }}"
+            target="_blank" class="document-link">{{ message.urlMedios }}</a>
+
+          <!-- Flujos -->
+          <span *ngIf="message.typeTxt === 'flow'">
+            <button mat-mini-fab color="primary" aria-label="Example icon button with a menu icon"
+              (click)="handleOpenFlows(message)">
+              <mat-icon>remove_red_eye</mat-icon>
+            </button>
+            Flujo
+          </span>
+
+          <!-- Texto -->
+          <span *ngIf="message.txt">
+            {{ message.txt }}
+          </span>
+
+          <!-- Fecha y estado del mensaje juntos -->
+          <div class="message-info">
+            <span class="message-date">{{ message.date }}</span>
+            <mat-icon class="message-status" *ngIf="message.sendWhatsapp === 0">done</mat-icon>
+            <mat-icon class="message-status double-check" *ngIf="message.sendWhatsapp === 1">done_all</mat-icon>
+            <button mat-button [matMenuTriggerFor]="menu1">
+              <mat-icon>save_alt</mat-icon>
+            </button>
+            <mat-menu #menu1="matMenu">
+              <button mat-menu-item (click)="setReply(message)">Responder</button>
+            </mat-menu>
+            <mat-icon class="mouse" *ngIf="message.sendWhatsapp === 1"
+              (click)="handleDropChatMsx( message.idWhatsapp )">restore_from_trash</mat-icon>
+          </div>
+        </div>
+      </div>
+      <button mat-mini-fab color="warn" class="scroll-btn scroll-down" *ngIf="!isAtBottom" (click)="scrollToBottom()">
+        <mat-icon> vertical_align_bottom</mat-icon>
+      </button>
+
+      <button mat-mini-fab color="warn" class="scroll-btn scroll-up" *ngIf="!isAtTop" (click)="scrollToTop()">
+        <mat-icon> vertical_align_top</mat-icon>
+      </button>
+    </div>
+    <!-- Si existe un mensaje al que se está respondiendo -->
+    <div *ngIf="replyingToMessage" class="reply-preview">
+      <span>Respondiendo a: {{ replyingToMessage.txt || replyingToMessage.urlMedios }}</span>
+      <button mat-mini-fab color="warn" (click)="cancelReply()">
+        <mat-icon>close</mat-icon>
+      </button>
+    </div>
+
+    <div class="d-flex bd-highlight" style="background-color: #f1f1f1;">
+      <div class="d-flex justify-content-between" style="width: 100%" *ngIf="btnDisabledChatInit">
+        <div>
+          <button mat-icon-button [matMenuTriggerFor]="menu" color="primary" class="attach-button">
+            <mat-icon>add_circle_outline</mat-icon>
+          </button>
+          <mat-menu #menu="matMenu">
+            <button mat-menu-item (click)="handleFile('document')">
+              <mat-icon>file_copy</mat-icon>
+            </button>
+            <button mat-menu-item (click)="handleFile('video')">
+              <mat-icon>movie</mat-icon>
+            </button>
+            <button mat-menu-item (click)="handleFile('photo')">
+              <mat-icon>insert_photo</mat-icon>
+            </button>
+          </mat-menu>
+        </div>
+        <div style="width: 100%">
+          <form [formGroup]="chatForm" (ngSubmit)="sendMessage()">
+            <div class="chat-input-wrapper">
+
+              <!-- Input para escribir mensaje -->
+              <textarea #chatInput cdkFocusInitial formControlName="message" (keydown.enter)="handleEnter($event)"
+                placeholder="Escribe un mensaje..." class="chat-input-area" rows="1"
+                (click)="emojiPickerVisible=false"></textarea>
+
+              <!-- Botón de emoji -->
+              <button type="button" mat-icon-button (click)="toggleEmojiPicker()" class="emoji-button">
+                😊
+              </button>
+
+              <!-- Picker de emojis -->
+              <div *ngIf="emojiPickerVisible" class="emoji-picker">
+                <emoji-mart set="twitter" (emojiSelect)="addEmoji($event)"></emoji-mart>
+              </div>
+              <button mat-mini-fab color="warn" aria-label="Example icon button with a menu icon"
+                (click)="openBottomSheetFastAnswer();emojiPickerVisible=false;">
+                <i class="ni ni-user-run"></i>
+              </button>
+
+              <!-- Botón de enviar -->
+              <button type="submit" mat-mini-fab color="accent" class="send-button">
+                ➤
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="d-flex justify-content-between" style="width: 100%" *ngIf="!btnDisabledChatInit">
+        <div class="d-flex justify-content-center">
+          <div style="width: 100%;">
+            <button mat-raised-button (click)="ProcessTxtChatNew( {}, 'Init','', 'txt'); btnDisabledChatInit = true;"
+              color="primary">{{ dataConfig.txtInitChat }}</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</mat-dialog-content>
+<mat-dialog-actions align="end">
+
+</mat-dialog-actions>

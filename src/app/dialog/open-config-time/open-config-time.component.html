@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>{{ dataConfig.txtListAdviser }}</h2>
+
+<mat-dialog-content class="mat-typography">
+  <form [formGroup]="form">
+    <div formArrayName="days">
+      <div *ngFor="let day of days; let i = index" [formGroupName]="i">
+        <h3>{{ day }}</h3>
+
+        <label>
+          <input type="checkbox" formControlName="isOpen"> Abierto
+        </label>
+
+        <div formArrayName="timeSlots">
+          <div *ngFor="let slot of getTimeSlots(i).controls; let j = index" [formGroupName]="j">
+            <mat-form-field>
+              <mat-label>Apertura</mat-label>
+              <input matInput type="time" formControlName="start">
+            </mat-form-field>
+            <mat-form-field>
+              <mat-label>Cierre</mat-label>
+              <input matInput type="time" formControlName="end">
+            </mat-form-field>
+            <button mat-icon-button color="warn" (click)="removeTimeSlot(i, j)">
+              <mat-icon>delete</mat-icon>
+            </button>
+          </div>
+        </div>
+
+        <button mat-stroked-button color="accent" (click)="addTimeSlot(i)">Agregar horario</button>
+      </div>
+    </div>
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-raised-button color="warn" mat-dialog-close>
+    <i class="ni ni-fat-remove"></i>
+  </button>
+  <button mat-raised-button color="primary" (click)="saveHours()" [disabled]="btnDisabled">
+    {{ dataConfig.txtUpdate }}
+  </button>
+</mat-dialog-actions>

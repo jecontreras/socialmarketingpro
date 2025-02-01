@@ -16,6 +16,7 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { FormControl, FormGroup } from '@angular/forms';
 import { SequencesService } from 'src/app/servicesComponent/sequences.service';
+import { UsuariosService } from 'src/app/servicesComponent/usuarios.service';
 
 @Component({
   selector: 'app-list-chat-option',
@@ -43,6 +44,7 @@ export class ListChatOptionComponent implements OnInit {
   listSequence:SEQUENCESUSER[];
   countChat: 0;
   rolName:string;
+  listUserAdviser:USERT[];
 
   constructor(
     private _config: ConfigKeysService,
@@ -54,7 +56,7 @@ export class ListChatOptionComponent implements OnInit {
     public _toolsService: ToolsService,
     private activate: ActivatedRoute,
     private _whatsappTxtService : WhatsappTxtService,
-    private _sequence: SequencesService
+    private _sequence: SequencesService,
   ) {
     this.dataConfig = _config._config.keys;
     this._store.subscribe((store: any) => {
@@ -93,6 +95,7 @@ export class ListChatOptionComponent implements OnInit {
     });
     let resultSequences:any = await this.getListSequences();
     this.listSequence = resultSequences;
+
     //this.reloadCharge();
   }
 
@@ -114,6 +117,23 @@ export class ListChatOptionComponent implements OnInit {
         resolve( res );
       },()=> resolve( false ) );
     });
+  }
+
+  getChatAdviser( item ){
+    return new Promise( resolve =>{
+      this._whatsappTxtUserService.getChatAdviser( { 
+        where:{
+          whatsappId: item.id,
+          assignedMe: 0,
+          companyId: this.dataUser.empresa
+        },
+        limit: 10000
+      } ).subscribe( res => {
+        res = res.data;
+        this.listUserAdviser = res;
+        resolve( res );
+      });
+    } );
   }
 
   async handleDataSentDestroy( item ){
@@ -146,6 +166,9 @@ export class ListChatOptionComponent implements OnInit {
     //this.loading = true;
     let result:any = await this.getListChat( this.querys );
     //this.listChat = result;
+    for( let item of result ){
+      item.listAdvise = await this.getChatAdviser( item.whatsappIdList )
+    }
     //if( result.length > 0 ) this.loading = false;
     this.listChat =_.unionBy(this.listChat || [], result, 'id');
     this.dataChatClone = _.clone( result );

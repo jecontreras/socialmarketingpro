@@ -1,58 +1,102 @@
-<div class="row">
-  <div class="col-12 col-sm-4">
-    <div class="row">
-      <div class="col-12">
-        <div class="d-flex bd-highlight">
-          <div class="p-2 flex-grow-1 bd-highlight">
-            <h3> {{ dataConfig.mine }} </h3>
-          </div>
-          <div class="p-2 bd-highlight">
-          </div>
-          <div class="p-2 bd-highlight">
-            <button mat-mini-fab color="primary" aria-label="Example icon button with a home icon" (click)="handleOpenAllChat()">
-              <mat-icon>find_in_page</mat-icon>
-            </button>
-          </div>
+<div class="content">
+  <div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-center">
+            <div style="padding: 15px;">
+                <h2>{{ dataConfig.liveChat }}</h2>      
+            </div>
+            <div>
+              <mat-form-field appearance="fill">
+                <mat-label>{{ dataConfig.txtDateTime }}</mat-label>
+                <mat-date-range-input [formGroup]="range" [rangePicker]="picker">
+                  <input matStartDate formControlName="start" placeholder="Start date">
+                  <input matEndDate formControlName="end" placeholder="End date">
+                </mat-date-range-input>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-date-range-picker #picker></mat-date-range-picker>
+  
+                <mat-error *ngIf="range.controls.start.hasError('matStartDateInvalid')">Invalid start date</mat-error>
+                <mat-error *ngIf="range.controls.end.hasError('matEndDateInvalid')">Invalid end date</mat-error>
+              </mat-form-field> 
+            </div>
+            <div style="padding: 15px;">
+              <button mat-raised-button color="primary" (click)="handleFilterDate()">{{ dataConfig.txtBtnFilter }}</button>
+            </div>
         </div>
-      </div>
-      <div class="col-12">
-        <mat-tab-group mat-align-tabs="center" [(selectedIndex)]="selectedTabIndex" (selectedTabChange)="onTabClick($event)">
-          <mat-tab [label]="dataConfig.txtChatNew">
-            <app-list-chat-option
-              (dataSent)="receiveDataFrom($event)"
-              [querys]="querys1"
-              #dataSentDestroy1
-              >
-
-            </app-list-chat-option>
-          </mat-tab>
-          <mat-tab [label]="dataConfig.txtChatAnswered">
-            <app-list-chat-option
-              (dataSent)="receiveDataFrom($event)"
-              [querys]="querys2"
-              #dataSentDestroy2
-            >
-
-           </app-list-chat-option>
-          </mat-tab>
-          <mat-tab [label]="dataConfig.txtChatFinalized">
-            <app-list-chat-option
-              (dataSent)="receiveDataFrom($event)"
-              [querys]="querys3"
-              #dataSentDestroy3
-            >
-
-           </app-list-chat-option>
-          </mat-tab>
-        </mat-tab-group>
+    </div>
+</div>
+</div>
+<div 
+  class="board mouse" 
+>
+    <div
+      class="column"
+      *ngFor="let column of listChat"
+      style="height: 97vh;"
+    >
+     <div class="column-header">
+        <input [(ngModel)]="column.sequences" placeholder="Nombre de columna" (change)="handleUpdateDbsSequences( column.id, column.sequences )"/>
+        
+        <!-- Botón para eliminar columna -->
+        <button mat-icon-button color="warn" (click)="deleteColumn(column)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      
+        <!-- Botón para agregar columna al lado -->
+        <button 
+          mat-icon-button 
+          class="add-column-btn" 
+          (click)="addColumnAfter(column)">
+          <mat-icon>add</mat-icon>
+        </button>
+     </div>
+     <div 
+      class="column-body" 
+      cdkDropList 
+      [cdkDropListData]="column.listChat" 
+      [cdkDropListConnectedTo]="connectedLists" 
+      (cdkDropListDropped)="onDrop($event)"
+    >
+        <!-- Virtual Scroll Viewport -->
+        <cdk-virtual-scroll-viewport 
+          itemSize="80" 
+          class="virtual-scroll-container"
+        >
+          <div
+            class="card"
+            *cdkVirtualFor="let item of column.listChat"
+            cdkDrag
+            [cdkDragData]="item"
+            (click)="openChatDialog(item)"
+          >
+            <div class="card-content" style="width: 100%;">
+              <div class="chat-details">
+                <div class="chat-header">
+                  <span class="chat-name">
+                    <img 
+                      [src]="(item['contactIdList']?.foto) || './assets/imagenes/perfil.png'" 
+                      alt="Foto" 
+                      class="chat-photo" 
+                    />
+                    {{ item['contactIdList']?.name | slice: 0:10 }} - {{ item['whatsappId']?.Sinto }}
+                  </span>
+                </div>
+                <div 
+                  class="chat-message" 
+                  [matBadge]="item.countChatV" 
+                  matBadgeOverlap="false" 
+                  matBadgeColor="accent"
+                >
+                  {{ item['whatsappId']?.txt | slice: 0:30 }}
+                </div>
+                <div class="chat-date">
+                  {{ item.updatedAt | date: 'dd-MM-yyyy' }} {{ item.updatedAt | date: 'hh:mm:ss' }}
+                </div>
+              </div>
+            </div>
+          </div>
+        </cdk-virtual-scroll-viewport>
       </div>
     </div>
-
-  </div>
-  <div class="col-12 col-sm-8">
-    <section>
-      <app-chat-new-detailed [data]="dataSelect" (dataSent)="receiveChatDestroy($event)" #sonChat></app-chat-new-detailed>
-      <!--<app-list-chat-detailed [data]="dataSelect" #sonChat></app-list-chat-detailed>-->
-    </section>
-  </div>
 </div>
+  

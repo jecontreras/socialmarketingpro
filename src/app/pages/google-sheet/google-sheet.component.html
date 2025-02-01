@@ -1,0 +1,164 @@
+<div class="header bg-gradient-danger pb-5 pt-2 pt-md-5">
+</div>
+<div class="content container">
+  <div class="row">
+    <div class="col-12">
+        <div class="d-flex flex-row-reverse bd-highlight">
+            <div class="p-2 bd-highlight">
+                <button mat-raised-button color="primary" (click)="handleConfig()">
+                    {{ dataKey.txtConfigText }}
+                </button>
+            </div>
+            <div class="p-2 bd-highlight">
+                <button mat-raised-button color="warn" (click)="handleNew()">
+                    {{ dataKey.createGooglesheet }}
+                </button>
+            </div>
+            <div class="p-2 bd-highlight">
+                <button mat-raised-button color="accent" (click)="handleTime()">
+                    {{ dataKey.txtConfigTime }}
+                </button>
+            </div>
+          </div>
+    </div>
+    <div class="col-12">
+        <table mat-table
+            [dataSource]="dataSource" multiTemplateDataRows
+            class="mat-elevation-z8">
+        <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
+            <th mat-header-cell *matHeaderCellDef> {{column}} </th>
+            <td mat-cell *matCellDef="let element" style="width: 0%;"> 
+                <span *ngIf="( column !== 'accion' ) "> {{element[column]}}  </span>
+                <span *ngIf="( column === 'accion') ">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Estados {{ element.state }}</mat-label>
+                        <mat-select [(ngModel)]="element.state">
+                          <mat-option value="0">
+                            Activo
+                          </mat-option>
+                          <mat-option value="1">
+                            Inactivo
+                          </mat-option>
+                        </mat-select>
+                      </mat-form-field>
+                </span>
+            </td>
+        </ng-container>
+
+        <!-- Expanded Content Column - The detail row is made up of this one column that spans across all columns -->
+        <ng-container matColumnDef="expandedDetail">
+            <td mat-cell *matCellDef="let element" [attr.colspan]="columnsToDisplay.length">
+            <div class="example-element-detail"
+                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                <div class="row" style="width: 100%;">
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Titulo</mat-label>
+                            <input matInput placeholder="Titulo de la Hoja" [(ngModel)]="element.title">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Descripcion</mat-label>
+                            <input matInput placeholder="Descripcion de la hoja" [(ngModel)]="element.description">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Id google</mat-label>
+                            <input matInput placeholder="id de google" [(ngModel)]="element.urlGoogle">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Nombre de la Hoja</mat-label>
+                            <input matInput placeholder="ej: ventas el nombre se encuentra en pie del doc" [(ngModel)]="element.sheetName">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Limite de la hoja</mat-label>
+                            <input matInput placeholder="ej: A1:v10" [(ngModel)]="element.limitSheet">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key a Numero guia</mat-label>
+                            <input matInput placeholder="ej: donde se coloca el numero de guia" [(ngModel)]="element.keyGuide">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key a Buscar</mat-label>
+                            <input matInput placeholder="ej: numero de guia o numero de celular" [(ngModel)]="element.key1">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key Alterar</mat-label>
+                            <input matInput placeholder="ej: dato alterar" [(ngModel)]="element.key2">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key Departamento</mat-label>
+                            <input matInput placeholder="ej: Departamento del envio" [(ngModel)]="element.key3">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key Ciudad</mat-label>
+                            <input matInput placeholder="ej: Ciudad del envio" [(ngModel)]="element.key4">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key Nombre Cliente</mat-label>
+                            <input matInput placeholder="ej: Nombre del cliente envio" [(ngModel)]="element.keyName">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key Apellido Cliente</mat-label>
+                            <input matInput placeholder="ej: Apellido del cliente envio" [(ngModel)]="element.keySurname">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key Dirección Cliente</mat-label>
+                            <input matInput placeholder="ej: Dirección del cliente envio" [(ngModel)]="element.keyDir">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key Phone</mat-label>
+                            <input matInput placeholder="ej: Numero del cliente envio" [(ngModel)]="element.keyPhone">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key Transportadora</mat-label>
+                            <input matInput placeholder="ej: Transportadora Enviada" [(ngModel)]="element.keyTransport">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-12">
+                        <button mat-raised-button color="primary" (click)="handleProcessSubmit( element )">{{  dataKey.txtUpdateBtn }}</button>
+                    </div>
+                </div>
+            </div>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let element; columns: columnsToDisplay;"
+            class="example-element-row"
+            [class.example-expanded-row]="expandedElement === element"
+            (click)="expandedElement = expandedElement === element ? null : element">
+        </tr>
+        <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
+        </table>
+
+          
+    </div>
+  </div>
+</div>

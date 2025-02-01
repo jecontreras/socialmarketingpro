@@ -19,6 +19,7 @@ import { MatListModule } from '@angular/material/list';
 import { ChatNewDetailedComponent } from './chat-new-detailed/chat-new-detailed.component';
 import { ListChatOptionComponent } from './list-chat-option/list-chat-option.component';
 import { A11yModule } from '@angular/cdk/a11y';
+import { ListChatOptionDevComponent } from './list-chat-option-dev/list-chat-option-dev.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { A11yModule } from '@angular/cdk/a11y';
     ListChatOptionComponent,
     BottomSheetSheetFastAnswer,
     BottomSheetSheetFlows,
-    ListChatDetailedComponent
+    ListChatDetailedComponent,
+    ListChatOptionDevComponent
   ],
   exports:[
     TablaComponent,
@@ -59,7 +61,7 @@ import { A11yModule } from '@angular/cdk/a11y';
     FormsModule,
     PickerModule,
     ReactiveFormsModule,
-    A11yModule
+    A11yModule,
   ],
   providers: [FullConnectionService]
 })
