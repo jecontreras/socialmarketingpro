@@ -4,6 +4,9 @@
   <div class="row">
     <div class="col-12">
       <mat-tab-group mat-align-tabs="center">
+        <mat-tab [label]="dataConfig.config" *ngIf="viewProfile === 'admin'">
+          <app-detail-config></app-detail-config>
+        </mat-tab>
         <mat-tab [label]="dataConfig.tag">
           <app-list-tag></app-list-tag>
         </mat-tab>
@@ -18,9 +21,6 @@
         </mat-tab>
         <mat-tab [label]="dataConfig.defaultFlows" *ngIf="viewProfile === 'admin'">
           <app-default-flows></app-default-flows>
-        </mat-tab>
-        <mat-tab [label]="dataConfig.config" *ngIf="viewProfile === 'admin'">
-          <app-detail-config></app-detail-config>
         </mat-tab>
       </mat-tab-group>
     </div>

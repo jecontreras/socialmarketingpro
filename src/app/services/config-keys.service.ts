@@ -159,7 +159,10 @@ export class ConfigKeysService {
       titleConfigCon: "Quieres Iniciar la conversacion",
       txtConfigCon: "Se va a inciar un mensaje por defecto",
       txtSequenceId: "Secuencias...",
-      txtUpdateCompany: "¡Información guardada con éxito!"
+      txtUpdateCompany: "¡Información guardada con éxito!",
+      googleSheet: "Hoja de Calculo",
+      createGooglesheet: "Crear Hoja de Calculo",
+      txtConfigText: "Configuración de textos"
     }
   };
   constructor() { }

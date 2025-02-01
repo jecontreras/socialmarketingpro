@@ -2,15 +2,36 @@
   <div class="col-12">
     <div class="form-group">
       <label for="exampleFormControlInput1">Url Socket</label>
-      <input type="email" class="form-control" [(ngModel)]="data.urlSocket" (change)="handleNext()">
+      <input type="text" class="form-control" [(ngModel)]="data.urlSocket" (change)="handleNext()">
     </div>
   </div>
+  <!--<div class="col-12">
+    <div class="form-group">
+      <label for="exampleFormControlInput1">Url Google Exel</label>
+      <input type="text" class="form-control" [(ngModel)]="data.urlGoogleExel" (change)="handleNext()">
+    </div>
+  </div>-->
   <div class="col-12">
     <div class="d-flex bd-highlight">
       <div class="p-2 flex-grow-1 bd-highlight"></div>
       <div class="p-2 bd-highlight">
         <button mat-raised-button color="primary" (click)="handleNext()">Actualizar</button>
       </div>
+    </div>
+  </div>
+  <div class="col-12">
+    <div class="form-group">
+      <label for="exampleFormControlInput1">Estado del Whatsapp! <span *ngIf="flagWhatsapp" class="text-success">Conectado</span> <span *ngIf="!flagWhatsapp" class="text-danger"> No Conectado</span> </label>
+    </div>
+    <div class="form-group">
+      <label for="exampleFormControlInput1">Qr Whatsapp</label>
+      <br>
+      <span style="text-align: center;" *ngIf="qrCodeDownloadLink; else loading">
+        <img [src]="qrCodeDownloadLink" alt="Código QR" />
+      </span>
+      <ng-template #loading>
+        <p>Cargando QR...</p>
+      </ng-template>
     </div>
   </div>
 </div>

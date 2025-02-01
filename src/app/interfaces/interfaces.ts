@@ -45,6 +45,8 @@ export interface Componente {
     check?: boolean;
     idUserAdviser?: string;
     idAviserAsigned?: string;
+    qrWhatsapp?: string;
+    urlGoogleExel?: string;
   }
 
   export interface ROL{
@@ -302,3 +304,27 @@ export interface Fruit {
   usu_email: string;
 }
 
+export interface googleSheet {
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  user?: string;
+  company?: string;
+  state?: number;
+  urlGoogle?: string;
+  key1?: string;
+  key2?: string;
+  title?: string;
+  description?: string;
+}
+
+export interface CONFIGTEXT {
+  id?: string;
+  createdAt?: string;
+  updatedAt?: string;
+  titulo?: string;
+  description?: string;
+  typeOpt?: string;
+  user?: string;
+  company?: string;
+}

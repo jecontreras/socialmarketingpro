@@ -19,6 +19,7 @@ import { ListAdvisorsComponent } from './list-advisors/list-advisors.component';
 import { FastMsxComponent } from './fast-msx/fast-msx.component';
 import { A11yModule } from '@angular/cdk/a11y';
 import { OpenChatComponent } from './open-chat/open-chat.component';
+import { OpenConfigTextComponent } from './open-config-text/open-config-text.component';
 
 
 
@@ -32,7 +33,8 @@ import { OpenChatComponent } from './open-chat/open-chat.component';
     FormFlowsComponent,
     FormTagComponent,
     FormAllChatComponent,
-    FormWhatsappComponent
+    FormWhatsappComponent,
+    OpenConfigTextComponent
 
   ],
   declarations: [
@@ -50,7 +52,8 @@ import { OpenChatComponent } from './open-chat/open-chat.component';
     FormWhatsappComponent,
     ListAdvisorsComponent,
     FastMsxComponent,
-    OpenChatComponent
+    OpenChatComponent,
+    OpenConfigTextComponent
     ,
   ],
   exports:[
@@ -62,7 +65,8 @@ import { OpenChatComponent } from './open-chat/open-chat.component';
     FormFlowsComponent,
     FormTagComponent,
     FormAllChatComponent,
-    FormWhatsappComponent
+    FormWhatsappComponent,
+    OpenConfigTextComponent
 
   ],
   imports: [

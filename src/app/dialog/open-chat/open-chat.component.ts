@@ -294,6 +294,7 @@ export class OpenChatComponent implements OnInit {
         this.processId( false );
         let result:any = await this.getWhatsappDetails();
         this.messages = result;
+        this.handleUpdateView();
         //this.invertMessagesOrder();
         setTimeout(()=> this.scrollToBottom(), 200 );
         let resultAdviser:any = await this.getChatAdviser();
@@ -306,6 +307,12 @@ export class OpenChatComponent implements OnInit {
     console.log("*****313", valueDate)
     if( valueDate ) this.btnDisabledChatInit = false;
     else this.btnDisabledChatInit = true;
+  }
+
+  handleUpdateView(){
+    this._whatsappDetails.updateView( { idWhatsapp: this.data.id } ).subscribe( res =>{
+      console.log("****313", res )
+    });
   }
 
   getWhatsappDetails(){
