@@ -53,7 +53,7 @@ export class ListChatComponent implements OnInit {
       .catch((err) => {
         console.error('Permission denied:', err);
       });
-      const startDate = moment().subtract(1, 'day').startOf('day').toDate(); // Desde ayer a las 00:00
+      const startDate = moment().startOf('day').toDate(); // Desde ayer a las 00:00
       const endDate = moment().endOf('day').toDate(); // Hasta hoy a las 23:59:59
 
       this.querys1 = {

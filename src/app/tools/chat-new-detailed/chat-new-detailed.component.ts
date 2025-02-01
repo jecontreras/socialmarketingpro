@@ -89,6 +89,7 @@ export class ChatNewDetailedComponent implements OnInit{
 
   isModalOpen = false;
   modalImageUrl = '';
+  btnDisabledChatInit: boolean = true;
 
   constructor(
     private fb: FormBuilder,
@@ -193,7 +194,8 @@ export class ChatNewDetailedComponent implements OnInit{
           whatsappId: this.data.id,
           assignedMe: 0,
           companyId: this.dataUser.empresa
-        }
+        },
+        limit: 10000
       } ).subscribe( res => {
         res = res.data;
         resolve( res );
@@ -207,7 +209,8 @@ export class ChatNewDetailedComponent implements OnInit{
         where:{
           empresa: this.dataUser.empresa,
           estado: "activo"
-        }
+        },
+        limit: 100
       } ).subscribe( res => {
         res = res.data;
         resolve( res );
@@ -306,6 +309,11 @@ export class ChatNewDetailedComponent implements OnInit{
         //this.processSpinnerValue('end');
       }else this.messages = [];
     }, 200)
+
+    let valueDate = this.verificarTiempoTranscurrido();
+    console.log("*****313", valueDate)
+    if( valueDate ) this.btnDisabledChatInit = false;
+    else this.btnDisabledChatInit = true;
   }
 
   getWhatsappDetails(){
@@ -345,6 +353,7 @@ export class ChatNewDetailedComponent implements OnInit{
 
 
   ngAfterViewChecked() {
+    //console.log("**RRR")
     //this.scrollToBottom();
   }
 
@@ -546,7 +555,7 @@ export class ChatNewDetailedComponent implements OnInit{
     }
   }
 
-  ProcessTxtChatNew( opt, message, urlMedios = "", typeMsx ){
+  async ProcessTxtChatNew( opt, message, urlMedios = "", typeMsx ){
     if( this.replyingToMessage ) { opt = { relationMessage: this.replyingToMessage.idWhatsapp }; }
     //console.log("*****546", this.replyingToMessage, opt)
     let newMessage = {
@@ -567,7 +576,13 @@ export class ChatNewDetailedComponent implements OnInit{
     };
      let validateDate = this.verificarTiempoTranscurrido();
      //console.log("******577 R", validateDate)
-     if( validateDate ) this.chatService.initChatopp( newMessage );
+     if( validateDate ) {
+      let alertV = await this._toolsService.confirm( { title: this.dataConfig.titleConfigCon, text: this.dataConfig.txtConfigCon } );
+      //console.log("RRRR", alertV )
+      if(!alertV.value) return false;
+      this.chatService.initChatopp( newMessage );
+      this._toolsService.tooast( { title: "Mensaje Inciado se envio una plantilla" } )
+    }
      else {
       this.chatService.enviarMensaje( newMessage );
       this.messages.push(
@@ -591,21 +606,35 @@ export class ChatNewDetailedComponent implements OnInit{
   }
 
   verificarTiempoTranscurrido() {
-    // Fecha actual
-    const fechaActual = moment();  // La fecha y hora actuales
-    const fechaReferencia = moment(this.data.date, "DD-MM-YYYY HH:mm:ss");
 
-    // Diferencia en horas entre la fecha guardada y la fecha actual
-    if (!fechaReferencia.isValid()) {
-      console.error('La fecha no es válida');
-      return false;
+    // Fecha que llega desde la base de datos en formato ISO
+    const dbDateStr = this.data.date;
+
+    // Convertimos la cadena de la base de datos a un objeto Date
+    const dbDate = new Date(dbDateStr);
+
+    // Obtenemos la fecha y hora actual
+    const currentDate = new Date();
+
+    // Calculamos la diferencia en milisegundos
+    const differenceInMs = currentDate.getTime() - dbDate.getTime();
+
+    // Convertimos la diferencia a horas
+    const differenceInHours = differenceInMs / (1000 * 60 * 60);
+    // Imprimimos para depuración
+      /*console.log('differenceInMs: ', differenceInMs, "XXX", this.data.date);
+      console.log('dbDate: ', dbDate);
+      console.log('currentDate: ', currentDate);
+      console.log('differenceInHours: ', differenceInHours);*/
+        // Verificamos si ya han pasado 24 horas
+     // Validamos si la diferencia es NaN
+     if (isNaN(differenceInMs)) {
+      console.log('La diferencia es NaN, algo salió mal con la fecha.');
+      // Aquí puedes realizar alguna acción cuando la diferencia sea NaN
+      return true;
     }
-    const diferenciaHoras = fechaActual.diff(fechaReferencia, 'hours');
-    //console.log("*******", diferenciaHoras, this.data.date, fechaReferencia)
-    // Verifica si la fecha es válida
-    // Si la diferencia es mayor a 24 horas
-    if (diferenciaHoras >= 24) {
-      console.log("**RR YA PASO LAS Horas" );
+    if (differenceInHours >= 24) {
+      console.log('Ya han pasado 24 horas.');
       this.nextUpdateWhatsappTxt( );
       return true;
     } else {
@@ -616,7 +645,7 @@ export class ChatNewDetailedComponent implements OnInit{
 
   nextUpdateWhatsappTxt( ){
     return new Promise( resolve =>{
-      this._whatsappDetails.update( { id: this.data.id, date: moment( ).format('DD-MM-YYYY, h:mm:ss') } ).subscribe( res =>{
+      this._whatsappDetails.update( { id: this.data.id, date: moment( ) } ).subscribe( res =>{
         this.data.date = res.date;
         resolve( res );
       }, ( error )=> resolve( error ) );

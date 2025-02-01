@@ -53,6 +53,10 @@ export class ChatService {
     this.socket.emit('deleteChat', { id: id });
   }
 
+  resetFlows(opt: any) {
+    this.socket.emit('resetFlujoChat', { opt: opt });
+  }
+
   initChatopp( data:any ) {
     this.socket.emit('initMessage', data );
   }

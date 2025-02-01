@@ -42,6 +42,7 @@ export class ListChatOptionComponent implements OnInit {
   listState = [{ id: 0, txt:"Sin Contestar"}, { id: 1, txt:"Contestados"}, { id: 3, txt:"Todos"}];
   listSequence:SEQUENCESUSER[];
   countChat: 0;
+  rolName:string;
 
   constructor(
     private _config: ConfigKeysService,
@@ -60,6 +61,9 @@ export class ListChatOptionComponent implements OnInit {
       store = store.name;
       if(!store) return false;
       this.dataUser = store.user || {};
+      try {
+        this.rolName = this.dataUser.rol.nombre;
+      } catch (error) { }
     });
     navigator.mediaDevices.getUserMedia({ audio: true })
       .then((stream) => {
@@ -84,7 +88,7 @@ export class ListChatOptionComponent implements OnInit {
       this.processMessageUpdate( data.dataDbs );
     });
     this.range = new FormGroup({
-      start: new FormControl(moment().subtract(1, 'day').startOf('day').toDate()),  // Fecha de inicio
+      start: new FormControl(moment().startOf('day').toDate()),  // Fecha de inicio
       end: new FormControl(moment().endOf('day').toDate())       // Fecha de final
     });
     let resultSequences:any = await this.getListSequences();
@@ -97,10 +101,15 @@ export class ListChatOptionComponent implements OnInit {
       const startDate = moment( this.range.value.start ).startOf('day').toDate(); // Desde ayer a las 00:00
       const endDate = moment(this.range.value.end).endOf('day').toDate(); // Hasta hoy a las 23:59:59
 
-      this._whatsappTxtUserService.countChatUser( { where: { createdAt: {
-        '>=': startDate,
-        '<=': endDate
-      } } } ).subscribe( res =>{
+      this._whatsappTxtUserService.countChatUser( { 
+        where:{
+          createdAt: {
+            '>=': startDate,
+            '<=': endDate
+          },
+          user: this.dataUser.cabeza
+        }
+       } ).subscribe( res =>{
         res = res.count;
         resolve( res );
       },()=> resolve( false ) );
@@ -133,18 +142,22 @@ export class ListChatOptionComponent implements OnInit {
   }
 
   async reloadCharge(){
-    if (this.loading) return;
-    this.loading = true;
+    //if (this.loading) return;
+    //this.loading = true;
     let result:any = await this.getListChat( this.querys );
     //this.listChat = result;
-    if( result.length > 0 ) this.loading = false;
+    //if( result.length > 0 ) this.loading = false;
     this.listChat =_.unionBy(this.listChat || [], result, 'id');
     this.dataChatClone = _.clone( result );
     this.handleOrderChat();
     this.processColorItem();
-    let countRChat:any = await this.getCountChat();
-    this.countChat = countRChat;
-    console.log("*********94", this.countChat)
+    if( this.rolName === 'admin' ){
+      let countRChat:any = await this.getCountChat();
+      this.countChat = countRChat; 
+    }else{
+      let countRChat:any = this.listChat.length;
+      this.countChat = countRChat;
+    }
     return true;
   }
 
@@ -212,8 +225,10 @@ export class ListChatOptionComponent implements OnInit {
         date1: moment.unix( item.date ).format("YYYY-MM-DD HH:mm")
       }
     });
-    this.listChat = _.orderBy(this.listChat, ['date'], ['desc']);
-//    console.log("********105", this.listChat );
+    // Convertir las fechas y ordenar por las más recientes
+    this.listChat.sort((a, b) => moment(b.date, "DD-MM-YYYY, HH:mm:ss").unix() - moment(a.date, "DD-MM-YYYY, HH:mm:ss").unix());
+    //this.listChat = _.orderBy(this.listChat, ['date'], ['desc']);
+     //console.log("********105", this.listChat );
   }
 
   async handleEventFater( item ) {
@@ -309,7 +324,8 @@ export class ListChatOptionComponent implements OnInit {
         where:{
           to: {
             contains: number
-          }
+          },
+          //user: this.querys.where.userId
         },
         user: this.querys.where.userId,
       };

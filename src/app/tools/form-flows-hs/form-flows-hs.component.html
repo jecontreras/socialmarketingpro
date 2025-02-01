@@ -1,6 +1,6 @@
 <div class="container">
   <div class="row">
-    <div class="col-12 row" *ngIf="views==='one'">
+    <div class="col-12 row mat-elevation-z8" *ngIf="views==='one'">
       <div class="col-12">
         <h3> {{ dataConfig.initialDetails }} </h3>
       </div>
@@ -42,8 +42,8 @@
     <div class="col-12">
       <ul class="list-group list-group-flush">
         <li *ngFor="let item of listLogic; let i=index;">
-          <div class="row">
-            <div class="col-12">
+          <div class="row mat-elevation-z8">
+            <div class="col-12" style="padding: 20px;">
               <div class="d-flex bd-highlight mb-3">
                 <div class="p-2 bd-highlight">
                   <button type="button" class="btn btn-primary" (click)="handlePushList()"> {{ dataConfig.BtnAddFurther }} </button>
@@ -136,13 +136,26 @@
             </div>
             <div class="col-12 form-group">
               <section class="example-section">
-                <mat-checkbox class="example-margin" [(ngModel)]="item.respUser">Espera una Respues!</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="item.respUser"> {{ dataConfig.txtTimeResponse }} </mat-checkbox>
               </section>
-
+              <section class="example-section">
+                <mat-checkbox class="example-margin" [(ngModel)]="item.continueRes">{{ dataConfig.txtTimeResponsePas }} </mat-checkbox>
+              </section>
+            </div>
+            <div class="col-12 form-group">
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtKeyElement }} </label>
+              <input type="text" class="form-control"  [(ngModel)]="item.elementKey">
             </div>
             <div class="col-12 form-group">
               <label for="exampleFormControlInput1"> {{ dataConfig.txtTimeMessage }} </label>
               <input type="number" class="form-control"  [(ngModel)]="item.timeSend">
+            </div>
+            <div class="col-12 form-group" >
+              <label for="exampleFormControlInput1"> {{ dataConfig.txtSequenceId }} </label>
+              <select class="form-control" [(ngModel)]="item.sequencesIdA">
+                <option [value]="item.id" *ngFor="let item of listSequences">
+                    {{ item.sequences }}</option>
+              </select>
             </div>
             <div class="col-12 form-group" >
               <label for="exampleFormControlInput1"> {{ dataConfig.txtNextSequence }} </label>

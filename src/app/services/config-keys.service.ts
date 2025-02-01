@@ -14,6 +14,7 @@ export class ConfigKeysService {
       config: 'ConFiguraciones',
       whatsapp: "Whatsapp",
       createContact: 'Crear Contacto',
+      txtContact: "Contacto",
       txtCreateWhatsapp: "Crear Whatsapp",
       txtUpdateWhatsapp: "Actualizar Whatsapp",
       dischargeInfo: 'Descargar Informe',
@@ -151,7 +152,13 @@ export class ConfigKeysService {
       txtCountChat: "Cantidad de Chat en el Dia",
       txtInitChat: "Iniciar Chat",
       txtMsxFanst: "Mensajes Rapidos",
-      txtErrorSelectMsx: "Error Seleccione Almenos un Chat"
+      txtErrorSelectMsx: "Error Seleccione Almenos un Chat",
+      txtTimeResponsePas: "Si no hizo una accion Seguir adelante durante el tiempo establecido!",
+      txtTimeResponse: "Espera una Respuesta!",
+      txtKeyElement: "Elemento donde guarda la respuesta",
+      titleConfigCon: "Quieres Iniciar la conversacion",
+      txtConfigCon: "Se va a inciar un mensaje por defecto",
+      txtSequenceId: "Secuencias..."
     }
   };
   constructor() { }

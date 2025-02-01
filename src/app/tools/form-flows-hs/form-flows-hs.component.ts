@@ -9,11 +9,13 @@ import { USER } from 'src/app/interfaces/user';
 import { GaleriaService } from 'src/app/servicesComponent/galeria.service';
 import * as _ from 'lodash';
 import { MatChipInputEvent } from '@angular/material/chips';
-import { FLOWS, INDICATOR } from 'src/app/interfaces/interfaces';
+import { FLOWS, INDICATOR, SEQUENCESUSER } from 'src/app/interfaces/interfaces';
 import { ConfigKeysService } from 'src/app/services/config-keys.service';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FormFlowsComponent } from 'src/app/dialog/form-flows/form-flows.component';
 import { FileDetailComponent } from 'src/app/dialog/file-detail/file-detail.component';
+import { SequencesService } from 'src/app/servicesComponent/sequences.service';
+import { ChatService } from 'src/app/servicesComponent/chat.service';
 
 @Component({
   selector: 'app-form-flows-hs',
@@ -56,6 +58,7 @@ export class FormFlowsHsComponent implements OnInit {
   dataConfig:any = {};
   views:string = "one";
   disabledFunctionApi:boolean = true;
+  listSequences:SEQUENCESUSER[];
 
   constructor(
     private _logicWhatsapp: InfoWhatsappService,
@@ -65,7 +68,9 @@ export class FormFlowsHsComponent implements OnInit {
     private _whatsappInfo: WhatsappInfoService,
     private _config: ConfigKeysService,
     public dialogRef: MatDialogRef<FormFlowsComponent>,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private _sequence: SequencesService,
+    private chatService: ChatService,
   ) {
     this.dataConfig = this._config._config.keys;
     this._store.subscribe((store: any) => {
@@ -124,6 +129,16 @@ export class FormFlowsHsComponent implements OnInit {
     console.log("***", this.data)
     this.getGaleria();
     this.getWhatsappInfo();
+    let resultSequences:any = await this.getListSequences();
+    this.listSequences = resultSequences;
+  }
+
+  getListSequences( ){
+    return new Promise( resolve =>{
+      this._sequence.get( { where: { state: "activo" } } ).subscribe( res => {
+        resolve( res.data );
+      });
+    });
   }
 
   getFlowId( id ){
@@ -192,6 +207,7 @@ export class FormFlowsHsComponent implements OnInit {
     if( this.id ) await this.handleUpdate();
     else await this.handleCreate();
     this.closeDialog({});
+    this.chatService.resetFlows( { opt: true } );
     this.disableBtn = false;
   }
 
