@@ -22,4 +22,7 @@ export class CompanyServiceService {
   delete(query:any){
     return this._model.querys('empresa/'+query.id, query, 'delete');
   }
+  getStatisCompany(query:any){
+    return this._model.querys('empresa/statisticsInit',query, 'post');
+  }
 }

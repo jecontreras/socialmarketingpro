@@ -12,8 +12,8 @@ const headers = new HttpHeaders({
   'X-Api-Key': ""
 });
 
-const URL = environment.url;
-const URLFILE = environment.urlFile;
+let URL = environment.url;
+let URLFILE = environment.urlFile;
 
 @Injectable({
   providedIn: 'root'
@@ -37,6 +37,8 @@ export class ServiciosService {
       store = store.name;
       if(!store) return false;
       this.dataConfig = store.configuracion || {};
+      if( store.user.urlBackend ) URL = store.user.urlBackend || URL;
+      if( store.user.urlFile ) URLFILE = store.user.urlFile || URLFILE;
       try {
         this.activador = store.userpr.id ? true : false;
       } catch (error) {

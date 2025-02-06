@@ -47,6 +47,11 @@ export interface Componente {
     idAviserAsigned?: string;
     qrWhatsapp?: string;
     urlGoogleExel?: string;
+    urlBackend?: string;
+    urlBackendFile?: string;
+    userDropi?: string;
+    claveDropi?: string;
+    rolDropi?: string;
   }
 
   export interface ROL{

@@ -57,7 +57,7 @@ export class GoogleSheetComponent implements OnInit {
 
   getFilter(){
     return new Promise( resolve =>{
-      this.googleSheetServices.get( { state: 0, company: this.dataUser.empresa } ).subscribe( res => {
+      this.googleSheetServices.get( { where: { state: 0, company: this.dataUser.empresa } } ).subscribe( res => {
         resolve( res.data );
       });
     });

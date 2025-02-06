@@ -141,6 +141,24 @@
                             <input matInput placeholder="ej: Transportadora Enviada" [(ngModel)]="element.keyTransport">
                         </mat-form-field>
                     </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key Producto</mat-label>
+                            <input matInput placeholder="ej: Productos" [(ngModel)]="element.keyProduct">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key Cantidad</mat-label>
+                            <input matInput placeholder="ej: Cantidad adquirida" [(ngModel)]="element.keyAmountRequested">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field class="example-full-width">
+                            <mat-label>Key Total del Recaudo</mat-label>
+                            <input matInput placeholder="ej: Total a recaudar" [(ngModel)]="element.keyTotalRecaudo">
+                        </mat-form-field>
+                    </div>
                     <div class="col-12">
                         <button mat-raised-button color="primary" (click)="handleProcessSubmit( element )">{{  dataKey.txtUpdateBtn }}</button>
                     </div>

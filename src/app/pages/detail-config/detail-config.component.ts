@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { SafeUrl } from '@angular/platform-browser';
 import { Store } from '@ngrx/store';
 import { USERT } from 'src/app/interfaces/interfaces';
@@ -15,74 +16,85 @@ import { UsuariosService } from 'src/app/servicesComponent/usuarios.service';
   styleUrls: ['./detail-config.component.scss']
 })
 export class DetailConfigComponent implements OnInit {
-  data = {
-    urlSocket: "http://localhost:3000",
-    qrWhatsapp: "",
-    urlGoogleExel: ""
-  };
-  dataUser:USERT;
-  dataConfig:any = {};
-  public qrCodeDownloadLink: SafeUrl = "";
-  flagWhatsapp:boolean = false;
+  configForm!: FormGroup;
+  flagWhatsapp = false;
+  qrCodeDownloadLink = '';
+  dataUser: USERT = {};
+  dataConfig: any = {};
 
   constructor(
+    private fb: FormBuilder,
     private _store: Store<USER>,
     private _user: UsuariosService,
     private _toolsServices: ToolsService,
     private _config: ConfigKeysService,
-    private chatService: ChatService,
+    private chatService: ChatService
   ) {
+    
+    // Suscribirse a la tienda para cargar datos del usuario
     this._store.subscribe((store: any) => {
+      if (!store) return;
       store = store.name;
-      if(!store) return false;
       this.dataUser = store.user || {};
-      this.data.urlSocket = this.dataUser.urlSocket || this.data.urlSocket;
       this.qrCodeDownloadLink = this.dataUser.qrWhatsapp || '';
-      this.data.urlGoogleExel = this.dataUser.urlGoogleExel;
+      this.configForm.patchValue(this.dataUser);
+      console.log("***51", this.dataUser, this.configForm.value )
     });
-    this.dataConfig = _config._config.keys;
+
   }
 
   ngOnInit(): void {
-    this.chatService.qrWhatsapp().subscribe(async ( data ) => {
-       //console.log("****31", data)
-       this.qrCodeDownloadLink = data;
+    // Crear el formulario reactivo
+    this.configForm = this.fb.group({
+      urlSocket: [''],
+      urlBackend: [''],
+      urlBackendFile: [''],
+      userDropi: [''],
+      claveDropi: [''],
+      rolDropi: ['']
     });
-    this.chatService.statusWhatsapp().subscribe(async ( data ) => {
-      //console.log("****31", data)
-      this.flagWhatsapp = data.data;
-      if( this.flagWhatsapp ) this.qrCodeDownloadLink;
-   });
+    // Obtener QR y estado de WhatsApp
+    this.chatService.qrWhatsapp().subscribe(data => {
+      this.qrCodeDownloadLink = data;
+    });
+
+    this.chatService.statusWhatsapp().subscribe(data => {
+      if (this.dataUser.empresa === data.company) {
+        this.flagWhatsapp = data.status;
+      }
+    });
   }
 
-  handleNext(){
-    this.dataUser.urlSocket = this.data.urlSocket || '';
-    this.dataUser.qrWhatsapp = this.data.qrWhatsapp || '';
-    let accion = new UserAction( this.dataUser, 'put');
-    this._store.dispatch( accion );
-    this.processUserUpdate();
-    this.processUserUpdateTotal();
-    this._toolsServices.presentToast( this.dataConfig.txtUpdate );
+  handleSubmit(): void {
+    if (this.configForm.valid) {
+      this.dataUser = { ...this.dataUser, ...this.configForm.value };
+
+      // Actualizar usuario en el store
+      const accion = new UserAction(this.dataUser, 'put');
+      this._store.dispatch(accion);
+
+      // Actualizar en el backend
+      this.updateUser();
+      this.updateUserSocket();
+
+      this._toolsServices.presentToast(this.dataConfig.txtUpdate);
+
+      // Cerrar el diálogo y recargar la página después de actualizar
+      setTimeout(() => location.reload(), 2000);
+    }
   }
 
-  async processUserUpdate(){
-    return new Promise( resolve =>{
-      this._user.update( { 
-        id: this.dataUser.id, 
-        urlSocket: this.dataUser.urlSocket, 
-        qrWhtsapp: this.dataUser.qrWhatsapp,
-      } ).subscribe( res => resolve( res ), error => resolve( error ) );
-    })
+  async updateUser(): Promise<void> {
+    await this._user.update({
+      id: this.dataUser.id,
+      ...this.configForm.value
+    }).toPromise();
   }
 
-  async processUserUpdateTotal(){
-    return new Promise( resolve =>{
-      this._user.updateUrlSocketTotal( { id: this.dataUser.id, urlSocket: this.dataUser.urlSocket } ).subscribe( res => resolve( res ), error => resolve( error ) );
-    })
+  async updateUserSocket(): Promise<void> {
+    await this._user.updateUrlSocketTotal({
+      id: this.dataUser.id,
+      urlSocket: this.dataUser.urlSocket
+    }).toPromise();
   }
-
-  onChangeURL(url: SafeUrl) {
-    this.qrCodeDownloadLink = url;
-  }
-
 }

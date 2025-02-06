@@ -37,7 +37,7 @@ export class OpenConfigTimeComponent implements OnInit {
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      days: this.fb.array([])
+      days: this.fb.array([]) // Inicialmente vacío, lo llenaremos con los datos de la API
     });
 
     this.days.forEach(day => {
@@ -79,9 +79,33 @@ export class OpenConfigTimeComponent implements OnInit {
 
   loadBusinessHours(): void {
     this._bussinesHours.getHours({ user: this.dataUser.id, company: this.dataUser.empresa }).subscribe((data: any) => {
-      data.forEach((item: any, index: number) => {
-        (this.form.get('days') as FormArray).at(index).patchValue(item);
+      const daysFormArray = this.form.get('days') as FormArray;
+      
+      // Limpiar y poblar el FormArray con los datos recibidos
+      daysFormArray.clear(); // Limpia el array antes de agregar los nuevos datos
+
+      data.forEach((item) => {
+        daysFormArray.push(this.createDayFormGroup(item));
       });
+
+      console.log("***85", this.form.value);
     });
   }
+  createDayFormGroup(item: any): FormGroup {
+    return this.fb.group({
+      dayOfWeek: [item.dayOfWeek || ''],
+      isOpen: [item.isOpen || false],
+      timeSlots: this.fb.array(
+        item.timeSlots ? item.timeSlots.map(slot => this.createTimeSlotFormGroup(slot)) : []
+      )
+    });
+  }
+  
+  createTimeSlotFormGroup(slot: any): FormGroup {
+    return this.fb.group({
+      start: [slot.start || ''],
+      end: [slot.end || '']
+    });
+  }
+
 }

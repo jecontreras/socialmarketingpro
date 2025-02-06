@@ -163,7 +163,14 @@ export class ConfigKeysService {
       googleSheet: "Hoja de Calculo",
       createGooglesheet: "Crear Hoja de Calculo",
       txtConfigText: "Configuración de textos",
-      txtConfigTime: "Configuración de tiempos"
+      txtConfigTime: "Configuración de tiempos",
+      txtTrafico: "Trafico",
+      txtNewUser: "Nuevos usuario",
+      txtVentas: "Ventas",
+      txtPerformance: "Performancia",
+      txtSalesValues: "Valores de venta",
+      txtProductBuy: "Producto mas vendido",
+      txtSocialTrafic: "Trafico de Redes sociales"
     }
   };
   constructor() { }

@@ -4,13 +4,13 @@
   <div class="row">
     <div class="col-12">
       <mat-tab-group mat-align-tabs="center">
-        <mat-tab [label]="dataConfig.config" *ngIf="viewProfile === 'admin'">
+        <mat-tab [label]="dataConfig.config" *ngIf="( viewProfile === 'admin' ) || ( viewProfile === 'bootUser' )">
           <app-detail-config></app-detail-config>
         </mat-tab>
-        <mat-tab [label]="dataConfig.tag">
+        <mat-tab [label]="dataConfig.tag" *ngIf="viewProfile !== 'bootUser' ">
           <app-list-tag></app-list-tag>
         </mat-tab>
-        <mat-tab [label]="dataConfig.fastAnswer">
+        <mat-tab [label]="dataConfig.fastAnswer" *ngIf="viewProfile !== 'bootUser' ">
           <app-fast-answer></app-fast-answer>
         </mat-tab>
         <mat-tab [label]="dataConfig.teamMembers" *ngIf="viewProfile === 'admin'">
