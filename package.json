@@ -8,9 +8,33 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start"
+    "install:clean": "rm -rf node_modules/ && rm -rf package-lock.json && npm install && npm start",
+    "electron": "ng build && electron electron.main.js",
+    "package": "electron-builder --win --x64"
   },
   "private": true,
+  "electron-builder": {
+    "build": {
+      "appId": "com.miapp.desktop",
+      "productName": "MiApp",
+      "directories": {
+        "output": "dist-electron"
+      },
+      "files": [
+        "dist/",
+        "electron.main.js"
+      ],
+      "win": {
+        "target": "nsis"
+      },
+      "mac": {
+        "target": "dmg"
+      },
+      "linux": {
+        "target": "AppImage"
+      }
+    }
+  },
   "dependencies": {
     "@angular/animations": "^13.4.0",
     "@angular/cdk": "^13.3.1",
@@ -50,6 +74,7 @@
     "ngx-spinner": "^13.1.1",
     "ngx-toastr": "14.2.2",
     "nouislider": "15.5.1",
+    "pdf-lib": "^1.17.1",
     "recordrtc": "^5.6.2",
     "rxjs": "^7.5.5",
     "socket.io-client": "^4.4.1",
@@ -66,6 +91,8 @@
     "@types/jasminewd2": "~2.0.10",
     "@types/node": "^16.3.2",
     "codelyzer": "6.0.2",
+    "electron": "^34.1.0",
+    "electron-builder": "^25.1.8",
     "jasmine-core": "~4.0.1",
     "jasmine-spec-reporter": "~7.0.0",
     "karma": "^6.3.17",

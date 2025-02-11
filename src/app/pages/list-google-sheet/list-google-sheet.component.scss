@@ -1,0 +1,60 @@
+table {
+    width: 100%;
+    margin-top: 20px;
+  }
+  
+  th {
+    text-align: left;
+  }
+  
+  .actions {
+    margin-top: 20px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .table-container {
+    width: 100%;
+    overflow-x: auto; /* Habilita el scroll horizontal */
+    white-space: nowrap; /* Evita que el contenido se corte */
+  }
+  
+  table {
+    min-width: 1200px; /* Ajusta según la cantidad de columnas */
+  }
+
+  .error-row {
+    background-color: #ffcccc !important; /* Rojo claro */
+    color: red !important; /* Texto rojo */
+  }
+  .succes-row {
+    background-color: #c0fab9 !important; /* Rojo claro */
+    color: rgb(0, 255, 72) !important; /* Texto rojo */
+  }
+  .btn-imprimir {
+    background-color: #28a745 !important; /* Verde */
+    color: white !important;
+  }
+  
+  .spinner-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 300px; /* Ajusta según el tamaño de tu tabla */
+    text-align: center;
+}
+
+.spinner-container p {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #666;
+}
+
+.wrap-text {
+  max-width: 150px;  /* Fijar el ancho para que no agrande la columna */
+  word-wrap: break-word;  /* Forzar el salto de línea */
+  overflow-wrap: break-word; /* Alternativa para asegurar la ruptura */
+  white-space: normal; /* Permitir saltos de línea */
+}
+

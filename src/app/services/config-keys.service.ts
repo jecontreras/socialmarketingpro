@@ -170,7 +170,8 @@ export class ConfigKeysService {
       txtPerformance: "Performancia",
       txtSalesValues: "Valores de venta",
       txtProductBuy: "Producto mas vendido",
-      txtSocialTrafic: "Trafico de Redes sociales"
+      txtSocialTrafic: "Trafico de Redes sociales",
+      txtListVent: "Lista de Ventas"
     }
   };
   constructor() { }

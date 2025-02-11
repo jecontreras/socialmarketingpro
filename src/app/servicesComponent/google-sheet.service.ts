@@ -13,8 +13,14 @@ export class GoogleSheetService {
   get(query:any){
     return this._model.querys('googleSheet/querys',query, 'post');
   }
+  getShet(query:any){
+    return this._model.querys('googleSheet/getShet',query, 'post');
+  }
   create(query:any){
     return this._model.querys('googleSheet',query, 'post');
+  }
+  createGuide(query:any){
+    return this._model.querys('googleSheet/createMns',query, 'post');
   }
   update(query:any){
     return this._model.querys('googleSheet/'+query.id, query, 'put');

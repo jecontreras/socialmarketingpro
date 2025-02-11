@@ -5,6 +5,7 @@ import { CART } from '../interfaces/sotarage';
 import { Store } from '@ngrx/store';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { PDFDocument } from 'pdf-lib';
 
 @Injectable({
   providedIn: 'root'
@@ -517,6 +518,25 @@ export class ToolsService {
       } catch (error) {
         return numero;
       }
+    }
+
+    async unirPDFs(urls: string[]): Promise<Blob> {
+      const pdfDoc = await PDFDocument.create();
+  
+      for (const url of urls) {
+        try {
+          const response = await fetch(url);
+          const pdfBytes = await response.arrayBuffer();
+          const pdf = await PDFDocument.load(pdfBytes);
+          const copiedPages = await pdfDoc.copyPages(pdf, pdf.getPageIndices());
+          copiedPages.forEach(page => pdfDoc.addPage(page));
+        } catch (error) {
+          console.error(`Error al cargar PDF: ${url}`, error);
+        }
+      }
+  
+      const mergedPdfBytes = await pdfDoc.save();
+      return new Blob([mergedPdfBytes], { type: 'application/pdf' });
     }
 
 

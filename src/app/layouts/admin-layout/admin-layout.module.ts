@@ -33,6 +33,8 @@ import { DefaultFlowsComponent } from 'src/app/pages/default-flows/default-flows
 import { WhatsappComponent } from 'src/app/pages/whatsapp/whatsapp.component';
 import { QRCodeModule } from 'angularx-qrcode';
 import { GoogleSheetComponent } from 'src/app/pages/google-sheet/google-sheet.component';
+import { ListGoogleSheetComponent } from 'src/app/pages/list-google-sheet/list-google-sheet.component';
+import { NgxCurrencyModule } from 'ngx-currency';
 // import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
@@ -49,6 +51,7 @@ import { GoogleSheetComponent } from 'src/app/pages/google-sheet/google-sheet.co
     MyOwnCustomMaterialModule,
     NgbAccordionModule,
     ReactiveFormsModule,
+    NgxCurrencyModule,
     QRCodeModule
   ],
   declarations: [
@@ -72,7 +75,8 @@ import { GoogleSheetComponent } from 'src/app/pages/google-sheet/google-sheet.co
     OfficeHoursComponent,
     DefaultFlowsComponent,
     WhatsappComponent,
-    GoogleSheetComponent
+    GoogleSheetComponent,
+    ListGoogleSheetComponent
   ]
 })
 

@@ -14,6 +14,7 @@ import { ConfigComponent } from 'src/app/pages/config/config.component';
 import { LiveChatComponent } from 'src/app/pages/live-chat/live-chat.component';
 import { WhatsappComponent } from 'src/app/pages/whatsapp/whatsapp.component';
 import { GoogleSheetComponent } from 'src/app/pages/google-sheet/google-sheet.component';
+import { ListGoogleSheetComponent } from 'src/app/pages/list-google-sheet/list-google-sheet.component';
 
 export const AdminLayoutRoutes: Routes = [
     { path: 'dashboard',      component: DashboardComponent },
@@ -31,4 +32,5 @@ export const AdminLayoutRoutes: Routes = [
     { path: 'config',           component: ConfigComponent },
     { path: 'whatsapp',           component: WhatsappComponent },
     { path: 'googleSheet',           component: GoogleSheetComponent },
+    { path: 'listGoogleSheet',           component: ListGoogleSheetComponent },
 ];
