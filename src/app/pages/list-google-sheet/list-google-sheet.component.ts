@@ -30,7 +30,7 @@ import { CreateBuyComponent } from 'src/app/dialog/create-buy/create-buy.compone
 })
 export class ListGoogleSheetComponent implements OnInit {
 
-  displayedColumns: string[] = ['SELECT', '#PEDIDO', 'TIPOENVIO', 'PRODUCT', 'CANTIDAD', 'NUMBERCEL', 'CLIENTE', 'DEPARTAMENT', 'CITY', 'TOTAL', 'FECHA' ];
+  displayedColumns: string[] = ['SELECT', '#PEDIDO', 'TIPOENVIO', 'PRODUCT', 'CANTIDAD', 'NUMBERCEL', 'CLIENTE', 'DEPARTAMENT', 'CITY', 'TOTAL', 'PRECIOFLETE', 'FECHA' ];
   dataSource = new MatTableDataSource([]);
   expandedElement: any | null;
 
@@ -236,6 +236,7 @@ export class ListGoogleSheetComponent implements OnInit {
             this.dataSource.data[index].transport= item.shipping_company;
             this.dataSource.data[index].stateGuide = "GENERADA";
             this.dataSource.data[index].idDropi = item.id;
+            this.dataSource.data[index].priceFlete = item.GrFlete.precioEnvio;
             await this.handleUpdate( {
               id: this.dataSource.data[index].id,
               createT: 1,
@@ -244,7 +245,8 @@ export class ListGoogleSheetComponent implements OnInit {
               transport: item.shipping_company,
               stateGuide: "GENERADA",
               printInt: 1,
-              idDropi: item.id
+              idDropi: item.id,
+              priceFlete: item.GrFlete.precioEnvio
              } );
           } else {
             console.log("Elemento no encontrado");

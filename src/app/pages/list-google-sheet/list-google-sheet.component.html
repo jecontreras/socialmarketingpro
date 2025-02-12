@@ -163,6 +163,11 @@
               <td mat-cell *matCellDef="let row">{{ row['FECHA'] }}</td>
             </ng-container>
 
+            <ng-container matColumnDef="PRECIOFLETE">
+              <th mat-header-cell *matHeaderCellDef>PRECIO FLETE</th>
+              <td mat-cell *matCellDef="let row">{{ ( row['priceFlete'] || 0 ) | number }}</td>
+            </ng-container>
+
             <!-- Columna Cantidad (Editable) -->
             <ng-container matColumnDef="CANTIDAD">
               <th mat-header-cell *matHeaderCellDef>CANTIDAD</th>
@@ -212,7 +217,16 @@
                           <p><strong>Cantidad:</strong> {{ element.CANTIDAD }}</p>
                         </div>
                         <div class="col-6 col-sm-3">
-                          <p><strong>Total:</strong> ${{ element['PRECIO VENTA TOTAL'] }}</p>
+                          <p><strong>Total:</strong> ${{ element['PRECIO VENTA TOTAL'] | number }}</p>
+                        </div>
+                        <div class="col-6 col-sm-3">
+                          <p><strong>Numero de Guia:</strong> {{ element['numberGuide'] }}</p>
+                        </div>
+                        <div class="col-6 col-sm-3">
+                          <p><strong>Transportadora:</strong> {{ element['transport'] }}</p>
+                        </div>
+                        <div class="col-6 col-sm-3">
+                          <p><strong>Precio de Flete:</strong> ${{ element['priceFlete'] | number }}</p>
                         </div>
                         <!--<div class="col-6 col-sm-3">
                           <button mat-mini-fab color="accent" (click)="handleTicket(element)">
