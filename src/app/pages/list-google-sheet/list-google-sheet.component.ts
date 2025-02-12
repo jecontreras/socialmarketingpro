@@ -145,13 +145,24 @@ export class ListGoogleSheetComponent implements OnInit {
     this.dataSource.data = list;
   }
 
+  async handleProcessDelete(){
+    for( let item of this.selection ){
+      await this.handleNextDelete( item );
+    }
+  }
+
   async handleDrop( row:any ){
     let valid:any = await this._tools.confirm( { title: "Eliminar Dato", text: "Opciones" } );
     console.log("**104", valid)
     if( !valid.value ) return true;
+    await this.handleNextDelete( row );
+  }
+
+  async handleNextDelete( row ){
     if( row.id ) await this.handleUpdate( { id: row.id, createT: 2 } );
     this._tools.presentToast( this.dataConfig.txtUpdate );
     this.dataSource.data = this.dataSource.data.filter( item => item['# PEDIDO'] !== row['# PEDIDO'] );
+    return true;
   }
 
   async handleUpdate( row:any ){
