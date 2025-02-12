@@ -40,7 +40,7 @@ export class ListGoogleSheetComponent implements OnInit {
 
   quers:any = {
     where: { },
-    limit: 300,
+    limit: 30,
     page: 0
   };
   counts:number = 0;
@@ -85,7 +85,7 @@ export class ListGoogleSheetComponent implements OnInit {
         createT: [0,1,3],
         company: this.dataUser.empresa
       },
-      limit: 300,
+      limit: 30,
       page: 0
     };
     //let hojaR:any = await this.getHoja();

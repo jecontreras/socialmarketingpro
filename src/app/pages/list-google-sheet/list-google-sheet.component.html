@@ -197,10 +197,18 @@
                           <p><strong>Nombre:</strong> {{ element.NOMBRE }}</p>
                         </div>
                         <div class="col-6 col-sm-3">
-                          <p><strong>Dirección:</strong> {{ element.DIRECCION }}</p>
+                          <p><strong>Dirección:</strong> 
+                            <mat-form-field appearance="outline">
+                              <input matInput [(ngModel)]="row['DIRECCION']" (change)="actualizarVenta(row)">
+                            </mat-form-field>
+                          </p>
                         </div>
                         <div class="col-6 col-sm-3">
-                          <p><strong>Barrio:</strong> {{ element.BARRIO }}</p>
+                          <p><strong>Barrio:</strong> 
+                            <mat-form-field appearance="outline">
+                              <input matInput [(ngModel)]="row['BARRIO']" (change)="actualizarVenta(row)">
+                            </mat-form-field>
+                          </p>
                         </div>
                         <div class="col-6 col-sm-3">
                           <p><strong>Ciudad:</strong> {{ element.CIUDAD }}</p>
@@ -256,7 +264,7 @@
 
         </table>
         <!-- Paginador -->
-        <mat-paginator [pageSize]="300" [length]="counts" [pageSizeOptions]="[300,400,800,900]" showFirstLastButtons (page)="onScroll($event)"></mat-paginator>
+        <mat-paginator [pageSize]="30" [length]="counts" [pageSizeOptions]="[30,50,100,300,400,800,900]" showFirstLastButtons (page)="onScroll($event)"></mat-paginator>
     </div>
 
 
