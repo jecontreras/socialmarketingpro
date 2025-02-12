@@ -48,10 +48,10 @@ export class ListGoogleSheetComponent implements OnInit {
   dataConfig:any = {};
   opcionCurrencys: any = {};
   estadosVentas = [
-    { nombre: 'none', valor: 3 },
+    { nombre: 'none', valor: 4 },
     { nombre: 'Pendiente', valor: 0 },
     { nombre: 'Por imprimir', valor: 1 },
-    { nombre: 'imprimidas', valor: 2 },
+    { nombre: 'imprimidas', valor: 3 },
   ];
   cargando: boolean = false; // Estado del spinner
   cargando2: boolean = false;
@@ -140,7 +140,7 @@ export class ListGoogleSheetComponent implements OnInit {
 
   async filtrarPorEstado() {
     this.quers.where.printInt = [this.quers.where.printInt]; // Asegura que sea un array
-    if( this.quers.where.printInt[0] === 3 ) delete this.quers.where.printInt;
+    if( this.quers.where.printInt[0] === 4 ) delete this.quers.where.printInt;
     let list:any = await this.getListData( );
     this.dataSource.data = list;
   }
