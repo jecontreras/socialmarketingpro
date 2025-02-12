@@ -8,16 +8,31 @@ import { ToolsService } from 'src/app/services/tools.service';
 import { GoogleSheetService } from 'src/app/servicesComponent/google-sheet.service';
 import { ListVentaService } from 'src/app/servicesComponent/list-venta.service';
 import * as _ from 'lodash';
+import { animate, state, style, transition, trigger } from '@angular/animations';
+import { PDFDocument } from 'pdf-lib';
+import { ServiciosService } from 'src/app/services/servicios.service';
+import { MatDialog } from '@angular/material/dialog';
+import { SelectionDepartamentComponent } from 'src/app/dialog/selection-departament/selection-departament.component';
+import { SelectionCiudadComponent } from 'src/app/dialog/selection-ciudad/selection-ciudad.component';
 
 @Component({
   selector: 'app-list-google-sheet',
   templateUrl: './list-google-sheet.component.html',
-  styleUrls: ['./list-google-sheet.component.scss']
+  styleUrls: ['./list-google-sheet.component.scss'],
+  animations: [
+    trigger('detailExpand', [
+      state('collapsed', style({height: '0px', minHeight: '0'})),
+      state('expanded', style({height: '*'})),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
+    ]),
+  ],
 })
 export class ListGoogleSheetComponent implements OnInit {
 
   displayedColumns: string[] = ['SELECT', '#PEDIDO', 'TIPOENVIO', 'PRODUCT', 'CANTIDAD', 'NUMBERCEL', 'CLIENTE', 'DEPARTAMENT', 'CITY', 'TOTAL', 'FECHA' ];
   dataSource = new MatTableDataSource([]);
+  expandedElement: any | null;
+
   
   selection: any[] = []; // Lista de filas seleccionadas
   dataUser:USERT;
@@ -39,6 +54,9 @@ export class ListGoogleSheetComponent implements OnInit {
   cargando2: boolean = false;
   cargandoTabla: boolean = true;
 
+  departamentos: any[] = [];
+  ciudades: any[] = [];
+
 
   constructor(
     private _googleShet: GoogleSheetService,
@@ -46,6 +64,8 @@ export class ListGoogleSheetComponent implements OnInit {
     private _listVe: ListVentaService,
     private _tools: ToolsService,
     private _config: ConfigKeysService,
+    private _servicesR: ServiciosService,
+    public dialog: MatDialog
   ) {
     this.dataConfig = this._config._config.keys;
     this.opcionCurrencys = this._tools.currency;
@@ -70,6 +90,7 @@ export class ListGoogleSheetComponent implements OnInit {
     //let list:any = await this.getList( hojaR );
     let list:any = await this.getListData( );
     this.dataSource.data = list;
+    await this.cargarDepartamentos();
   }
 
   getHoja(){
@@ -209,12 +230,14 @@ export class ListGoogleSheetComponent implements OnInit {
             this.dataSource.data[index].photoTicket= item.sticker;
             this.dataSource.data[index].numberGuide= item.shipping_guide;
             this.dataSource.data[index].transport= item.shipping_company;
+            this.dataSource.data[index].stateGuide = "GENERADA";
             await this.handleUpdate( { 
               id: this.dataSource.data[index].id, 
               createT: 1, 
               photoTicket: item.sticker, 
               numberGuide: item.shipping_guide, 
               transport: item.shipping_company,
+              stateGuide: "GENERADA",
               printInt: 1
              } );
           } else {
@@ -239,23 +262,41 @@ export class ListGoogleSheetComponent implements OnInit {
       this.cargando = false; // Desactivar spinner al completar
     }, ()=>this.cargando = false );
   }
-  imprimirGuia() {
-    console.log('Imprimiendo guía para:', this.selection);
+
+  async imprimirGuia() {
     this.cargando2 = true; // Activar spinner
-    const urlsPDF:any = this.selection.map(async (row) => {
-      await this.handleUpdate( { id: row.id, printInt: 2 } );
-      return row.photoTicket;
-    }); // Lista de URLs de los PDFs
-    console.log("**243", urlsPDF );
-    this._tools.unirPDFs(urlsPDF).then(mergedPdfBlob => {
-      const url = URL.createObjectURL(mergedPdfBlob);
-      window.open(url, '_blank'); // Abre el PDF combinado en otra ventana para imprimir
-      this.cargando2 = false;
-    }).catch(error => {
+    const urlsPDF: string[] = this.selection.map(row => row.photoTicket);
+    for( let row of this.selection ) await await this.handleUpdate( { id: row.id, printInt: 3 } );
+    try {
+      const mergedPdf = await this.unirPDFs(urlsPDF);
+      const url = URL.createObjectURL(mergedPdf);
+      window.open(url, '_blank');
+    } catch (error) {
       console.error('Error al unir los PDFs:', error);
+    } finally {
       this.cargando2 = false;
-    });
-    //window.print(); // Esto abrirá la ventana de impresión
+    }
+  }
+  
+  async unirPDFs(urls: string[]): Promise<Blob> {
+    const mergedPdf = await PDFDocument.create();
+    
+    for (const url of urls) {
+      try {
+        // Llamar a Sails.js en lugar de la URL original
+        const proxyUrl = this._servicesR.URL+`/archivos/proxyPDF?url=${encodeURIComponent(url)}`;
+        const response = await fetch(proxyUrl);
+        const pdfBytes = await response.arrayBuffer();
+        const pdf = await PDFDocument.load(pdfBytes);
+        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+        copiedPages.forEach(page => mergedPdf.addPage(page));
+      } catch (error) {
+        console.error('Error al descargar el PDF:', url, error);
+      }
+    }
+  
+    const pdfBytesFinal = await mergedPdf.save();
+    return new Blob([pdfBytesFinal], { type: 'application/pdf' });
   }
 
     // Abrir SweetAlert2 para editar productos seleccionados
@@ -284,6 +325,61 @@ export class ListGoogleSheetComponent implements OnInit {
          }
         );
       }
+    }
+
+    async cargarDepartamentos() {
+      try {
+        this._googleShet.obtenerDepartamentos( {} ).subscribe( res =>{
+          this.departamentos = res.objects;
+        });
+      } catch (error) {
+        console.error('Error cargando departamentos', error);
+      }
+    }
+  
+    async cargarCiudades(departamento: string, rate_type: string) {
+      return new Promise( resolve =>{
+        try {
+          
+          this._googleShet.obtenerCiudades({ where: { 
+            idDept: departamento,
+            rate_type: rate_type
+           }}).subscribe( res =>{
+            this.ciudades = res.objects.cities;
+            resolve(this.ciudades)
+          });
+        } catch (error) {
+          console.error('Error cargando ciudades', error);
+          resolve([]);
+        }
+      });
+    }
+  
+    openDepartmentList(row: any) {
+      const dialogRef = this.dialog.open(SelectionDepartamentComponent, {
+        data: { departamentos: this.departamentos }
+      });
+  
+      dialogRef.afterClosed().subscribe(async (selectedDepto) => {
+        if (selectedDepto) {
+          row['DEPARTAMENTO'] = selectedDepto.name;
+          await this.cargarCiudades(selectedDepto.id, 'CON RECAUDO');
+          await this.actualizarVenta( row );
+        }
+      });
+    }
+  
+    openCityList(row: any) {
+      const dialogRef = this.dialog.open(SelectionCiudadComponent, {
+        data: { ciudades: this.ciudades }
+      });
+  
+      dialogRef.afterClosed().subscribe(async (selectedCity) => {
+        if (selectedCity) {
+          row['CIUDAD'] = selectedCity.name;
+          await this.actualizarVenta( row );
+        }
+      });
     }
 
 }

@@ -1,0 +1,8 @@
+<h1 mat-dialog-title>Selecciona un Departamento</h1>
+    <div mat-dialog-content>
+      <mat-list>
+        <mat-list-item *ngFor="let depto of data.departamentos" (click)="seleccionar(depto)">
+          {{ depto.name }}
+        </mat-list-item>
+      </mat-list>
+    </div>

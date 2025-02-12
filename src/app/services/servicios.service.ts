@@ -25,6 +25,7 @@ export class ServiciosService {
   public dataUser:any = {};
   activador: boolean = false;
   dataConfig:any = {};
+  public URL = URL;
 
   constructor(
     private http: HttpClient,

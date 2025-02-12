@@ -28,4 +28,10 @@ export class GoogleSheetService {
   delete(query:any){
     return this._model.querys('googleSheet/'+query.id, query, 'delete');
   }
+  obtenerDepartamentos(query:any){
+    return this._model.querys('googleSheet/getDepartamento',query, 'post');
+  }
+  obtenerCiudades(query:any){
+    return this._model.querys('googleSheet/getCity',query, 'post');
+  }
 }

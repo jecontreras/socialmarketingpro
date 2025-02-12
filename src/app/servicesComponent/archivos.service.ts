@@ -32,6 +32,7 @@ export class ArchivosService {
     //this.FileFirebase( query );
     return this.http.post<void>(environment.urlFile+'/archivos/mediaapiwhatsapp', query).toPromise();
   }
+  
 
   getBase64(file) {
     return new Promise((resolve, reject) => {

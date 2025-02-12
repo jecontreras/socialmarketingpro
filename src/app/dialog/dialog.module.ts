@@ -21,6 +21,8 @@ import { A11yModule } from '@angular/cdk/a11y';
 import { OpenChatComponent } from './open-chat/open-chat.component';
 import { OpenConfigTextComponent } from './open-config-text/open-config-text.component';
 import { OpenConfigTimeComponent } from './open-config-time/open-config-time.component';
+import { SelectionDepartamentComponent } from './selection-departament/selection-departament.component';
+import { SelectionCiudadComponent } from './selection-ciudad/selection-ciudad.component';
 
 
 
@@ -56,7 +58,9 @@ import { OpenConfigTimeComponent } from './open-config-time/open-config-time.com
     FastMsxComponent,
     OpenChatComponent,
     OpenConfigTextComponent,
-    OpenConfigTimeComponent
+    OpenConfigTimeComponent,
+    SelectionDepartamentComponent,
+    SelectionCiudadComponent
     ,
   ],
   exports:[
