@@ -2,7 +2,7 @@
 <div>
     <!-- Botón para generar guías -->
     <div class="actions">
-        
+
         <mat-form-field appearance="outline">
             <mat-label>Estado de Ventas</mat-label>
             <mat-select [(ngModel)]="quers.where.printInt" (selectionChange)="filtrarPorEstado()">
@@ -22,12 +22,16 @@
                 <mat-spinner *ngIf="cargando2" diameter="20"></mat-spinner>
                 <span *ngIf="!cargando2">Imprimir Guía</span>
               </button>
+               <!-- 🚀 Nuevo botón "Crear Venta" -->
+              <button mat-raised-button color="warn" (click)="abrirFormularioVenta()">
+                  Crear Venta
+              </button>
         </div>
     </div>
 
     <div class="table-container">
         <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" *ngIf="!cargandoTabla; else loadingSpinner" multiTemplateDataRows>
-    
+
             <!-- Checkbox General (Encabezado) -->
             <ng-container matColumnDef="SELECT">
               <th mat-header-cell *matHeaderCellDef>
@@ -36,11 +40,21 @@
               <td mat-cell *matCellDef="let row">
                 <mat-checkbox (change)="toggleSelection(row)" [checked]="selection.includes(row)"></mat-checkbox>
                 <button style="margin: 6px;" mat-mini-fab color="warn" (click)="handleDrop( row )">
-                    <mat-icon>delete_sweep</mat-icon>
+                  <mat-icon>delete</mat-icon>
                 </button>
+                <button mat-mini-fab color="accent"
+                  [class.example-expanded-row]="expandedElement === row"
+                  (click)="expandedElement = expandedElement === row ? null : row"
+                >
+                  <mat-icon *ngIf="!expandedElement">keyboard_arrow_down</mat-icon>
+                  <mat-icon *ngIf="expandedElement">keyboard_arrow_up</mat-icon>
+                </button>
+                <!--<button mat-mini-fab color="accent" (click)="handleTicket(row)">
+                  <mat-icon>headset_mic</mat-icon>
+                </button>-->
               </td>
             </ng-container>
-    
+
             <!-- Columna ID Pedido -->
             <ng-container matColumnDef="#PEDIDO">
               <th mat-header-cell *matHeaderCellDef>ID PEDIDO</th>
@@ -51,7 +65,7 @@
               </td>
             </ng-container>
 
-            <!-- Columna Tipo de Envío (Editable, Select) --> 
+            <!-- Columna Tipo de Envío (Editable, Select) -->
             <ng-container matColumnDef="TIPOENVIO">
                 <th mat-header-cell *matHeaderCellDef>TIPO DE ENVÍO</th>
                 <td mat-cell *matCellDef="let row">
@@ -90,10 +104,10 @@
               </td>
             </ng-container>
 
-  
+
               <ng-container matColumnDef="PRODUCT">
                 <th mat-header-cell *matHeaderCellDef>
-                    PRODUCTO 
+                    PRODUCTO
                     <button mat-icon-button (click)="editarProductosSeleccionados()">
                         <mat-icon>edit</mat-icon>
                     </button>
@@ -108,8 +122,8 @@
                     </div>
                 </td>
             </ng-container>
-    
-            
+
+
             <ng-container matColumnDef="NUMBERCEL">
               <th mat-header-cell *matHeaderCellDef>NUMERO DE CELULAR</th>
               <td mat-cell *matCellDef="let row">
@@ -118,8 +132,8 @@
                 </mat-form-field>
               </td>
             </ng-container>
-    
-            
+
+
             <ng-container matColumnDef="CLIENTE">
                 <th mat-header-cell *matHeaderCellDef>NOMBRE</th>
                 <td mat-cell *matCellDef="let row">
@@ -128,27 +142,27 @@
                   </mat-form-field>
                 </td>
             </ng-container>
-    
-            
+
+
             <ng-container matColumnDef="TOTAL">
               <th mat-header-cell *matHeaderCellDef>Total</th>
               <td mat-cell *matCellDef="let row">
                 <input currencyMask [(ngModel)]="row['PRECIO VENTA TOTAL']"
-                     class="form-control" 
+                     class="form-control"
                      style="width: 110px;"
                      [options]="opcionCurrencys"
-                     (wheel)="$event.preventDefault()" 
+                     (wheel)="$event.preventDefault()"
                      (change)="actualizarVenta(row)"
                     />
             </td>
             </ng-container>
-    
+
             <!-- Columna Fecha de Venta (No editable) -->
             <ng-container matColumnDef="FECHA">
               <th mat-header-cell *matHeaderCellDef>FECHA DE VENTA</th>
               <td mat-cell *matCellDef="let row">{{ row['FECHA'] }}</td>
             </ng-container>
-    
+
             <!-- Columna Cantidad (Editable) -->
             <ng-container matColumnDef="CANTIDAD">
               <th mat-header-cell *matHeaderCellDef>CANTIDAD</th>
@@ -164,7 +178,7 @@
               <td mat-cell *matCellDef="let element" [attr.colspan]="displayedColumns.length" class="detalle-container">
                 <div class="example-element-detail" [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
                   <mat-card class="detalle-pedido">
-          
+
                     <mat-card-content>
                       <div class="row">
                         <div class="col-6 col-sm-3">
@@ -200,27 +214,31 @@
                         <div class="col-6 col-sm-3">
                           <p><strong>Total:</strong> ${{ element['PRECIO VENTA TOTAL'] }}</p>
                         </div>
+                        <!--<div class="col-6 col-sm-3">
+                          <button mat-mini-fab color="accent" (click)="handleTicket(element)">
+                            <mat-icon>headset_mic</mat-icon>
+                          </button>
+                        </div>-->
                       </div>
                     </mat-card-content>
-          
+
                   </mat-card>
                 </div>
               </td>
             </ng-container>
-            
-    
+
+
             <!-- Encabezado y Filas -->
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="{'error-row': row.createT === 3,'succes-row': row.createT === 1}"
-              [class.example-expanded-row]="expandedElement === row"
-              (click)="expandedElement = expandedElement === row ? null : row"
+
             ></tr>
 
             <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
-    
+
         </table>
         <!-- Paginador -->
-        <mat-paginator [pageSize]="100" [length]="counts" [pageSizeOptions]="[100,200,400,800,900]" showFirstLastButtons (page)="onScroll($event)"></mat-paginator>
+        <mat-paginator [pageSize]="300" [length]="counts" [pageSizeOptions]="[300,400,800,900]" showFirstLastButtons (page)="onScroll($event)"></mat-paginator>
     </div>
 
 

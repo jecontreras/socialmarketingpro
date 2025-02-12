@@ -14,6 +14,7 @@ import { ServiciosService } from 'src/app/services/servicios.service';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectionDepartamentComponent } from 'src/app/dialog/selection-departament/selection-departament.component';
 import { SelectionCiudadComponent } from 'src/app/dialog/selection-ciudad/selection-ciudad.component';
+import { CreateBuyComponent } from 'src/app/dialog/create-buy/create-buy.component';
 
 @Component({
   selector: 'app-list-google-sheet',
@@ -33,13 +34,13 @@ export class ListGoogleSheetComponent implements OnInit {
   dataSource = new MatTableDataSource([]);
   expandedElement: any | null;
 
-  
+
   selection: any[] = []; // Lista de filas seleccionadas
   dataUser:USERT;
 
   quers:any = {
     where: { },
-    limit: 100,
+    limit: 300,
     page: 0
   };
   counts:number = 0;
@@ -47,8 +48,10 @@ export class ListGoogleSheetComponent implements OnInit {
   dataConfig:any = {};
   opcionCurrencys: any = {};
   estadosVentas = [
+    { nombre: 'none', valor: 3 },
     { nombre: 'Pendiente', valor: 0 },
-    { nombre: 'Por imprimir', valor: 1 }
+    { nombre: 'Por imprimir', valor: 1 },
+    { nombre: 'imprimidas', valor: 2 },
   ];
   cargando: boolean = false; // Estado del spinner
   cargando2: boolean = false;
@@ -82,7 +85,7 @@ export class ListGoogleSheetComponent implements OnInit {
         createT: [0,1,3],
         company: this.dataUser.empresa
       },
-      limit: 100,
+      limit: 300,
       page: 0
     };
     //let hojaR:any = await this.getHoja();
@@ -137,6 +140,7 @@ export class ListGoogleSheetComponent implements OnInit {
 
   async filtrarPorEstado() {
     this.quers.where.printInt = [this.quers.where.printInt]; // Asegura que sea un array
+    if( this.quers.where.printInt[0] === 3 ) delete this.quers.where.printInt;
     let list:any = await this.getListData( );
     this.dataSource.data = list;
   }
@@ -212,7 +216,7 @@ export class ListGoogleSheetComponent implements OnInit {
     this.cargando = true; // Activar spinner
     console.log('Generando guías para:', this.selection);
     //alert(`Se generaron las guías para ${this.selection.length} ventas.`);
-    this._googleShet.createGuide( { 
+    this._googleShet.createGuide( {
       where:{
         listBuy: this.selection.filter( row => row.createT !== 1 && !row.numberGuide ),
         user: this.dataUser.id,
@@ -222,7 +226,7 @@ export class ListGoogleSheetComponent implements OnInit {
       console.log("***174", res );
       if( res.data.length ){
         for( let item of res.data ){
-          let index = this.dataSource.data.findIndex(row => row['# PEDIDO'] === item.id);
+          let index = this.dataSource.data.findIndex(row => row['# PEDIDO'] === item.ids);
 
           if (index !== -1) {
             console.log(`Elemento encontrado en la posición: ${index}`);
@@ -231,14 +235,16 @@ export class ListGoogleSheetComponent implements OnInit {
             this.dataSource.data[index].numberGuide= item.shipping_guide;
             this.dataSource.data[index].transport= item.shipping_company;
             this.dataSource.data[index].stateGuide = "GENERADA";
-            await this.handleUpdate( { 
-              id: this.dataSource.data[index].id, 
-              createT: 1, 
-              photoTicket: item.sticker, 
-              numberGuide: item.shipping_guide, 
+            this.dataSource.data[index].idDropi = item.id;
+            await this.handleUpdate( {
+              id: this.dataSource.data[index].id,
+              createT: 1,
+              photoTicket: item.sticker,
+              numberGuide: item.shipping_guide,
               transport: item.shipping_company,
               stateGuide: "GENERADA",
-              printInt: 1
+              printInt: 1,
+              idDropi: item.id
              } );
           } else {
             console.log("Elemento no encontrado");
@@ -246,7 +252,7 @@ export class ListGoogleSheetComponent implements OnInit {
           //this.dataSource.data = this.dataSource.data.filter( row => row['# PEDIDO'] !== item.id );
         }
         console.log("**195", this.dataSource.data)
-        this._tools.presentToast( this.dataConfig.txtUpdate ); 
+        this._tools.presentToast( this.dataConfig.txtUpdate );
       }
       // ❌ Marcar las filas con error en rojo
       if (res.error.length) {
@@ -277,10 +283,10 @@ export class ListGoogleSheetComponent implements OnInit {
       this.cargando2 = false;
     }
   }
-  
+
   async unirPDFs(urls: string[]): Promise<Blob> {
     const mergedPdf = await PDFDocument.create();
-    
+
     for (const url of urls) {
       try {
         // Llamar a Sails.js en lugar de la URL original
@@ -294,7 +300,7 @@ export class ListGoogleSheetComponent implements OnInit {
         console.error('Error al descargar el PDF:', url, error);
       }
     }
-  
+
     const pdfBytesFinal = await mergedPdf.save();
     return new Blob([pdfBytesFinal], { type: 'application/pdf' });
   }
@@ -302,12 +308,12 @@ export class ListGoogleSheetComponent implements OnInit {
     // Abrir SweetAlert2 para editar productos seleccionados
     async editarProductosSeleccionados() {
       const seleccionados = this.selection;
-      
+
       if (seleccionados.length === 0) {
         this._tools.basic( 'No has seleccionado ningún producto' );
         return;
       }
-      let result:any = await this._tools.alertInput( 
+      let result:any = await this._tools.alertInput(
         {
           title: 'Editar Producto',
           input: 'text',
@@ -336,12 +342,12 @@ export class ListGoogleSheetComponent implements OnInit {
         console.error('Error cargando departamentos', error);
       }
     }
-  
+
     async cargarCiudades(departamento: string, rate_type: string) {
       return new Promise( resolve =>{
         try {
-          
-          this._googleShet.obtenerCiudades({ where: { 
+
+          this._googleShet.obtenerCiudades({ where: {
             idDept: departamento,
             rate_type: rate_type
            }}).subscribe( res =>{
@@ -354,12 +360,12 @@ export class ListGoogleSheetComponent implements OnInit {
         }
       });
     }
-  
+
     openDepartmentList(row: any) {
       const dialogRef = this.dialog.open(SelectionDepartamentComponent, {
         data: { departamentos: this.departamentos }
       });
-  
+
       dialogRef.afterClosed().subscribe(async (selectedDepto) => {
         if (selectedDepto) {
           row['DEPARTAMENTO'] = selectedDepto.name;
@@ -368,18 +374,40 @@ export class ListGoogleSheetComponent implements OnInit {
         }
       });
     }
-  
+
     openCityList(row: any) {
       const dialogRef = this.dialog.open(SelectionCiudadComponent, {
         data: { ciudades: this.ciudades }
       });
-  
+
       dialogRef.afterClosed().subscribe(async (selectedCity) => {
         if (selectedCity) {
           row['CIUDAD'] = selectedCity.name;
           await this.actualizarVenta( row );
         }
       });
+    }
+
+    handleTicket( row ){
+
+    }
+
+    abrirFormularioVenta() {
+      const dialogRef = this.dialog.open(CreateBuyComponent, {
+        width: '400px'
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result) {
+          console.log("✅ Nueva Venta:", result);
+          this.guardarVentaEnDB(result); // Guardar en la base de datos
+        }
+      });
+    }
+
+    guardarVentaEnDB(venta: any) {
+      // Aquí puedes hacer una petición HTTP para guardar la venta en tu backend
+      console.log("📌 Guardando en DB:", venta);
     }
 
 }

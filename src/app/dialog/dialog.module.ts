@@ -23,6 +23,7 @@ import { OpenConfigTextComponent } from './open-config-text/open-config-text.com
 import { OpenConfigTimeComponent } from './open-config-time/open-config-time.component';
 import { SelectionDepartamentComponent } from './selection-departament/selection-departament.component';
 import { SelectionCiudadComponent } from './selection-ciudad/selection-ciudad.component';
+import { CreateBuyComponent } from './create-buy/create-buy.component';
 
 
 
@@ -60,7 +61,8 @@ import { SelectionCiudadComponent } from './selection-ciudad/selection-ciudad.co
     OpenConfigTextComponent,
     OpenConfigTimeComponent,
     SelectionDepartamentComponent,
-    SelectionCiudadComponent
+    SelectionCiudadComponent,
+    CreateBuyComponent
     ,
   ],
   exports:[
