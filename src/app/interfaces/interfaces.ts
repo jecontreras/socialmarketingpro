@@ -52,6 +52,7 @@ export interface Componente {
     userDropi?: string;
     claveDropi?: string;
     rolDropi?: string;
+    transPortDropi?: string;
   }
 
   export interface ROL{

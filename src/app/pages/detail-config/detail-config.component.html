@@ -1,5 +1,5 @@
 <form [formGroup]="configForm">
-  
+
   <div class="col-12 col-sn-6">
     <!-- URL Socket -->
     <mat-form-field appearance="outline">
@@ -52,10 +52,18 @@
     </mat-form-field>
   </div>
   <div class="col-12 col-sn-6">
+    <h3>Selecciona la Transportadora dropi:</h3>
+    <mat-checkbox *ngFor="let transportadora of transportadoras"
+                  (change)="toggleSeleccion(transportadora)"
+                  [checked]="seleccionadas.includes(transportadora)">
+      {{ transportadora }}
+    </mat-checkbox>
+  </div>
+  <div class="col-12 col-sn-6">
       <!-- Estado del WhatsApp -->
     <div>
       <p>
-        <strong>Estado del WhatsApp:</strong> 
+        <strong>Estado del WhatsApp:</strong>
         <span [ngClass]="flagWhatsapp ? 'text-success' : 'text-danger'">
           {{ flagWhatsapp ? 'Conectado ✅' : 'No Conectado ❌' }}
         </span>
@@ -74,7 +82,7 @@
       </ng-template>
     </div>
   </div>
-  
+
 </form>
 <button mat-raised-button color="primary" (click)="handleSubmit()">
   <mat-icon>update</mat-icon> Actualizar

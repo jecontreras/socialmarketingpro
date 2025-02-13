@@ -21,6 +21,8 @@ export class DetailConfigComponent implements OnInit {
   qrCodeDownloadLink = '';
   dataUser: USERT = {};
   dataConfig: any = {};
+  transportadoras = ["INTERRAPIDISIMO", "ENVIA", "SERVIENTREGA", "COORDINADORA", "TCC", '99MINUTOS', 'DOMINA']; // Opciones de transporte
+  seleccionadas: string[] = []; // Aquí guardamos las transportadoras seleccionadas
 
   constructor(
     private fb: FormBuilder,
@@ -30,20 +32,6 @@ export class DetailConfigComponent implements OnInit {
     private _config: ConfigKeysService,
     private chatService: ChatService
   ) {
-    
-    // Suscribirse a la tienda para cargar datos del usuario
-    this._store.subscribe((store: any) => {
-      if (!store) return;
-      store = store.name;
-      this.dataUser = store.user || {};
-      this.qrCodeDownloadLink = this.dataUser.qrWhatsapp || '';
-      this.configForm.patchValue(this.dataUser);
-      console.log("***51", this.dataUser, this.configForm.value )
-    });
-
-  }
-
-  ngOnInit(): void {
     // Crear el formulario reactivo
     this.configForm = this.fb.group({
       urlSocket: [''],
@@ -53,6 +41,26 @@ export class DetailConfigComponent implements OnInit {
       claveDropi: [''],
       rolDropi: ['']
     });
+    // Suscribirse a la tienda para cargar datos del usuario
+    this._store.subscribe((store: any) => {
+      if (!store) return;
+      store = store.name;
+      this.dataUser = store.user || {};
+      this.qrCodeDownloadLink = this.dataUser.qrWhatsapp || '';
+      this.configForm.patchValue(this.dataUser);
+      try {
+        if (this.dataUser && this.dataUser.transPortDropi) {
+          this.seleccionadas = JSON.parse(this.dataUser.transPortDropi) || [];
+        }
+      } catch (error) {
+        console.log("❌ Error al parsear las transportadoras:", error);
+      }
+    });
+
+  }
+
+  ngOnInit(): void {
+
     // Obtener QR y estado de WhatsApp
     this.chatService.qrWhatsapp().subscribe(data => {
       this.qrCodeDownloadLink = data;
@@ -64,6 +72,18 @@ export class DetailConfigComponent implements OnInit {
       }
     });
   }
+
+    // Método para seleccionar/deseleccionar transportadoras
+    toggleSeleccion(transportadora: string) {
+      const index = this.seleccionadas.indexOf(transportadora);
+      if (index === -1) {
+        this.seleccionadas.push(transportadora); // Agregar si no está seleccionada
+      } else {
+        this.seleccionadas.splice(index, 1); // Quitar si ya estaba seleccionada
+      }
+    }
+
+
 
   handleSubmit(): void {
     if (this.configForm.valid) {
@@ -87,6 +107,7 @@ export class DetailConfigComponent implements OnInit {
   async updateUser(): Promise<void> {
     await this._user.update({
       id: this.dataUser.id,
+      transPortDropi: JSON.stringify(this.seleccionadas), // Convertir array a string
       ...this.configForm.value
     }).toPromise();
   }

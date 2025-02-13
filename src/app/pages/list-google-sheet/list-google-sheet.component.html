@@ -22,12 +22,12 @@
                 <mat-spinner *ngIf="cargando2" diameter="20"></mat-spinner>
                 <span *ngIf="!cargando2">Imprimir Guía</span>
               </button>
-              <button style="margin: 6px;" mat-mini-fab color="warn" (click)="handleDrop( row )" [disabled]="selection.length === 0 || cargando">
+              <button style="margin: 6px;" mat-mini-fab color="warn" (click)="handleProcessDelete(  )" [disabled]="selection.length === 0 || cargando">
                 <mat-icon>delete</mat-icon>
               </button>
-              <button mat-raised-button color="accent" class="btn-imprimir" (click)="imprimirGuia()">
+              <button mat-raised-button color="warn"  (click)="handleCancelGuide()" [disabled]="selection.length === 0 || cargando">
                 <mat-spinner *ngIf="cargando2" diameter="20"></mat-spinner>
-                <span *ngIf="!cargando2">Imprimir Guía</span>
+                <span *ngIf="!cargando2">Cancelar Guia</span>
               </button>
                <!-- 🚀 Nuevo botón "Crear Venta" -->
               <!--<button mat-raised-button color="warn" (click)="abrirFormularioVenta()">
@@ -190,57 +190,57 @@
 
                     <mat-card-content>
                       <div class="row">
-                        <div class="col-6 col-sm-3">
+                        <div class="col-6 col-sm-3 col-md-2">
                           <mat-card-subtitle>ID Pedido: {{ element['# PEDIDO'] }}</mat-card-subtitle>
                         </div>
-                        <div class="col-6 col-sm-3">
+                        <div class="col-6 col-sm-3 col-md-2">
                           <p><strong>Nombre:</strong> {{ element.NOMBRE }}</p>
                         </div>
-                        <div class="col-6 col-sm-3">
-                          <p><strong>Dirección:</strong> 
+                        <div class="col-6 col-sm-3 col-md-2">
+                          <p><strong>Dirección:</strong>
                             <mat-form-field appearance="outline">
-                              <input matInput [(ngModel)]="row['DIRECCION']" (change)="actualizarVenta(row)">
+                              <input matInput [(ngModel)]="element['DIRECCION']" (change)="actualizarVenta(element)">
                             </mat-form-field>
                           </p>
                         </div>
-                        <div class="col-6 col-sm-3">
-                          <p><strong>Barrio:</strong> 
+                        <div class="col-6 col-sm-3 col-md-2">
+                          <p><strong>Barrio:</strong>
                             <mat-form-field appearance="outline">
-                              <input matInput [(ngModel)]="row['BARRIO']" (change)="actualizarVenta(row)">
+                              <input matInput [(ngModel)]="element['BARRIO']" (change)="actualizarVenta(element)">
                             </mat-form-field>
                           </p>
                         </div>
-                        <div class="col-6 col-sm-3">
+                        <div class="col-6 col-sm-3 col-md-2">
                           <p><strong>Ciudad:</strong> {{ element.CIUDAD }}</p>
                         </div>
-                        <div class="col-6 col-sm-3">
+                        <div class="col-6 col-sm-3 col-md-2">
                           <p><strong>Departamento:</strong> {{ element.DEPARTAMENTO }}</p>
                         </div>
-                        <div class="col-6 col-sm-3">
+                        <div class="col-6 col-sm-3 col-md-2">
                           <p><strong>Correo:</strong> {{ element.CORREO }}</p>
                         </div>
-                        <div class="col-6 col-sm-3">
+                        <div class="col-6 col-sm-3 col-md-2">
                           <p><strong>Celular:</strong> {{ element.CELULAR }}</p>
                         </div>
-                        <div class="col-6 col-sm-3">
+                        <div class="col-6 col-sm-3 col-md-2">
                           <p><strong>Producto:</strong> {{ element['TITULO PRODUCTO'] }}</p>
                         </div>
-                        <div class="col-6 col-sm-3">
+                        <div class="col-6 col-sm-3 col-md-2">
                           <p><strong>Cantidad:</strong> {{ element.CANTIDAD }}</p>
                         </div>
-                        <div class="col-6 col-sm-3">
+                        <div class="col-6 col-sm-3 col-md-2">
                           <p><strong>Total:</strong> ${{ element['PRECIO VENTA TOTAL'] | number }}</p>
                         </div>
-                        <div class="col-6 col-sm-3">
+                        <div class="col-6 col-sm-3 col-md-2">
                           <p><strong>Numero de Guia:</strong> {{ element['numberGuide'] }}</p>
                         </div>
-                        <div class="col-6 col-sm-3">
+                        <div class="col-6 col-sm-3 col-md-2">
                           <p><strong>Transportadora:</strong> {{ element['transport'] }}</p>
                         </div>
-                        <div class="col-6 col-sm-3">
+                        <div class="col-6 col-sm-3 col-md-2">
                           <p><strong>Precio de Flete:</strong> ${{ element['priceFlete'] | number }}</p>
                         </div>
-                        <!--<div class="col-6 col-sm-3">
+                        <!--<div class="col-6 col-sm-3 col-md-2">
                           <button mat-mini-fab color="accent" (click)="handleTicket(element)">
                             <mat-icon>headset_mic</mat-icon>
                           </button>

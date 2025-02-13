@@ -34,4 +34,7 @@ export class GoogleSheetService {
   obtenerCiudades(query:any){
     return this._model.querys('googleSheet/getCity',query, 'post');
   }
+  cancelGuide(query:any){
+    return this._model.querys('googleSheet/cancelGuide',query, 'post');
+  }
 }

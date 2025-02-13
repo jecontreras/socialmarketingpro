@@ -146,7 +146,7 @@ export class ListGoogleSheetComponent implements OnInit {
   }
 
   async handleProcessDelete(){
-    for( let item of this.selection ){
+    for( let item of this.selection.filter( row => row['numberGuide'] === null ) ){
       await this.handleNextDelete( item );
     }
   }
@@ -403,6 +403,27 @@ export class ListGoogleSheetComponent implements OnInit {
 
     handleTicket( row ){
 
+    }
+
+    async handleCancelGuide(){
+      this.cargando2 = true;
+      for( let row of this.selection ){
+        if( !row.numberGuide )continue;
+        await this.handleNextCancelGuide( row );
+      }
+      this.cargando2 = false;
+      this._tools.presentToast( this.dataConfig.txtUpdate );
+    }
+
+    handleNextCancelGuide( row ){
+      return new Promise( resolve =>{
+        this._googleShet.cancelGuide( {
+          idGuia: Number( row.idDropi ),
+          user: row.user.id || row.user
+        }).subscribe( res =>{
+          resolve( res );
+        },()=>resolve( false) );
+      })
     }
 
     abrirFormularioVenta() {
