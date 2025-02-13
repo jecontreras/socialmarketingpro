@@ -52,6 +52,7 @@ export class ListGoogleSheetComponent implements OnInit {
     { nombre: 'Pendiente', valor: 0 },
     { nombre: 'Por imprimir', valor: 1 },
     { nombre: 'imprimidas', valor: 3 },
+    { nombre: 'Borradas', valor: 2 },
   ];
   cargando: boolean = false; // Estado del spinner
   cargando2: boolean = false;
@@ -146,14 +147,16 @@ export class ListGoogleSheetComponent implements OnInit {
   }
 
   async handleProcessDelete(){
-    for( let item of this.selection.filter( row => row['numberGuide'] === null ) ){
+    let valid:any = await this._tools.confirm( { title: "Eliminar Datos", text: "Opciones" } );
+    if( !valid.value ) return true;
+    console.log("**149", this.selection)
+    for( let item of this.selection.filter( row => !row['numberGuide'] ) ){
       await this.handleNextDelete( item );
     }
   }
 
   async handleDrop( row:any ){
-    let valid:any = await this._tools.confirm( { title: "Eliminar Dato", text: "Opciones" } );
-    console.log("**104", valid)
+    let valid:any = await this._tools.confirm( { title: "Eliminar Datos", text: "Opciones" } );
     if( !valid.value ) return true;
     await this.handleNextDelete( row );
   }
@@ -214,7 +217,17 @@ export class ListGoogleSheetComponent implements OnInit {
     //alert(`Venta ID ${row.pedido} actualizada correctamente.`);
     let dataR = {
       txtR: JSON.stringify( row ),
-      id: row.id
+      id: row.id,
+      idPe: row.idPe,
+      createT: row.createT,
+      printInt: row.printInt,
+      photoTicket: row.photoTicket,
+      numberGuide: row.numberGuide,
+      transport: row.transport,
+      stateGuide: row.stateGuide,
+      trackingState: row.trackingState,
+      idDropi: row.idDropi,
+      priceFlete: row.priceFlete
     };
     await this.handleUpdate( dataR );
     this._tools.presentToast( this.dataConfig.txtUpdate );
@@ -426,6 +439,7 @@ export class ListGoogleSheetComponent implements OnInit {
         let res = await this.handleNextCancelGuide( row );
         if( res === false ) continue;
         await this.actualizarVenta( {
+          ...row,
           id: row.id,
           printInt: 0,
           createT: 0,
@@ -433,8 +447,7 @@ export class ListGoogleSheetComponent implements OnInit {
           stateGuide :"PENDIENTE",
           priceFlete: 0,
           numberGuide: "",
-          transport: "",
-          ...row
+          transport: ""
         } );
         row.printInt =  0;
         row.createT =  0;

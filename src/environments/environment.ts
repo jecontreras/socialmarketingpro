@@ -4,9 +4,9 @@
 
 export const environment = {
   production: false,
-  url: "http://localhost:1337",
+  //url: "http://localhost:1337",
   urlFile: "https://apilokomproaqui3-8479ed1ed46c.herokuapp.com",
-  //url: "https://1337-jecontreras-socialmarke-gi0k7bqhhip.ws-us117.gitpod.io",
+  url: "https://1337-jecontreras-socialmarke-gi0k7bqhhip.ws-us117.gitpod.io",
   //url: "https://socialmarketingapi2-12ab86fb3d47.herokuapp.com",
   //urlFile: "https://apilokomproaqui1-9219656b6da1.herokuapp.com"
   //url: "https://1337-jecontreras-socialmarke-r9pote9hj0o.ws-us116.gitpod.io"
@@ -18,12 +18,12 @@ export const environment = {
  *
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
- * 
+ *
  * @echo off
 title Iniciando Sails.js y XAMPP...
 
 echo 🔹 Iniciando XAMPP...
-cd /d "C:\xampp" 
+cd /d "C:\xampp"
 start xampp-control.exe
 
 timeout /t 5 /nobreak >nul
