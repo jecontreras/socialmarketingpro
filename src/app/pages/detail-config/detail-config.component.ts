@@ -39,7 +39,8 @@ export class DetailConfigComponent implements OnInit {
       urlBackendFile: [''],
       userDropi: [''],
       claveDropi: [''],
-      rolDropi: ['']
+      rolDropi: [''],
+      numberResponse: ['']
     });
     // Suscribirse a la tienda para cargar datos del usuario
     this._store.subscribe((store: any) => {

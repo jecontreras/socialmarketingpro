@@ -433,8 +433,17 @@ export class ListGoogleSheetComponent implements OnInit {
           stateGuide :"PENDIENTE",
           priceFlete: 0,
           numberGuide: "",
-          transport: ""
+          transport: "",
+          ...row
         } );
+        row.printInt =  0;
+        row.createT =  0;
+        row.trackingState =  0;
+        row.stateGuide  = "PENDIENTE";
+        row.priceFlete =  0;
+        row.numberGuide =  "";
+        row.transport =  "";
+
       }
       this.cargando2 = false;
       this._tools.presentToast( this.dataConfig.txtUpdate );
