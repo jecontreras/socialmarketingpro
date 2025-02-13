@@ -1,8 +1,15 @@
-<h1 mat-dialog-title>Selecciona una Ciudad</h1>
+<h1 mat-dialog-title>Selecciona una Ciudad {{ data.city }} </h1>
 <div mat-dialog-content>
-  <mat-list>
-    <mat-list-item *ngFor="let city of data.ciudades" (click)="seleccionar(city)">
+  <!-- Buscador -->
+  <mat-form-field appearance="outline">
+    <mat-label>Buscar ciudad</mat-label>
+    <input matInput [(ngModel)]="filtro" placeholder="Ej: Bucaramanga">
+  </mat-form-field>
+
+  <!-- Lista de ciudades filtradas -->
+  <mat-selection-list>
+    <mat-list-option *ngFor="let city of ciudadesFiltradas()" (click)="seleccionar(city)">
       {{ city.name }}
-    </mat-list-item>
-  </mat-list>
+    </mat-list-option>
+  </mat-selection-list>
 </div>

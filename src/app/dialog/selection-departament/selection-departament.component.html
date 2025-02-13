@@ -1,8 +1,15 @@
-<h1 mat-dialog-title>Selecciona un Departamento</h1>
-    <div mat-dialog-content>
-      <mat-list>
-        <mat-list-item *ngFor="let depto of data.departamentos" (click)="seleccionar(depto)">
-          {{ depto.name }}
-        </mat-list-item>
-      </mat-list>
-    </div>
+<h1 mat-dialog-title>Selecciona un Departamento {{ data.departamen }} </h1>
+<div mat-dialog-content>
+  <!-- Buscador -->
+  <mat-form-field appearance="outline">
+    <mat-label>Buscar departamento</mat-label>
+    <input matInput [(ngModel)]="filtro" placeholder="Ej: Santander">
+  </mat-form-field>
+
+  <!-- Lista de departamentos filtrados -->
+  <mat-selection-list>
+    <mat-list-option *ngFor="let depto of departamentosFiltrados()" (click)="seleccionar(depto)">
+      {{ depto.name }}
+    </mat-list-option>
+  </mat-selection-list>
+</div>

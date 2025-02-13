@@ -22,10 +22,11 @@
                 <mat-spinner *ngIf="cargando2" diameter="20"></mat-spinner>
                 <span *ngIf="!cargando2">Imprimir Guía</span>
               </button>
-              <button style="margin: 6px;" mat-mini-fab color="warn" (click)="handleProcessDelete(  )" [disabled]="selection.length === 0 || cargando">
-                <mat-icon>delete</mat-icon>
+              <button mat-raised-button color="warn"  (click)="handleProcessDelete(  )" [disabled]="selection.length === 0 || cargando">
+                <mat-spinner *ngIf="cargando2" diameter="20"></mat-spinner>
+                <span *ngIf="!cargando2">Borrar venta</span>
               </button>
-              <button mat-raised-button color="warn"  (click)="handleCancelGuide()" [disabled]="selection.length === 0 || cargando">
+              <button mat-raised-button color="accent"  (click)="handleCancelGuide()" [disabled]="selection.length === 0 || cargando">
                 <mat-spinner *ngIf="cargando2" diameter="20"></mat-spinner>
                 <span *ngIf="!cargando2">Cancelar Guia</span>
               </button>
@@ -101,7 +102,7 @@
               <td mat-cell *matCellDef="let row">
                 <mat-form-field appearance="outline">
                   <input matInput [(ngModel)]="row['CIUDAD']" (change)="actualizarVenta(row)" placeholder="Selecciona una ciudad">
-                  <button mat-icon-button matSuffix (click)="openCityList(row)" [disabled]="ciudades.length === 0">
+                  <button mat-icon-button matSuffix (click)="openCityList(row)" [disabled]="!row['checkDepart']">
                     <mat-icon>visibility</mat-icon>
                   </button>
                 </mat-form-field>
@@ -190,6 +191,9 @@
 
                     <mat-card-content>
                       <div class="row">
+                        <div class="col-12" *ngIf="element.errorT">
+                          <p class="text-danger"><strong>Error:</strong> {{ element.errorT }}</p>
+                        </div>
                         <div class="col-6 col-sm-3 col-md-2">
                           <mat-card-subtitle>ID Pedido: {{ element['# PEDIDO'] }}</mat-card-subtitle>
                         </div>

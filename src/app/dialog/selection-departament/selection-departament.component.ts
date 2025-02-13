@@ -7,7 +7,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./selection-departament.component.scss']
 })
 export class SelectionDepartamentComponent implements OnInit {
-
+  filtro: string = '';
   constructor(
     public dialogRef: MatDialogRef<SelectionDepartamentComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -15,6 +15,11 @@ export class SelectionDepartamentComponent implements OnInit {
 
   seleccionar(depto: string) {
     this.dialogRef.close(depto);
+  }
+  departamentosFiltrados() {
+    return this.data.departamentos.filter(depto =>
+      depto.name.toLowerCase().includes(this.filtro.toLowerCase())
+    );
   }
 
   ngOnInit(): void {

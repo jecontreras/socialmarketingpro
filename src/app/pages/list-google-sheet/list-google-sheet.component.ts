@@ -273,10 +273,11 @@ export class ListGoogleSheetComponent implements OnInit {
           let row = this.dataSource.data.find(row => row['# PEDIDO'] === item.id);
           if (row) {
             row.createT = 3;
+            row.errorT = item.createGuide.data;
             await this.handleUpdate( { id: row.id, createT: 3 } );
+            this._tools.presentToast( item.createGuide.data );
           }
         }
-        this._tools.presentToast( this.dataConfig.txtError );
       }
       this.cargando = false; // Desactivar spinner al completar
     }, ()=>this.cargando = false );
@@ -284,13 +285,19 @@ export class ListGoogleSheetComponent implements OnInit {
 
   async imprimirGuia() {
     this.cargando2 = true; // Activar spinner
-    const urlsPDF: string[] = this.selection.map(row => row.photoTicket);
-    for( let row of this.selection ) await await this.handleUpdate( { id: row.id, printInt: 3 } );
+    let listSelect = this.selection.filter(row => row.photoTicket);
+    const urlsPDF: string[] = listSelect.map(row => row.photoTicket);
+    for( let row of this.selection ) {if( !row.photoTicket ) continue; await await this.handleUpdate( { id: row.id, printInt: 3 } );}
     try {
+      if( urlsPDF.length === 0 ) {
+        this._tools.basic( "No hay datos de imprecion" );
+        return this.cargando2 = false;
+      }
       const mergedPdf = await this.unirPDFs(urlsPDF);
       const url = URL.createObjectURL(mergedPdf);
       window.open(url, '_blank');
     } catch (error) {
+      this._tools.basic( this.dataConfig.txtError );
       console.error('Error al unir los PDFs:', error);
     } finally {
       this.cargando2 = false;
@@ -356,7 +363,7 @@ export class ListGoogleSheetComponent implements OnInit {
       }
     }
 
-    async cargarCiudades(departamento: string, rate_type: string) {
+    async cargarCiudades(departamento: string, rate_type: string, listDepartament) {
       return new Promise( resolve =>{
         try {
 
@@ -364,6 +371,7 @@ export class ListGoogleSheetComponent implements OnInit {
             idDept: departamento,
             rate_type: rate_type
            }}).subscribe( res =>{
+            listDepartament.ciudades = res.objects.cities;
             this.ciudades = res.objects.cities;
             resolve(this.ciudades)
           });
@@ -376,21 +384,26 @@ export class ListGoogleSheetComponent implements OnInit {
 
     openDepartmentList(row: any) {
       const dialogRef = this.dialog.open(SelectionDepartamentComponent, {
-        data: { departamentos: this.departamentos }
+        data: { departamentos: this.departamentos, departamen: row['DEPARTAMENTO'] }
       });
 
       dialogRef.afterClosed().subscribe(async (selectedDepto) => {
         if (selectedDepto) {
           row['DEPARTAMENTO'] = selectedDepto.name;
-          await this.cargarCiudades(selectedDepto.id, 'CON RECAUDO');
+          row['checkDepart'] = true;
+          let filterR = this.departamentos.find( item => item.name === row['DEPARTAMENTO'] );
+          await this.cargarCiudades(selectedDepto.id, ( row.tipoEnvio || 'CON RECAUDO' ), filterR );
           await this.actualizarVenta( row );
         }
       });
     }
 
     openCityList(row: any) {
+      let filter:any = this.departamentos.find( item => item.name === row['DEPARTAMENTO'] );
+      if( !filter ) return this._tools.basic("*no encontramos la ciudad");
+      console.log("***395", filter)
       const dialogRef = this.dialog.open(SelectionCiudadComponent, {
-        data: { ciudades: this.ciudades }
+        data: { ciudades: filter.ciudades, city: row['CIUDAD'] }
       });
 
       dialogRef.afterClosed().subscribe(async (selectedCity) => {
@@ -407,9 +420,21 @@ export class ListGoogleSheetComponent implements OnInit {
 
     async handleCancelGuide(){
       this.cargando2 = true;
-      for( let row of this.selection ){
+      let listSelect = this.selection.filter(row => row.numberGuide);
+      for( let row of listSelect ){
         if( !row.numberGuide )continue;
-        await this.handleNextCancelGuide( row );
+        let res = await this.handleNextCancelGuide( row );
+        if( res === false ) continue;
+        await this.actualizarVenta( {
+          id: row.id,
+          printInt: 0,
+          createT: 0,
+          trackingState: 0,
+          stateGuide :"PENDIENTE",
+          priceFlete: 0,
+          numberGuide: "",
+          transport: ""
+        } );
       }
       this.cargando2 = false;
       this._tools.presentToast( this.dataConfig.txtUpdate );
@@ -419,9 +444,10 @@ export class ListGoogleSheetComponent implements OnInit {
       return new Promise( resolve =>{
         this._googleShet.cancelGuide( {
           idGuia: Number( row.idDropi ),
+          ['# PEDIDO']: row['# PEDIDO'],
           user: row.user.id || row.user
         }).subscribe( res =>{
-          resolve( res );
+          resolve( true );
         },()=>resolve( false) );
       })
     }
