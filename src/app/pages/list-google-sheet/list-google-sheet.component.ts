@@ -147,9 +147,27 @@ export class ListGoogleSheetComponent implements OnInit {
       delete this.quers.where.printInt;
 
     }else if( td === 4 ){
+      this.quers = {
+        where: {
+          user: this.dataUser.id,
+          createT: [0,1,3],
+          company: this.dataUser.empresa
+        },
+        limit: 30,
+        page: 0
+      };
       delete this.quers.where.printInt;
     }else{
-
+      this.quers = {
+        where: {
+          user: this.dataUser.id,
+          createT: [0,1,3],
+          company: this.dataUser.empresa
+        },
+        limit: 30,
+        page: 0
+      };
+      this.quers.where.printInt = [td]; // Asegura que sea un array
     }
     let list:any = await this.getListData( );
     this.dataSource.data = list;
