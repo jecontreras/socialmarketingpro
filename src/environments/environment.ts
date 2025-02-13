@@ -18,5 +18,28 @@ export const environment = {
  *
  * This import should be commented out in production mode because it will have a negative impact
  * on performance if an error is thrown.
+ * 
+ * @echo off
+title Iniciando Sails.js y XAMPP...
+
+echo 🔹 Iniciando XAMPP...
+cd /d "C:\xampp" 
+start xampp-control.exe
+
+timeout /t 5 /nobreak >nul
+
+echo 🔹 Iniciando MySQL y Apache...
+start "" "C:\xampp\xampp_start.exe"
+
+timeout /t 5 /nobreak >nul
+
+echo 🔹 Iniciando Sails.js...
+cd /d "C:\ruta\de\tu\proyecto\sails"
+start cmd /k "node app.js"
+
+echo ✅ Servidores iniciados correctamente.
+exit
+
+
  */
 // import 'zone.js/dist/zone-error';  // Included with Angular CLI.
