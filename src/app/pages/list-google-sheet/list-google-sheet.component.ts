@@ -140,13 +140,17 @@ export class ListGoogleSheetComponent implements OnInit {
   }
 
   async filtrarPorEstado() {
-    this.quers.where.printInt = [this.quers.where.printInt]; // Asegura que sea un array
-  if( this.quers.where.printInt === 20 ) {
-    this.quers.where.createT = [ this.quers.where.printInt ];
-    delete this.quers.where.printInt;
+    let td = this.quers.where.printInt;
+    this.quers.where.printInt = [td]; // Asegura que sea un array
+    if( td === 20 ) {
+      this.quers.where.createT = [ 2 ];
+      delete this.quers.where.printInt;
 
-  }
-    if( this.quers.where.printInt[0] === 4 ) delete this.quers.where.printInt;
+    }else if( td === 4 ){
+      delete this.quers.where.printInt;
+    }else{
+
+    }
     let list:any = await this.getListData( );
     this.dataSource.data = list;
   }
