@@ -325,45 +325,77 @@ export class ListGoogleSheetComponent implements OnInit {
 
   async imprimirGuia() {
     this.cargando2 = true; // Activar spinner
+
     let listSelect = this.selection.filter(row => row.photoTicket);
     const urlsPDF: string[] = listSelect.map(row => row.photoTicket);
-    for( let row of this.selection ) {if( !row.photoTicket ) continue; await await this.handleUpdate( { id: row.id, printInt: 3 } );}
+
+    // 📌 Obtener la lista de productos desde la selección
+    const listProducto = listSelect.map(row => ({
+        producto: row.txtDetallePedido || "Sin descripción",
+        cantidad: 0,
+        precio: 0
+    }));
+
+    for (let row of this.selection) {
+        if (!row.photoTicket) continue;
+        await this.handleUpdate({ id: row.id, printInt: 3 });
+    }
+
     try {
-      if( urlsPDF.length === 0 ) {
-        this._tools.basic( "No hay datos de imprecion" );
-        return this.cargando2 = false;
-      }
-      const mergedPdf = await this.unirPDFs(urlsPDF);
-      const url = URL.createObjectURL(mergedPdf);
-      window.open(url, '_blank');
+        if (urlsPDF.length === 0) {
+            this._tools.basic("No hay datos de impresión");
+            return (this.cargando2 = false);
+        }
+
+        console.log("📌 URLs de PDFs:", urlsPDF);
+        console.log("📌 Detalles de productos:", listProducto);
+
+        const mergedPdf = await this.unirPDFs(urlsPDF, listProducto);
+        const url = URL.createObjectURL(mergedPdf);
+        window.open(url, '_blank');
     } catch (error) {
-      this._tools.basic( this.dataConfig.txtError );
-      console.error('Error al unir los PDFs:', error);
+        this._tools.basic(this.dataConfig.txtError);
+        console.error("❌ Error al unir los PDFs:", error);
     } finally {
-      this.cargando2 = false;
+        this.cargando2 = false;
     }
-  }
+}
 
-  async unirPDFs(urls: string[]): Promise<Blob> {
-    const mergedPdf = await PDFDocument.create();
 
-    for (const url of urls) {
+async unirPDFs(urls: string[], listProducto: any[]): Promise<Blob> {
+  const mergedPdf = await PDFDocument.create();
+
+  for (let i = 0; i < urls.length; i++) {
       try {
-        // Llamar a Sails.js en lugar de la URL original
-        const proxyUrl = this._servicesR.URL+`/archivos/proxyPDF?url=${encodeURIComponent(url)}`;
-        const response = await fetch(proxyUrl);
-        const pdfBytes = await response.arrayBuffer();
-        const pdf = await PDFDocument.load(pdfBytes);
-        const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
-        copiedPages.forEach(page => mergedPdf.addPage(page));
-      } catch (error) {
-        console.error('Error al descargar el PDF:', url, error);
-      }
-    }
+          const url = urls[i];
+          const productoInfo = listProducto[i]; // 📌 Obtener detalles del producto correspondiente
 
-    const pdfBytesFinal = await mergedPdf.save();
-    return new Blob([pdfBytesFinal], { type: 'application/pdf' });
+          console.log("📌 Descargando PDF desde:", url);
+          console.log("📌 Producto Info:", productoInfo);
+
+          // Llamar a Sails.js y enviar `TXTPRODUCTO`
+          const proxyUrl = `${this._servicesR.URL}/archivos/proxyPDF?url=${encodeURIComponent(url)}&producto=${encodeURIComponent(productoInfo.producto)}&cantidad=${productoInfo.cantidad}&precio=${productoInfo.precio}`;
+          const response = await fetch(proxyUrl);
+
+          if (!response.ok) {
+              throw new Error(`❌ Error al descargar ${url}: ${response.status} ${response.statusText}`);
+          }
+
+          const pdfBytes = await response.arrayBuffer();
+          const pdf = await PDFDocument.load(pdfBytes);
+          const copiedPages = await mergedPdf.copyPages(pdf, pdf.getPageIndices());
+          copiedPages.forEach(page => mergedPdf.addPage(page));
+
+      } catch (error) {
+          console.error("❌ Error al procesar PDF:", error);
+      }
   }
+
+  const pdfBytesFinal = await mergedPdf.save();
+  return new Blob([pdfBytesFinal], { type: "application/pdf" });
+}
+
+
 
     // Abrir SweetAlert2 para editar productos seleccionados
     async editarProductosSeleccionados() {
