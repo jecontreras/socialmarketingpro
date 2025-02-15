@@ -331,9 +331,9 @@ export class ListGoogleSheetComponent implements OnInit {
 
     // 📌 Obtener la lista de productos desde la selección
     const listProducto = listSelect.map(row => ({
-        producto: row.TXTPRODUCTO || "Sin descripción",
-        cantidad: row.CANTIDAD || 1,
-        precio: row["PRECIO VENTA TOTAL"] || 0
+        producto: row.txtDetallePedido || "Sin descripción",
+        cantidad: 0,
+        precio: 0
     }));
 
     for (let row of this.selection) {
@@ -374,7 +374,7 @@ async unirPDFs(urls: string[], listProducto: any[]): Promise<Blob> {
           console.log("📌 Producto Info:", productoInfo);
 
           // Llamar a Sails.js y enviar `TXTPRODUCTO`
-          const proxyUrl = `${this._servicesR.URL}/archivos/proxyPDF?url=${encodeURIComponent(url)}&producto=${encodeURIComponent(productoInfo.txtDetallePedido)}&cantidad=${productoInfo.cantidad}&precio=${productoInfo.precio}`;
+          const proxyUrl = `${this._servicesR.URL}/archivos/proxyPDF?url=${encodeURIComponent(url)}&producto=${encodeURIComponent(productoInfo.producto)}&cantidad=${productoInfo.cantidad}&precio=${productoInfo.precio}`;
           const response = await fetch(proxyUrl);
 
           if (!response.ok) {
